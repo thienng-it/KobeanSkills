@@ -68,6 +68,10 @@ If you have already cloned KobeanSkills locally or want a machine-wide global in
 | Command | Description |
 | :--- | :--- |
 | `npx kobean-skills init` | Zero-clone project setup into `.kobean/` with automated MCP & rule wiring. |
+| `npx kobean-skills help [cmd]` | Context-aware manual for any command (e.g. `init`, `mcp`, `skills`, `doctor`). |
+| `npx kobean-skills skills [name]` | Terminal inspector for all 9 entry skills; `kobean skill <name>` prints runbook. |
+| `npx kobean-skills roles [phase]` | Terminal inspector for 22 specialist roles; `kobean role <name>` prints YAML. |
+| `npx kobean-skills playbooks [q]` | Browse 9 engineering playbooks; `kobean playbook <name>` extracts playbook. |
 | `npx kobean-skills mcp` | Inspect configured MCP connectors, agent sync status, and environment variables. |
 | `npx kobean-skills mcp marketplace` | Browse 38+ vetted MCP connectors across 6 categories in terminal. |
 | `npx kobean-skills mcp search <query>` | Search marketplace connectors by keyword, technology, or provider. |

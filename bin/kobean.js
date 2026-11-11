@@ -523,8 +523,9 @@ const MCP_PRESETS = {
   }
 };
 
-function showHelp() {
-  console.log(`
+function showHelp(topic) {
+  if (!topic) {
+    console.log(`
 KobeanSkills CLI
 
 Usage:
@@ -533,33 +534,162 @@ Usage:
   kobean [command] [options]
 
 Core Commands:
-  init [dir]              Initialize .kobean/ in target repo (default: current directory)
-  docs                    Open the interactive documentation web page in your browser
-  guide                   Display the developer workflow guide and prompt cheatsheet
-  pr-template [dir]       Scaffold clean, elegant GitHub PR template (.github/pull_request_template.md)
-  install                 Install globally into ~/.gemini, ~/.claude, and ~/.codex
-  doctor                  Check status of companion CLI tools and MCP connectors
-  help                    Show this help message
+  init [dir]                    Initialize .kobean/ in target repo (default: current directory)
+  docs                          Open the interactive documentation web page in your browser
+  guide                         Display the developer workflow guide and prompt cheatsheet
+  pr-template [dir]             Scaffold clean, elegant GitHub PR template (.github/pull_request_template.md)
+  install                       Install globally into ~/.gemini, ~/.claude, and ~/.codex
+  doctor                        Check status of companion CLI tools, agent CLIs, and MCP connectors
+  help [command]                Show detailed manual and options for a specific command
 
 MCP Connector & Marketplace Commands:
   mcp                           List configured MCP servers, sync status, and environment checks
   mcp marketplace [category]    Browse 38+ vetted MCP servers grouped by category
   mcp search <keyword>          Search the marketplace for connectors (e.g. database, linear, cloud)
-  mcp add <preset>              Add a preset connector and auto-sync across all 4 agent files
+  mcp add <name>                Add a preset or custom connector and auto-sync all agent files
   mcp remove <name>             Remove an MCP server from configuration and update agent files
   mcp sync [--global]           Synchronize .kobean/mcp.json across Claude, Gemini, Antigravity & Codex
   mcp presets                   Alias for 'mcp marketplace'
+
+Architecture & Inspection Commands:
+  skills [name]                 List all 9 entry skills or display a specific skill runbook
+  roles [phase|name]            List all 22 specialist role contracts or inspect a specific role
+  playbooks [query]             Browse 9 step-by-step engineering playbooks
 
 Examples:
   bunx kobean-skills init
   bunx kobean-skills mcp marketplace
   bunx kobean-skills mcp search database
+  bunx kobean-skills mcp add supabase
+  bunx kobean-skills skills
+  bunx kobean-skills skill git
+  bunx kobean-skills role backend
+  bunx kobean-skills doctor
+  bunx kobean-skills help mcp
+`);
+    return;
+  }
+
+  const t = topic.toLowerCase().trim();
+  if (t === 'init') {
+    console.log(`
+Command: kobean init [target-dir]
+
+Summary:
+  Zero-clone initialization of KobeanSkills into any repository.
+
+What it does:
+  1. Creates self-contained .kobean/ folder with skills, roles, stack guides, and templates.
+  2. Wires Gemini CLI & Antigravity discovery (.agents/skills/ & GEMINI.md / AGENTS.md).
+  3. Wires Claude CLI discovery (.claude/skills/ & CLAUDE.md).
+  4. Wires Codex CLI discovery (.codex/skills/ & AGENTS.md).
+  5. Configures Cross-Agent MCP connectors (.kobean/mcp.json, .mcp.json, .codex/config.toml).
+  6. Scaffolds GitHub Pull Request template (.github/pull_request_template.md).
+
+Arguments:
+  target-dir    Optional directory path (defaults to current working directory).
+
+Examples:
+  bunx kobean-skills init
+  bunx kobean-skills init /path/to/my-repo
+`);
+  } else if (t === 'mcp') {
+    console.log(`
+Command: kobean mcp <action> [options]
+
+Summary:
+  Universal Cross-Agent MCP Manager. Manages Model Context Protocol connectors across
+  Claude Code, Gemini CLI, Antigravity, and OpenAI Codex with zero configuration drift.
+
+Actions:
+  list                          Audit active connectors, sync status, and environment variables
+  marketplace [category]        Browse 38+ vetted MCP connectors across 6 categories
+  search <query>                Search marketplace connectors by name, technology, or provider
+  add <name>                    Add a connector preset to .kobean/mcp.json and auto-sync all agents
+  remove <name>                 Remove a connector and update agent configuration files
+  sync [--global]               Re-export .kobean/mcp.json to .mcp.json, .agents/mcp.json, and .codex/config.toml
+
+Examples:
+  bunx kobean-skills mcp
+  bunx kobean-skills mcp marketplace databases
+  bunx kobean-skills mcp search database
   bunx kobean-skills mcp add postgres
   bunx kobean-skills mcp add supabase
-  bunx kobean-skills mcp add github
   bunx kobean-skills mcp sync
-  bunx kobean-skills doctor
 `);
+  } else if (t === 'git' || t === 'pr' || t === 'pr-template') {
+    console.log(`
+Command: kobean pr-template [dir] / kb-git skill
+
+Summary:
+  Git lifecycle management, Conventional Commits, rebase master/main, and GitHub PR workflows.
+
+CLI Helpers:
+  pr-template [dir]    Scaffolds clean, elegant .github/pull_request_template.md
+
+Skill Trigger:
+  "Use kb-git to create branch feat/webhook-retry, commit with conventional format, rebase on main, and open a PR."
+
+Capabilities:
+  • Branch lifecycle: create (feat/*, fix/*), rename, safe local & remote delete
+  • Atomic Conventional Commits with betterleaks secret verification
+  • Rebase on default branch (main/master) with clean conflict resolution
+  • Pull Request creation via 'gh pr create' using clean template
+`);
+  } else if (t === 'doctor' || t === 'check') {
+    console.log(`
+Command: kobean doctor
+
+Summary:
+  System health and companion tool diagnostic check.
+
+What it inspects:
+  • Task Graph: bd (Beads)
+  • Security & Leak Prevention: betterleaks
+  • Codebase Cartography: graphify
+  • Supply Chain & Vulnerabilities: osv-scanner, semgrep
+  • Runtime Environments: bun, node, git
+  • Supported Agent CLIs: Gemini CLI, Claude CLI, Codex CLI
+  • Global Discovery Symlinks: ~/.gemini, ~/.claude, ~/.codex
+  • Active MCP Connectors & Agent Sync Status
+`);
+  } else if (t === 'skills' || t === 'skill') {
+    console.log(`
+Command: kobean skills [skill-name]
+
+Summary:
+  Inspect the 9 progressive-disclosure entry skills of KobeanSkills.
+
+Usage:
+  bunx kobean-skills skills              List all 9 skills with descriptions
+  bunx kobean-skills skill <name>        View the complete runbook for a skill
+
+Skills:
+  kb-router     Master Classifier & Pipeline Router
+  kb-spec       Requirements Validation & STRIDE Threat Modeling
+  kb-plan       Architecture Planning, Contracts & Task Graph
+  kb-build      TDD Implementation & Ponytail Minimal Changes
+  kb-ui         High-Craft UI/UX (Impeccable + Taste-Skill Bold)
+  kb-review     Differential Review & Multi-Role Verification Gates
+  kb-debug      Systematic Root-Cause Debugging & Regressions
+  kb-git        Git Branch Lifecycle, Rebase & PR Workflows
+  kb-ship       Diátaxis Technical Docs, ADRs & Release Readiness
+`);
+  } else if (t === 'roles' || t === 'role') {
+    console.log(`
+Command: kobean roles [phase|role-name]
+
+Summary:
+  Inspect the 22 specialist role contracts with declared write paths, tools, and gates.
+
+Usage:
+  bunx kobean-skills roles               List all 22 roles organized by lifecycle phase
+  bunx kobean-skills roles <phase>       Filter roles by phase (discover, spec, plan, build, verify, ship)
+  bunx kobean-skills role <name>         View the YAML contract for a role (e.g. backend, security)
+`);
+  } else {
+    console.log(`No dedicated manual page for '${topic}'. Run 'kobean help' to see all commands.`);
+  }
 }
 
 function runInit(targetDirArg) {
@@ -961,7 +1091,6 @@ function runMcpAdd(presetName, targetDirArg) {
   let preset = MCP_PRESETS[presetKey];
 
   if (!preset) {
-    // Check if user is adding custom format: e.g. @package or custom name
     console.log(`[info] '${presetName}' is not in standard marketplace catalog.`);
     console.log('Searching for close matches...');
     const matches = Object.keys(MCP_PRESETS).filter((k) => k.includes(presetKey) || presetKey.includes(k));
@@ -974,7 +1103,6 @@ function runMcpAdd(presetName, targetDirArg) {
       process.exit(1);
     }
 
-    // Fallback: create custom server definition
     console.log(`[info] Configuring '${presetName}' as custom MCP server...`);
     preset = {
       name: presetName,
@@ -1150,6 +1278,186 @@ function runPrTemplate(targetDirArg) {
   console.log(`==> [✓] Scaffolded GitHub Pull Request template at: ${dest}`);
 }
 
+function runSkills(skillArg) {
+  const skillsDir = fs.existsSync(path.join(PKG_ROOT, 'skills'))
+    ? path.join(PKG_ROOT, 'skills')
+    : path.join(process.cwd(), '.kobean', 'skills');
+
+  if (!fs.existsSync(skillsDir)) {
+    console.error('[error] Could not locate skills directory.');
+    process.exit(1);
+  }
+
+  const skillDirs = fs.readdirSync(skillsDir)
+    .filter(d => d.startsWith('kb-') && fs.statSync(path.join(skillsDir, d)).isDirectory())
+    .sort();
+
+  if (skillArg) {
+    const targetDir = skillDirs.find(d => d === skillArg || d === `kb-${skillArg}`);
+    if (!targetDir) {
+      console.error(`[error] Skill '${skillArg}' not found. Available skills:`);
+      for (const d of skillDirs) console.log(`  • ${d}`);
+      process.exit(1);
+    }
+    const skillMd = path.join(skillsDir, targetDir, 'SKILL.md');
+    if (fs.existsSync(skillMd)) {
+      console.log(fs.readFileSync(skillMd, 'utf-8'));
+    }
+    return;
+  }
+
+  console.log('\n============================================================');
+  console.log('  KOBEANSKILLS — 9 PROGRESSIVE ENTRY SKILLS');
+  console.log('============================================================\n');
+
+  for (const d of skillDirs) {
+    const skillMd = path.join(skillsDir, d, 'SKILL.md');
+    if (!fs.existsSync(skillMd)) continue;
+    const text = fs.readFileSync(skillMd, 'utf-8');
+    const descMatch = text.match(/description:\s*>?-?\s*([\s\S]*?)---/);
+    const desc = descMatch ? descMatch[1].replace(/\s+/g, ' ').trim() : '';
+
+    console.log(`\x1b[1m\x1b[33m• ${d.padEnd(14)}\x1b[0m ${desc.slice(0, 110)}...`);
+    console.log(`  \x1b[90mInspect: bunx kobean-skills skill ${d.replace('kb-', '')}\x1b[0m\n`);
+  }
+
+  console.log('To view the full runbook for any skill:');
+  console.log('  bunx kobean-skills skill <name>  (e.g., bunx kobean-skills skill git)\n');
+}
+
+function runRoles(roleArg) {
+  const rolesDir = fs.existsSync(path.join(PKG_ROOT, 'roles'))
+    ? path.join(PKG_ROOT, 'roles')
+    : path.join(process.cwd(), '.kobean', 'roles');
+
+  if (!fs.existsSync(rolesDir)) {
+    console.error('[error] Could not locate roles directory.');
+    process.exit(1);
+  }
+
+  const roleFiles = fs.readdirSync(rolesDir).filter(f => f.endsWith('.yaml')).sort();
+
+  if (roleArg) {
+    const targetFile = roleFiles.find(f => f === roleArg || f === `${roleArg}.yaml`);
+    if (targetFile) {
+      console.log(fs.readFileSync(path.join(rolesDir, targetFile), 'utf-8'));
+      return;
+    }
+
+    // Check if it's a phase filter
+    const phaseRoles = [];
+    for (const f of roleFiles) {
+      const content = fs.readFileSync(path.join(rolesDir, f), 'utf-8');
+      const phaseMatch = content.match(/^phase:\s*(\S+)/m);
+      if (phaseMatch && phaseMatch[1].toLowerCase() === roleArg.toLowerCase()) {
+        const titleMatch = content.match(/^title:\s*(.+)/m);
+        const missionMatch = content.match(/^mission:\s*>?-?\s*([\s\S]*?)(?:reads:|forbidden:)/m);
+        phaseRoles.push({
+          name: path.basename(f, '.yaml'),
+          title: titleMatch ? titleMatch[1].trim() : '',
+          mission: missionMatch ? missionMatch[1].replace(/\s+/g, ' ').trim() : ''
+        });
+      }
+    }
+
+    if (phaseRoles.length > 0) {
+      console.log(`\n==> Roles in Phase '${roleArg}' (${phaseRoles.length} roles):\n`);
+      for (const r of phaseRoles) {
+        console.log(`  • \x1b[36m${r.name.padEnd(16)}\x1b[0m \x1b[1m${r.title}\x1b[0m`);
+        console.log(`    ${r.mission.slice(0, 100)}...\n`);
+      }
+      return;
+    }
+
+    console.error(`[error] Role or phase '${roleArg}' not found.`);
+    console.log('Phases: discover, spec, plan, build, verify, ship');
+    process.exit(1);
+  }
+
+  console.log('\n============================================================');
+  console.log('  KOBEANSKILLS — 22 SPECIALIST ROLE CONTRACTS');
+  console.log('============================================================\n');
+
+  const phases = ['discover', 'spec', 'plan', 'build', 'verify', 'ship'];
+  const grouped = {};
+  for (const p of phases) grouped[p] = [];
+
+  for (const f of roleFiles) {
+    const content = fs.readFileSync(path.join(rolesDir, f), 'utf-8');
+    const phaseMatch = content.match(/^phase:\s*(\S+)/m);
+    const titleMatch = content.match(/^title:\s*(.+)/m);
+    const phase = phaseMatch ? phaseMatch[1].trim() : 'other';
+    const roleObj = {
+      name: path.basename(f, '.yaml'),
+      title: titleMatch ? titleMatch[1].trim() : ''
+    };
+    if (!grouped[phase]) grouped[phase] = [];
+    grouped[phase].push(roleObj);
+  }
+
+  for (const [phase, items] of Object.entries(grouped)) {
+    if (items.length === 0) continue;
+    console.log(`\x1b[1m\x1b[33m▶ ${phase.toUpperCase()} (${items.length})\x1b[0m`);
+    for (const r of items) {
+      console.log(`  • \x1b[36m${r.name.padEnd(18)}\x1b[0m ${r.title}`);
+    }
+    console.log('');
+  }
+
+  console.log('To view the full YAML contract for any role:');
+  console.log('  bunx kobean-skills role <name>  (e.g., bunx kobean-skills role backend)\n');
+}
+
+function runPlaybooks(query) {
+  const guidePath = path.join(PKG_ROOT, 'GUIDE.md');
+  if (!fs.existsSync(guidePath)) {
+    console.log('==> Guide not found.');
+    return;
+  }
+  const guideText = fs.readFileSync(guidePath, 'utf-8');
+
+  if (query) {
+    const q = query.toLowerCase().trim();
+    const playbookRegex = /### Playbook \d+: ([\s\S]*?)(?=---\n\n### Playbook|---\n\n## 3|$)/g;
+    let match;
+    let found = false;
+    while ((match = playbookRegex.exec(guideText)) !== null) {
+      if (match[0].toLowerCase().includes(q)) {
+        console.log(`\n### Playbook ${match[1].trim()}\n`);
+        found = true;
+      }
+    }
+    if (!found) {
+      console.log(`[info] No playbook matched '${query}'. Run 'kobean playbooks' to list all.`);
+    }
+    return;
+  }
+
+  console.log('\n============================================================');
+  console.log('  KOBEANSKILLS — 9 CORE ENGINEERING PLAYBOOKS');
+  console.log('============================================================\n');
+
+  const titles = [
+    { num: 1, name: 'Greenfield (From Zero) Scaffolding', trigger: '"Bootstrap a new production-ready SaaS application"' },
+    { num: 2, name: 'End-to-End Feature Engineering', trigger: '"Build a webhook retry queue with backoff"' },
+    { num: 3, name: 'High-Craft UI/UX (Impeccable & Bold)', trigger: '"Redesign dashboard" / "Build bold landing page"' },
+    { num: 4, name: 'Systematic Root-Cause Debugging', trigger: '"Fix the failing auth middleware test"' },
+    { num: 5, name: 'Pre-PR Review & Security Gate', trigger: '"Review current diff and check security"' },
+    { num: 6, name: 'Technical Debt & Simplification', trigger: '"Simplify auth service with ponytail economy"' },
+    { num: 7, name: 'Codebase Cartography & Onboarding', trigger: '"Onboard this repo and generate CONTEXT.md"' },
+    { num: 8, name: 'Universal Cross-Agent MCP Manager', trigger: 'bunx kobean-skills mcp add <connector>' },
+    { num: 9, name: 'Git Branching, Rebase & PR Workflows', trigger: '"Create branch, rebase on main, and open PR"' }
+  ];
+
+  for (const t of titles) {
+    console.log(`  \x1b[1m\x1b[33mPlaybook ${t.num}:\x1b[0m \x1b[36m${t.name}\x1b[0m`);
+    console.log(`    \x1b[90mExample: ${t.trigger}\x1b[0m\n`);
+  }
+
+  console.log('To view details of any playbook:');
+  console.log('  bunx kobean-skills playbook <number-or-name>  (e.g., bunx kobean-skills playbook git)\n');
+}
+
 // Router
 switch (command) {
   case 'init':
@@ -1166,6 +1474,18 @@ switch (command) {
   case 'guide':
   case 'cheatsheet':
     runGuide();
+    break;
+  case 'skills':
+  case 'skill':
+    runSkills(args[1]);
+    break;
+  case 'roles':
+  case 'role':
+    runRoles(args[1]);
+    break;
+  case 'playbooks':
+  case 'playbook':
+    runPlaybooks(args[1]);
     break;
   case 'install':
   case 'setup':
@@ -1200,7 +1520,7 @@ switch (command) {
   case 'help':
   case '--help':
   case '-h':
-    showHelp();
+    showHelp(args[1]);
     break;
   default:
     console.error(`[error] Unknown command: ${command}`);

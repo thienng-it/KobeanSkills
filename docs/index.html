@@ -744,6 +744,51 @@
       background: var(--accent-surface);
     }
 
+    /* CLI Commands Showcase & Demo Tabs */
+    .cli-demo-tabs {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      align-items: center;
+    }
+    .cli-tab-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #94A3B8;
+      padding: 3px 9px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+    .cli-tab-btn:hover {
+      color: #F1F5F9;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .cli-tab-btn.active {
+      color: var(--accent);
+      background: var(--accent-surface);
+      border-color: var(--accent);
+      font-weight: 600;
+    }
+    .cli-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+    .cli-opt-tag {
+      font-size: 11px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: var(--text-dim);
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      padding: 2px 7px;
+      border-radius: 5px;
+    }
+
     /* MCP Marketplace Search Bar & Badges */
     .mcp-search-bar {
       display: flex;
@@ -904,7 +949,7 @@
         <li><a href="#entry-skills">9 Entry Skills (Handbook) <span class="badge">Fast Copy</span></a></li>
         <li><a href="#roles">22 Specialist Roles</a></li>
         <li><a href="#doctrine">Doctrine & Precedence</a></li>
-        <li><a href="#cli-commands">CLI & Doctor Helper</a></li>
+        <li><a href="#cli-commands">CLI Reference & Manual <span class="badge">Cheatsheet</span></a></li>
       </ul>
     </div>
   </aside>
@@ -925,7 +970,7 @@
     <div class="hero-features">
       <div class="feature-tag">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-        8 Entry Skills
+        9 Entry Skills
       </div>
       <div class="feature-tag">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
@@ -1339,12 +1384,10 @@ Use kb-ui in bold mode to build the product landing page.</code></pre>
         </div>
         <div class="terminal-window">
           <div class="terminal-header">
-            <div class="terminal-dots">
-              <span class="dot red"></span>
-              <span class="dot yellow"></span>
-              <span class="dot green"></span>
+            <div class="terminal-left">
+              <div class="terminal-dots"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div>
+              <span class="terminal-title">bash — MCP workflow</span>
             </div>
-            <span class="terminal-title">bash — MCP workflow</span>
             <button class="copy-btn" onclick="copyCode(this)" title="Copy commands">
               <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
               <span>Copy</span>
@@ -1647,34 +1690,88 @@ bunx kobean-skills mcp sync</code></pre>
       </div>
     </section>
 
-    <!-- CLI Commands -->
+    <!-- CLI Commands & Manual -->
     <section id="cli-commands">
-      <h2>CLI Helper Commands</h2>
-      <div class="card-grid">
-        <div class="card">
-          <div class="card-title"><code>npx kobean-skills init</code></div>
-          <div class="card-desc">Initializes self-contained <code>.kobean/</code> and wires agent discovery in the current repository.</div>
+      <h2>Command Line Reference & Helper Manual</h2>
+      <p>Zero-dependency CLI for project scaffolding, cross-agent MCP synchronization, progressive disclosure skills & roles inspection, diagnostic health checks, and PR template generation. Works instantly with Bun (<code>bunx kobean-skills</code>) or Node/npx (<code>npx kobean-skills</code>).</p>
+
+      <!-- Interactive Terminal Showcase -->
+      <div class="terminal-window" style="margin: 24px 0 32px;">
+        <div class="terminal-header">
+          <div class="terminal-left">
+            <div class="terminal-dots"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div>
+            <div class="cli-demo-tabs">
+              <button class="cli-tab-btn active" onclick="switchCliDemo('skills', this)">kobean skills</button>
+              <button class="cli-tab-btn" onclick="switchCliDemo('roles', this)">kobean roles build</button>
+              <button class="cli-tab-btn" onclick="switchCliDemo('playbooks', this)">kobean playbooks</button>
+              <button class="cli-tab-btn" onclick="switchCliDemo('help', this)">kobean help mcp</button>
+              <button class="cli-tab-btn" onclick="switchCliDemo('doctor', this)">kobean doctor</button>
+            </div>
+          </div>
+          <button class="copy-btn" onclick="copyCode(this)" title="Copy terminal output">
+            <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+            <span>Copy</span>
+          </button>
         </div>
-        <div class="card">
-          <div class="card-title"><code>npx kobean-skills docs</code></div>
-          <div class="card-desc">Opens this interactive documentation web page in your default browser.</div>
+        <div class="terminal-body" id="cli-demo-body">
+          <pre><code id="cli-demo-code">============================================================
+  KOBEANSKILLS — 9 PROGRESSIVE ENTRY SKILLS
+============================================================
+
+• kb-build       Subagent-driven TDD implementation and Ponytail minimal-change execution.
+  Inspect: bunx kobean-skills skill build
+
+• kb-debug       Systematic root-cause debugging and regression fixing.
+  Inspect: bunx kobean-skills skill debug
+
+• kb-git         Git branch lifecycle, conventional commits, rebase on main, and clean PRs.
+  Inspect: bunx kobean-skills skill git
+
+• kb-plan        Architecture planning, API contract design, and Beads task graph creation.
+  Inspect: bunx kobean-skills skill plan
+
+• kb-review      Multi-role verification gate (Ponytail review, AppSec, betterleaks, osv-scanner).
+  Inspect: bunx kobean-skills skill review
+
+• kb-router      Primary orchestrator for the KobeanSkills engineering system.
+  Inspect: bunx kobean-skills skill router
+
+• kb-ship        Release readiness, Diataxis documentation, ADR authoring, and CI/CD hardening.
+  Inspect: bunx kobean-skills skill ship
+
+• kb-spec        Requirements specification, Ponytail Ultra existence check, and STRIDE threats.
+  Inspect: bunx kobean-skills skill spec
+
+• kb-ui          High-craft UI/UX design (Impeccable & Bold mode) and Chrome DevTools testing.
+  Inspect: bunx kobean-skills skill ui
+
+To view the full runbook for any skill:
+  bunx kobean-skills skill &lt;name&gt;  (e.g., bunx kobean-skills skill git)</code></pre>
         </div>
-        <div class="card">
-          <div class="card-title"><code>npx kobean-skills mcp</code></div>
-          <div class="card-desc">Audits configured MCP server connectors, agent sync status, and environment variables across Claude, Gemini & Codex.</div>
-        </div>
-        <div class="card">
-          <div class="card-title"><code>npx kobean-skills mcp add &lt;preset&gt;</code></div>
-          <div class="card-desc">Adds a vetted MCP server (e.g. <code>postgres</code>, <code>github</code>, <code>playwright</code>) and auto-syncs all agent files.</div>
-        </div>
-        <div class="card">
-          <div class="card-title"><code>npx kobean-skills doctor</code></div>
-          <div class="card-desc">Verifies whether companion CLIs (<code>bd</code>, <code>betterleaks</code>, <code>graphify</code>, <code>osv-scanner</code>) and Agent CLIs are installed.</div>
-        </div>
-        <div class="card">
-          <div class="card-title"><code>npx kobean-skills guide</code></div>
-          <div class="card-desc">Outputs the complete developer playbook and prompt cheatsheet directly in your terminal.</div>
-        </div>
+      </div>
+
+      <!-- Search & Filters -->
+      <div style="display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin: 32px 0 10px;">
+        <h3 style="font-size: 20px; color: var(--text);">CLI Commands Cheatsheet</h3>
+        <span id="cli-count" style="font-size: 13px; color: var(--text-dim); font-family: ui-monospace, SFMono-Regular, Menlo, monospace;">Showing 18 of 18 commands</span>
+      </div>
+
+      <div class="mcp-search-bar">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        <input type="text" id="cli-search-input" placeholder="Search commands by name, flag, or keyword (e.g. skills, mcp, pr-template, doctor, help)..." oninput="handleCliSearch(this.value)">
+      </div>
+
+      <div class="filter-bar" style="margin-bottom: 22px;">
+        <button class="filter-chip active" onclick="filterCliCategory('all', this)">All (18)</button>
+        <button class="filter-chip" onclick="filterCliCategory('setup', this)">Setup & Scaffolding (3)</button>
+        <button class="filter-chip" onclick="filterCliCategory('mcp', this)">MCP Connectors (6)</button>
+        <button class="filter-chip" onclick="filterCliCategory('inspection', this)">Inspection & Manual (7)</button>
+        <button class="filter-chip" onclick="filterCliCategory('quality', this)">Quality & PRs (2)</button>
+      </div>
+
+      <!-- CLI Grid -->
+      <div id="cli-grid" class="skills-grid">
+        <!-- Rendered dynamically via JS below -->
       </div>
     </section>
 
@@ -1964,9 +2061,402 @@ bunx kobean-skills mcp sync</code></pre>
       renderMcpMarketplace();
     }
 
+    // CLI Demo Output Templates
+    const cliDemoOutputs = {
+      skills: `============================================================
+  KOBEANSKILLS — 9 PROGRESSIVE ENTRY SKILLS
+============================================================
+
+• kb-build       Subagent-driven TDD implementation and Ponytail minimal-change execution.
+  Inspect: bunx kobean-skills skill build
+
+• kb-debug       Systematic root-cause debugging and regression fixing.
+  Inspect: bunx kobean-skills skill debug
+
+• kb-git         Git branch lifecycle, conventional commits, rebase on main, and clean PRs.
+  Inspect: bunx kobean-skills skill git
+
+• kb-plan        Architecture planning, API contract design, and Beads task graph creation.
+  Inspect: bunx kobean-skills skill plan
+
+• kb-review      Multi-role verification gate (Ponytail review, AppSec, betterleaks, osv-scanner).
+  Inspect: bunx kobean-skills skill review
+
+• kb-router      Primary orchestrator for the KobeanSkills engineering system.
+  Inspect: bunx kobean-skills skill router
+
+• kb-ship        Release readiness, Diataxis documentation, ADR authoring, and CI/CD hardening.
+  Inspect: bunx kobean-skills skill ship
+
+• kb-spec        Requirements specification, Ponytail Ultra existence check, and STRIDE threats.
+  Inspect: bunx kobean-skills skill spec
+
+• kb-ui          High-craft UI/UX design (Impeccable & Bold mode) and Chrome DevTools testing.
+  Inspect: bunx kobean-skills skill ui
+
+To view the full runbook for any skill:
+  bunx kobean-skills skill <name>  (e.g., bunx kobean-skills skill git)`,
+
+      roles: `==> Roles in Phase 'build' (5 roles):
+
+  • backend          Senior Backend Engineer (Node / Hono / TypeScript)
+    Implement server routes, domain logic, validation, authz checks, and integration tests...
+
+  • frontend         Senior Frontend Engineer (React / Next.js)
+    Implement web UI components, routes, client/server state, and component tests...
+
+  • ml-engineer      ML & AI Systems Engineer (Python / FastAPI / HF)
+    Implement Python ML/AI pipelines, LLM structured-output workflows, and evals...
+
+  • mobile           Senior Mobile Engineer (React Native / Expo)
+    Build cross-platform iOS/Android screens, navigation, and Callstack performance rules...
+
+  • refactorer       Code Simplification & Debt Engineer
+    Harvest technical debt into DEBT.md and execute behavior-preserving refactors...
+
+To view the full YAML contract for any role:
+  bunx kobean-skills role <name>  (e.g., bunx kobean-skills role backend)`,
+
+      playbooks: `============================================================
+  KOBEANSKILLS — 9 CORE ENGINEERING PLAYBOOKS
+============================================================
+
+  Playbook 1: Greenfield (From Zero) Scaffolding
+    Example: "Bootstrap a new production-ready SaaS application"
+
+  Playbook 2: End-to-End Feature Engineering
+    Example: "Build a webhook retry queue with backoff"
+
+  Playbook 3: High-Craft UI/UX (Impeccable & Bold)
+    Example: "Redesign dashboard" / "Build bold landing page"
+
+  Playbook 4: Systematic Root-Cause Debugging
+    Example: "Fix the failing auth middleware test"
+
+  Playbook 5: Pre-PR Review & Security Gate
+    Example: "Review current diff and check security"
+
+  Playbook 6: Technical Debt & Simplification
+    Example: "Simplify auth service with ponytail economy"
+
+  Playbook 7: Codebase Cartography & Onboarding
+    Example: "Onboard this repo and generate CONTEXT.md"
+
+  Playbook 8: Universal Cross-Agent MCP Manager
+    Example: bunx kobean-skills mcp add <connector>
+
+  Playbook 9: Git Branching, Rebase & PR Workflows
+    Example: "Create branch, rebase on main, and open PR"
+
+To view details of any playbook:
+  bunx kobean-skills playbook <number-or-name>`,
+
+      help: `Command: kobean mcp <action> [options]
+
+Summary:
+  Universal Cross-Agent MCP Manager. Manages Model Context Protocol connectors across
+  Claude Code, Gemini CLI, Antigravity, and OpenAI Codex with zero configuration drift.
+
+Actions:
+  list                          Audit active connectors, sync status, and environment variables
+  marketplace [category]        Browse 38+ vetted MCP connectors across 6 categories
+  search <query>                Search marketplace connectors by name, technology, or provider
+  add <name>                    Add a connector preset to .kobean/mcp.json and auto-sync all agents
+  remove <name>                 Remove a connector and update agent configuration files
+  sync [--global]               Re-export .kobean/mcp.json to .mcp.json, .agents/mcp.json, etc.
+
+Examples:
+  bunx kobean-skills mcp
+  bunx kobean-skills mcp marketplace databases
+  bunx kobean-skills mcp search database
+  bunx kobean-skills mcp add postgres
+  bunx kobean-skills mcp sync`,
+
+      doctor: `==> Checking KobeanSkills environment and companion tools:
+
+  [✓] bd (Beads) is installed
+  [✓] betterleaks is installed
+  [✓] graphify is installed
+  [✓] bun is installed
+  [✓] node is installed
+  [✓] git is installed
+
+Supported Agent CLIs:
+  [✓] Gemini CLI is installed
+  [✓] Claude CLI is installed
+  [✓] Codex CLI is installed
+
+Global Discovery:
+  Gemini CLI:         [✓] Active (~/.gemini/GEMINI.md)
+  Antigravity plugin: [✓] Active (~/.gemini/config/plugins/)
+  Claude CLI:         [✓] Active (~/.claude/CLAUDE.md)
+  Codex CLI:          [✓] Active (~/.codex/AGENTS.md)
+
+MCP Connectors Status:
+  Source config:      [✓] Configured (.kobean/mcp.json)`
+    };
+
+    function switchCliDemo(key, btn) {
+      document.querySelectorAll('.cli-tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const codeEl = document.getElementById('cli-demo-code');
+      if (codeEl && cliDemoOutputs[key]) {
+        codeEl.innerText = cliDemoOutputs[key];
+      }
+    }
+
+    // CLI Commands Cheatsheet Data
+    const cliCommandsData = [
+      {
+        tag: 'INIT',
+        cat: 'setup',
+        catFull: 'Setup & Scaffolding',
+        title: 'kobean init [dir]',
+        desc: 'Zero-clone repository initialization. Scaffolds .kobean/, wires agent discovery (.agents, .claude, .codex), configures cross-agent MCP, and sets up PR templates.',
+        cmd: 'bunx kobean-skills init',
+        options: ['[dir] target path', 'zero-clone']
+      },
+      {
+        tag: 'MANUAL',
+        cat: 'inspection',
+        catFull: 'Inspection & Manual',
+        title: 'kobean help [command]',
+        desc: 'Context-aware command manual. Displays detailed explanations, arguments, options, and real-world examples for any command (init, mcp, skills, roles, doctor, etc.).',
+        cmd: 'bunx kobean-skills help mcp',
+        options: ['[command] command name', 'detailed reference']
+      },
+      {
+        tag: 'SKILLS',
+        cat: 'inspection',
+        catFull: 'Inspection & Manual',
+        title: 'kobean skills',
+        desc: 'Progressive disclosure skills inspector. Lists all 9 entry skills with short summaries and quick-inspect commands without loading large files into agent context.',
+        cmd: 'bunx kobean-skills skills',
+        options: ['all 9 entry skills', 'progressive disclosure']
+      },
+      {
+        tag: 'SKILL',
+        cat: 'inspection',
+        catFull: 'Inspection & Manual',
+        title: 'kobean skill <name>',
+        desc: 'Prints the complete SKILL.md runbook for any specific skill (e.g. git, build, review, spec, plan, ui, debug, ship, router) directly to terminal stdout.',
+        cmd: 'bunx kobean-skills skill git',
+        options: ['<name> skill name', 'full runbook markdown']
+      },
+      {
+        tag: 'ROLES',
+        cat: 'inspection',
+        catFull: 'Inspection & Manual',
+        title: 'kobean roles [phase]',
+        desc: 'Specialist role contract inspector. Lists all 22 specialist role contracts grouped by lifecycle phase (discover, spec, plan, build, verify, ship), or filters by phase.',
+        cmd: 'bunx kobean-skills roles build',
+        options: ['[phase] discover|spec|plan|build|verify|ship']
+      },
+      {
+        tag: 'ROLE',
+        cat: 'inspection',
+        catFull: 'Inspection & Manual',
+        title: 'kobean role <name>',
+        desc: 'Inspects a specialist role YAML contract (mission, allowed writes, forbidden paths, tools, done criteria) directly in the terminal.',
+        cmd: 'bunx kobean-skills role backend',
+        options: ['<name> role identifier (e.g. backend, frontend, qa)']
+      },
+      {
+        tag: 'PLAYBOOKS',
+        cat: 'inspection',
+        catFull: 'Inspection & Manual',
+        title: 'kobean playbooks',
+        desc: 'Terminal playbook browser. Lists the 9 core engineering playbooks with real-world trigger prompts to copy or run.',
+        cmd: 'bunx kobean-skills playbooks',
+        options: ['9 playbooks', 'trigger prompt cheat-sheet']
+      },
+      {
+        tag: 'PLAYBOOK',
+        cat: 'inspection',
+        catFull: 'Inspection & Manual',
+        title: 'kobean playbook <name>',
+        desc: 'Extracts and prints a specific engineering playbook (e.g. git, ui, debug, review) from GUIDE.md directly in your terminal.',
+        cmd: 'bunx kobean-skills playbook git',
+        options: ['<name> number or keyword']
+      },
+      {
+        tag: 'MCP AUDIT',
+        cat: 'mcp',
+        catFull: 'MCP Connectors',
+        title: 'kobean mcp',
+        desc: 'Universal Cross-Agent MCP audit. Inspects configured connectors, reports sync status across Claude, Gemini, Antigravity, and Codex, and flags missing environment variables.',
+        cmd: 'bunx kobean-skills mcp',
+        options: ['zero-drift check', 'environment variable audit']
+      },
+      {
+        tag: 'MARKETPLACE',
+        cat: 'mcp',
+        catFull: 'MCP Connectors',
+        title: 'kobean mcp marketplace',
+        desc: 'Browse the 38+ pre-vetted MCP marketplace catalog across Databases, Dev Tools, Web Automation, Search & AI, Cloud, and Productivity directly in the terminal.',
+        cmd: 'bunx kobean-skills mcp marketplace',
+        options: ['[category] filter by category']
+      },
+      {
+        tag: 'SEARCH',
+        cat: 'mcp',
+        catFull: 'MCP Connectors',
+        title: 'kobean mcp search <query>',
+        desc: 'Fast fuzzy search across all 38+ vetted MCP connectors by technology, package name, or vendor keywords.',
+        cmd: 'bunx kobean-skills mcp search database',
+        options: ['<query> search keyword']
+      },
+      {
+        tag: 'MCP ADD',
+        cat: 'mcp',
+        catFull: 'MCP Connectors',
+        title: 'kobean mcp add <name>',
+        desc: 'Installs a preset or custom connector into .kobean/mcp.json and immediately auto-syncs across all 4 agent configuration files (.mcp.json, .agents/mcp.json, .gemini/mcp_config.json, .codex/config.toml).',
+        cmd: 'bunx kobean-skills mcp add postgres',
+        options: ['<name> preset or custom npm package']
+      },
+      {
+        tag: 'MCP REMOVE',
+        cat: 'mcp',
+        catFull: 'MCP Connectors',
+        title: 'kobean mcp remove <name>',
+        desc: 'Uninstalls an MCP connector from .kobean/mcp.json and cleanly removes it from all agent configuration files.',
+        cmd: 'bunx kobean-skills mcp remove postgres',
+        options: ['<name> connector identifier']
+      },
+      {
+        tag: 'MCP SYNC',
+        cat: 'mcp',
+        catFull: 'MCP Connectors',
+        title: 'kobean mcp sync',
+        desc: 'Synchronizes .kobean/mcp.json across Claude Code, Gemini CLI, Antigravity, and OpenAI Codex. Pass --global to sync machine-wide configurations.',
+        cmd: 'bunx kobean-skills mcp sync',
+        options: ['--global user home sync']
+      },
+      {
+        tag: 'PR TEMPLATE',
+        cat: 'quality',
+        catFull: 'Quality & PRs',
+        title: 'kobean pr-template [dir]',
+        desc: 'Scaffolds a clean, elegant, production-ready Pull Request template at .github/pull_request_template.md with conventional commit summary, testing checklists, security gates, and Beads task links.',
+        cmd: 'bunx kobean-skills pr-template',
+        options: ['[dir] target repository directory']
+      },
+      {
+        tag: 'DOCTOR',
+        cat: 'quality',
+        catFull: 'Quality & PRs',
+        title: 'kobean doctor',
+        desc: 'Environment health check. Verifies companion engineering tools (bd, betterleaks, graphify, osv-scanner, semgrep), agent CLIs (gemini, claude, codex), and MCP configuration sync state.',
+        cmd: 'bunx kobean-skills doctor',
+        options: ['--verbose detailed check output']
+      },
+      {
+        tag: 'DOCS',
+        cat: 'setup',
+        catFull: 'Setup & Scaffolding',
+        title: 'kobean docs',
+        desc: 'Opens this interactive visual documentation site in your default browser with offline support.',
+        cmd: 'bunx kobean-skills docs',
+        options: ['browser launcher', 'offline documentation']
+      },
+      {
+        tag: 'INSTALL',
+        cat: 'setup',
+        catFull: 'Setup & Scaffolding',
+        title: 'kobean install',
+        desc: 'Performs global symlink installation into ~/.gemini, ~/.claude, and ~/.codex for machine-wide agent skill availability across all repositories.',
+        cmd: 'bunx kobean-skills install',
+        options: ['--uninstall cleanly remove global symlinks']
+      }
+    ];
+
+    let currentCliCat = 'all';
+    let currentCliSearch = '';
+
+    function renderCliCommands() {
+      const grid = document.getElementById('cli-grid');
+      const countEl = document.getElementById('cli-count');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      const q = currentCliSearch.toLowerCase().trim();
+      const filtered = cliCommandsData.filter(item => {
+        const matchesCat = currentCliCat === 'all' || item.cat === currentCliCat;
+        const matchesSearch = !q ||
+          item.title.toLowerCase().includes(q) ||
+          item.desc.toLowerCase().includes(q) ||
+          item.cmd.toLowerCase().includes(q) ||
+          item.catFull.toLowerCase().includes(q) ||
+          item.tag.toLowerCase().includes(q) ||
+          item.options.some(opt => opt.toLowerCase().includes(q));
+        return matchesCat && matchesSearch;
+      });
+
+      if (countEl) {
+        countEl.innerText = `Showing ${filtered.length} of ${cliCommandsData.length} commands`;
+      }
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 48px 24px; background: var(--surface); border: 1px dashed var(--border); border-radius: 14px;">
+            <div style="font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 6px;">No CLI commands match "${currentCliSearch}"</div>
+            <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 18px;">Try clearing your search query or run help in the terminal:</div>
+            <code style="background: var(--surface-elevated); border: 1px solid var(--border); padding: 8px 14px; border-radius: 6px; color: var(--accent); font-size: 13px;">bunx kobean-skills help</code>
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach(c => {
+        const card = document.createElement('div');
+        card.className = 'skill-card';
+        card.innerHTML = `
+          <div>
+            <div class="skill-header">
+              <span class="cli-badge">${c.tag}</span>
+              <span style="font-size: 11px; color: var(--sky); font-family: ui-monospace, SFMono-Regular, Menlo, monospace;">${c.catFull}</span>
+            </div>
+            <div class="cli-cmd-title">${c.title}</div>
+            <div class="cli-cmd-desc" style="margin-top: 6px;">${c.desc}</div>
+            <div class="cli-options">
+              ${c.options.map(opt => `<span class="cli-opt-tag">${opt}</span>`).join('')}
+            </div>
+          </div>
+          <div class="skill-prompt-box" onclick="copySkillPrompt(this)" title="Click to copy command">
+            <div class="skill-prompt-text">${c.cmd}</div>
+            <div class="skill-copy-action">
+              <span class="skill-copy-status">Click card to copy</span>
+              <span class="skill-copy-btn">
+                <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                <span>Copy Command</span>
+              </span>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function filterCliCategory(cat, btn) {
+      currentCliCat = cat;
+      const bar = btn.closest('.filter-bar');
+      if (bar) {
+        bar.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      }
+      btn.classList.add('active');
+      renderCliCommands();
+    }
+
+    function handleCliSearch(val) {
+      currentCliSearch = val || '';
+      renderCliCommands();
+    }
+
     // Initialize
     renderRoles('all');
     renderMcpMarketplace();
+    renderCliCommands();
   </script>
 </body>
 </html>

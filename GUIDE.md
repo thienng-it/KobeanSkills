@@ -226,6 +226,10 @@ Prompt:
 | **Keep implementations ultra-minimal** | `"Use ponytail mode: smallest possible diff"` |
 | **Manage branches, rebase & open PRs** | `"Use kb-git to rebase on main and create PR"` |
 | **Scaffold clean PR template** | Run `bunx kobean-skills pr-template` |
+| **Inspect skills or read runbook** | Run `bunx kobean-skills skills` or `skill <name>` |
+| **Inspect roles or view contract YAML** | Run `bunx kobean-skills roles` or `role <name>` |
+| **Browse or extract playbooks** | Run `bunx kobean-skills playbooks` or `playbook <name>` |
+| **Get command-specific help manual** | Run `bunx kobean-skills help [command]` |
 | **Inspect task status** | Run `bd ready` or `bd list` in terminal |
 | **Manage MCP connectors across agents** | Run `bunx kobean-skills mcp` |
 | **Check installed tools & MCP status** | Run `bunx kobean-skills doctor` |

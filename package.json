@@ -1,0 +1,43 @@
+{
+  "name": "kobean-skills",
+  "version": "0.2.0",
+  "description": "Antigravity-native & Claude Code-compatible engineering skill distribution and multi-role agent orchestrator.",
+  "main": "bin/kobean.js",
+  "bin": {
+    "kobean": "bin/kobean.js",
+    "kobean-skills": "bin/kobean.js"
+  },
+  "files": [
+    "bin",
+    "doctrine.md",
+    "init.sh",
+    "plugin.json",
+    "README.md",
+    "references",
+    "roles",
+    "rules",
+    "scripts",
+    "skills",
+    "SOURCES.md",
+    "templates"
+  ],
+  "scripts": {
+    "lint": "./scripts/lint.sh",
+    "install:global": "./scripts/install.sh",
+    "init:repo": "./init.sh"
+  },
+  "keywords": [
+    "antigravity",
+    "claude-code",
+    "agent-skills",
+    "speckit",
+    "superpowers",
+    "beads",
+    "ponytail",
+    "impeccable",
+    "taste-skill",
+    "trail-of-bits"
+  ],
+  "author": "Joseph Nguyen",
+  "license": "MIT"
+}

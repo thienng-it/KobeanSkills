@@ -11,26 +11,46 @@ KobeanSkills unifies modern agent methodologies—including **GitHub Spec-Kit**,
 
 ---
 
-## Quick Start: Single-Command Setup
+## Quick Setup: Single Command
 
-To equip any repository with KobeanSkills in **one clean `.kobean/` folder**, navigate to your target project and run:
+Choose the setup method that best matches your workflow:
 
-### If you already have KobeanSkills cloned locally:
+### Option 1: Via `npx` (Fastest — Zero Git Clone Required)
+
+Run inside any project repository to initialize `.kobean/` in seconds:
+
 ```bash
-cd /path/to/your-repo
-~/Developer/KobeanSkills/init.sh
+# Initialize KobeanSkills in the current repository
+npx kobean-skills init
+
+# Verify companion CLI tools
+npx kobean-skills doctor
 ```
 
-### For any new machine or teammate (One-Liner):
+### Option 2: Via Git Clone (`init.sh`)
+
+If you have cloned this repository locally or want to share it directly:
+
 ```bash
+# From inside any target project:
 cd /path/to/your-repo
+/path/to/KobeanSkills/init.sh
+
+# Or as a one-liner on a fresh machine:
 git clone <repo-url> .kobean && ./.kobean/init.sh
 ```
 
-### What this command does:
-1. Creates a single, self-contained **`.kobean/`** folder containing all 8 entry skills, 22 role contracts, stack references, templates, and doctrine.
-2. Automatically configures Antigravity (`.agents/`) and Claude Code (`.claude/`) discovery.
-3. Requires zero manual configuration. Commit `.kobean/` to version control to share with your team.
+### Option 3: Via Docker & Docker Compose (Containerized Sandbox)
+
+For environments where you want all companion tools (`bd`, `betterleaks`, `graphify`, `osv-scanner`) pre-baked without installing anything on your host machine:
+
+```bash
+# Spin up the sandboxed environment with your workspace mounted
+docker compose run --rm kobean
+
+# Inside the container, doctor check and all skills are active immediately
+kobean doctor
+```
 
 ---
 
@@ -99,6 +119,11 @@ Each role is defined in a strict YAML contract declaring write permissions, forb
 KobeanSkills/
 ├── doctrine.md              # Precedence rules and core engineering doctrine
 ├── plugin.json              # Antigravity plugin manifest
+├── package.json             # npm package manifest (npx kobean-skills)
+├── bin/
+│   └── kobean.js            # Node CLI (init, doctor, install)
+├── Dockerfile               # Pre-baked sandbox container with bd, betterleaks, osv-scanner
+├── docker-compose.yml       # Docker Compose service definition
 ├── rules/
 │   └── AGENTS.md            # Global engineering rules injected across all workspaces
 ├── skills/                  # The 8 public entry skills

@@ -1,0 +1,19 @@
+services:
+  kobean:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: kobean-skills:latest
+    container_name: kobean-environment
+    working_dir: /workspace
+    volumes:
+      # Mount your host code repository into the container
+      - .:/workspace
+      # Optional: persist Beads Dolt data and agent configurations across runs
+      - kobean-data:/root/.kobean
+    stdin_open: true
+    tty: true
+    command: /bin/bash
+
+volumes:
+  kobean-data:

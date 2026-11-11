@@ -11,26 +11,43 @@ KobeanSkills unifies modern agent methodologies—including **GitHub Spec-Kit**,
 
 ---
 
-## Installation
+## Quick Start: Single-Command Setup
 
-Clone the repository and run the setup script:
+To equip any repository with KobeanSkills in **one clean `.kobean/` folder**, navigate to your target project and run:
+
+### If you already have KobeanSkills cloned locally:
+```bash
+cd /path/to/your-repo
+~/Developer/KobeanSkills/init.sh
+```
+
+### For any new machine or teammate (One-Liner):
+```bash
+cd /path/to/your-repo
+git clone <repo-url> .kobean && ./.kobean/init.sh
+```
+
+### What this command does:
+1. Creates a single, self-contained **`.kobean/`** folder containing all 8 entry skills, 22 role contracts, stack references, templates, and doctrine.
+2. Automatically configures Antigravity (`.agents/`) and Claude Code (`.claude/`) discovery.
+3. Requires zero manual configuration. Commit `.kobean/` to version control to share with your team.
+
+---
+
+## Machine-Wide Global Installation (Optional)
+
+If you prefer installing KobeanSkills once globally so it activates across every project without creating project-level folders:
 
 ```bash
-git clone <repo-url> ~/Developer/KobeanSkills
 cd ~/Developer/KobeanSkills
-
-# Standard installation (enables global discovery across all projects)
 ./scripts/install.sh
 ```
 
-### Installation Options
-
-| Command | Description |
+| Flag | Description |
 | :--- | :--- |
-| `./scripts/install.sh` | Global installation linking entry skills and system rules into Antigravity and Claude Code. |
+| `./scripts/install.sh` | Machine-wide global installation linking entry skills into Antigravity and Claude Code. |
 | `./scripts/install.sh --with-tools` | Global installation plus automated check/install of companion CLIs (`bd`, `betterleaks`, `graphify`, `osv-scanner`). |
-| `./scripts/install.sh --project <dir>` | Project-scoped installation targeting only `<dir>/.agents/` and `<dir>/.claude/`. |
-| `./scripts/install.sh --uninstall` | Removes all global symlinks and plugin registrations cleanly. |
+| `./scripts/install.sh --uninstall` | Cleanly removes all global symlinks and plugin registrations. |
 
 ---
 

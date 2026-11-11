@@ -744,6 +744,59 @@
       background: var(--accent-surface);
     }
 
+    /* MCP Marketplace Search Bar & Badges */
+    .mcp-search-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 16px;
+      margin: 16px 0 14px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s ease;
+    }
+    .mcp-search-bar:focus-within {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+    .mcp-search-bar input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text);
+      font-size: 14px;
+      outline: none;
+    }
+    .mcp-search-bar input::placeholder {
+      color: var(--text-dim);
+    }
+    .mcp-search-bar svg {
+      width: 17px;
+      height: 17px;
+      fill: var(--text-dim);
+      flex-shrink: 0;
+    }
+    .badge-env {
+      font-size: 11px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: var(--accent);
+      background: var(--accent-surface);
+      border: 1px solid var(--accent);
+      padding: 2px 7px;
+      border-radius: 5px;
+    }
+    .badge-zero {
+      font-size: 11px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: var(--emerald);
+      background: var(--emerald-glow);
+      border: 1px solid var(--emerald);
+      padding: 2px 7px;
+      border-radius: 5px;
+    }
+
     /* Mobile toggle */
     .mobile-header {
       display: none;
@@ -1287,161 +1340,32 @@ bunx kobean-skills mcp sync</code></pre>
         </div>
       </div>
 
-      <h3 style="margin: 28px 0 12px; font-size: 18px; color: var(--text);">Vetted MCP Presets Catalog</h3>
-      <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 16px;">Click any preset card to immediately copy its install command to your clipboard:</p>
+      <div style="display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin: 36px 0 10px;">
+        <h3 style="font-size: 20px; color: var(--text);">MCP Marketplace & Directory (38 Connectors)</h3>
+        <span id="mcp-count" style="font-size: 13px; color: var(--text-dim); font-family: ui-monospace, SFMono-Regular, Menlo, monospace;">Showing 38 of 38 connectors</span>
+      </div>
+      <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 12px;">Browse, filter, or search 38 pre-vetted Model Context Protocol connectors across databases, cloud platforms, dev tools, and web automation. Click any card to copy its one-line install command:</p>
 
-      <div class="skills-grid">
-        <!-- postgres -->
-        <div class="skill-card">
-          <div>
-            <div class="skill-header">
-              <span class="skill-badge">postgres</span>
-              <span style="font-size: 11px; font-family: monospace; color: var(--accent); background: var(--accent-surface); padding: 2px 6px; border-radius: 4px;">Env: DATABASE_URL</span>
-            </div>
-            <div class="skill-title">PostgreSQL Database Connector</div>
-            <div class="skill-desc">Query runner and table schema introspection via <code>@modelcontextprotocol/server-postgres</code>.</div>
-          </div>
-          <div class="skill-prompt-box" onclick="copySkillPrompt(this)" title="Click to copy install command">
-            <div class="skill-prompt-text">bunx kobean-skills mcp add postgres</div>
-            <div class="skill-copy-action">
-              <span>Click card to copy</span>
-              <span class="copy-hint-pill">COPY</span>
-            </div>
-          </div>
-        </div>
+      <!-- Search Bar -->
+      <div class="mcp-search-bar">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        <input type="text" id="mcp-search-input" placeholder="Search 38+ connectors by name, keywords, database, tool, or provider..." oninput="handleMcpSearch(this.value)">
+      </div>
 
-        <!-- github -->
-        <div class="skill-card">
-          <div>
-            <div class="skill-header">
-              <span class="skill-badge">github</span>
-              <span style="font-size: 11px; font-family: monospace; color: var(--accent); background: var(--accent-surface); padding: 2px 6px; border-radius: 4px;">Env: GITHUB_TOKEN</span>
-            </div>
-            <div class="skill-title">GitHub Tooling Connector</div>
-            <div class="skill-desc">Issues, pull requests, commit searching, and branch management via <code>@modelcontextprotocol/server-github</code>.</div>
-          </div>
-          <div class="skill-prompt-box" onclick="copySkillPrompt(this)" title="Click to copy install command">
-            <div class="skill-prompt-text">bunx kobean-skills mcp add github</div>
-            <div class="skill-copy-action">
-              <span>Click card to copy</span>
-              <span class="copy-hint-pill">COPY</span>
-            </div>
-          </div>
-        </div>
+      <!-- Category Filter Chips -->
+      <div class="filter-bar" style="margin-bottom: 22px;">
+        <button class="filter-chip active" onclick="filterMcpCategory('all', this)">All (38)</button>
+        <button class="filter-chip" onclick="filterMcpCategory('Databases', this)">Databases & Storage (10)</button>
+        <button class="filter-chip" onclick="filterMcpCategory('Dev Tools', this)">Developer Tools & CI (8)</button>
+        <button class="filter-chip" onclick="filterMcpCategory('Web & Testing', this)">Web & Testing (4)</button>
+        <button class="filter-chip" onclick="filterMcpCategory('Search & AI', this)">Search & Intelligence (5)</button>
+        <button class="filter-chip" onclick="filterMcpCategory('Cloud', this)">Cloud & Big Data (4)</button>
+        <button class="filter-chip" onclick="filterMcpCategory('Productivity', this)">Productivity & Comms (7)</button>
+      </div>
 
-        <!-- playwright -->
-        <div class="skill-card">
-          <div>
-            <div class="skill-header">
-              <span class="skill-badge">playwright</span>
-              <span style="font-size: 11px; font-family: monospace; color: var(--emerald); background: var(--emerald-glow); padding: 2px 6px; border-radius: 4px;">Zero Config</span>
-            </div>
-            <div class="skill-title">Playwright Browser Automation</div>
-            <div class="skill-desc">Headless browser interaction, navigation, clicks, and end-to-end verification via Playwright MCP.</div>
-          </div>
-          <div class="skill-prompt-box" onclick="copySkillPrompt(this)" title="Click to copy install command">
-            <div class="skill-prompt-text">bunx kobean-skills mcp add playwright</div>
-            <div class="skill-copy-action">
-              <span>Click card to copy</span>
-              <span class="copy-hint-pill">COPY</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- sqlite -->
-        <div class="skill-card">
-          <div>
-            <div class="skill-header">
-              <span class="skill-badge">sqlite</span>
-              <span style="font-size: 11px; font-family: monospace; color: var(--emerald); background: var(--emerald-glow); padding: 2px 6px; border-radius: 4px;">Zero Config</span>
-            </div>
-            <div class="skill-title">SQLite Database Connector</div>
-            <div class="skill-desc">Local database querying and schema inspection via <code>@modelcontextprotocol/server-sqlite</code>.</div>
-          </div>
-          <div class="skill-prompt-box" onclick="copySkillPrompt(this)" title="Click to copy install command">
-            <div class="skill-prompt-text">bunx kobean-skills mcp add sqlite</div>
-            <div class="skill-copy-action">
-              <span>Click card to copy</span>
-              <span class="copy-hint-pill">COPY</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- fetch -->
-        <div class="skill-card">
-          <div>
-            <div class="skill-header">
-              <span class="skill-badge">fetch</span>
-              <span style="font-size: 11px; font-family: monospace; color: var(--emerald); background: var(--emerald-glow); padding: 2px 6px; border-radius: 4px;">Zero Config</span>
-            </div>
-            <div class="skill-title">Web Fetch & Markdown</div>
-            <div class="skill-desc">Fetches live web pages and converts HTML to clean, context-efficient Markdown for agent reading.</div>
-          </div>
-          <div class="skill-prompt-box" onclick="copySkillPrompt(this)" title="Click to copy install command">
-            <div class="skill-prompt-text">bunx kobean-skills mcp add fetch</div>
-            <div class="skill-copy-action">
-              <span>Click card to copy</span>
-              <span class="copy-hint-pill">COPY</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- brave-search -->
-        <div class="skill-card">
-          <div>
-            <div class="skill-header">
-              <span class="skill-badge">brave-search</span>
-              <span style="font-size: 11px; font-family: monospace; color: var(--accent); background: var(--accent-surface); padding: 2px 6px; border-radius: 4px;">Env: BRAVE_API_KEY</span>
-            </div>
-            <div class="skill-title">Brave Web & News Search</div>
-            <div class="skill-desc">Real-time web search and documentation retrieval without search engine trackers.</div>
-          </div>
-          <div class="skill-prompt-box" onclick="copySkillPrompt(this)" title="Click to copy install command">
-            <div class="skill-prompt-text">bunx kobean-skills mcp add brave-search</div>
-            <div class="skill-copy-action">
-              <span>Click card to copy</span>
-              <span class="copy-hint-pill">COPY</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- sentry -->
-        <div class="skill-card">
-          <div>
-            <div class="skill-header">
-              <span class="skill-badge">sentry</span>
-              <span style="font-size: 11px; font-family: monospace; color: var(--accent); background: var(--accent-surface); padding: 2px 6px; border-radius: 4px;">Env: SENTRY_AUTH_TOKEN</span>
-            </div>
-            <div class="skill-title">Sentry Error Diagnostics</div>
-            <div class="skill-desc">Retrieve real-time stack traces, production exception tags, and issue summaries directly for <code>kb-debug</code>.</div>
-          </div>
-          <div class="skill-prompt-box" onclick="copySkillPrompt(this)" title="Click to copy install command">
-            <div class="skill-prompt-text">bunx kobean-skills mcp add sentry</div>
-            <div class="skill-copy-action">
-              <span>Click card to copy</span>
-              <span class="copy-hint-pill">COPY</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- memory -->
-        <div class="skill-card">
-          <div>
-            <div class="skill-header">
-              <span class="skill-badge">memory</span>
-              <span style="font-size: 11px; font-family: monospace; color: var(--emerald); background: var(--emerald-glow); padding: 2px 6px; border-radius: 4px;">Zero Config</span>
-            </div>
-            <div class="skill-title">Knowledge Graph Memory</div>
-            <div class="skill-desc">Long-term cross-session associative memory and relation storage for agents across sessions.</div>
-          </div>
-          <div class="skill-prompt-box" onclick="copySkillPrompt(this)" title="Click to copy install command">
-            <div class="skill-prompt-text">bunx kobean-skills mcp add memory</div>
-            <div class="skill-copy-action">
-              <span>Click card to copy</span>
-              <span class="copy-hint-pill">COPY</span>
-            </div>
-          </div>
-        </div>
+      <!-- Dynamic Grid -->
+      <div id="mcp-grid" class="skills-grid">
+        <!-- Rendered dynamically via JS below -->
       </div>
     </section>
 
@@ -1856,8 +1780,143 @@ bunx kobean-skills mcp sync</code></pre>
       renderRoles(phase);
     }
 
+    // MCP Marketplace Data (38 Connectors)
+    const mcpMarketplaceData = [
+      // Databases & Storage (10)
+      { id: 'postgres', name: 'PostgreSQL Database', cat: 'Databases', catFull: 'Databases & Storage', desc: 'Query runner and table schema introspection via @modelcontextprotocol/server-postgres.', env: 'DATABASE_URL', cmd: 'bunx kobean-skills mcp add postgres' },
+      { id: 'sqlite', name: 'SQLite Database', cat: 'Databases', catFull: 'Databases & Storage', desc: 'Local SQLite database file querying, index inspection, and SQL runner.', env: '', cmd: 'bunx kobean-skills mcp add sqlite' },
+      { id: 'mysql', name: 'MySQL Database', cat: 'Databases', catFull: 'Databases & Storage', desc: 'MySQL relational database runner, query execution, and schema analysis.', env: 'MYSQL_URL', cmd: 'bunx kobean-skills mcp add mysql' },
+      { id: 'supabase', name: 'Supabase Postgres & Auth', cat: 'Databases', catFull: 'Databases & Storage', desc: 'Postgres tables, Edge Functions, Auth users, and Storage bucket management.', env: 'SUPABASE_URL', cmd: 'bunx kobean-skills mcp add supabase' },
+      { id: 'neon', name: 'Neon Serverless Postgres', cat: 'Databases', catFull: 'Databases & Storage', desc: 'Instant serverless Postgres branching, migrations, and database operations.', env: 'NEON_API_KEY', cmd: 'bunx kobean-skills mcp add neon' },
+      { id: 'redis', name: 'Redis Cache & Pub/Sub', cat: 'Databases', catFull: 'Databases & Storage', desc: 'In-memory key-value cache, strings, hashes, pub/sub, and data structures.', env: 'REDIS_URL', cmd: 'bunx kobean-skills mcp add redis' },
+      { id: 'mongodb', name: 'MongoDB NoSQL', cat: 'Databases', catFull: 'Databases & Storage', desc: 'Document collection querying, aggregation pipelines, and schema inspection.', env: 'MONGODB_URI', cmd: 'bunx kobean-skills mcp add mongodb' },
+      { id: 'clickhouse', name: 'ClickHouse Columnar Analytics', cat: 'Databases', catFull: 'Databases & Storage', desc: 'High-performance real-time analytical SQL queries and database tables.', env: 'CLICKHOUSE_HOST', cmd: 'bunx kobean-skills mcp add clickhouse' },
+      { id: 'pinecone', name: 'Pinecone Vector DB', cat: 'Databases', catFull: 'Databases & Storage', desc: 'Managed vector index search, vector embeddings upsert, and metadata queries.', env: 'PINECONE_API_KEY', cmd: 'bunx kobean-skills mcp add pinecone' },
+      { id: 'qdrant', name: 'Qdrant Vector Engine', cat: 'Databases', catFull: 'Databases & Storage', desc: 'Vector similarity search engine with payload-based filtering and collections.', env: 'QDRANT_URL', cmd: 'bunx kobean-skills mcp add qdrant' },
+
+      // Developer Tools & CI (8)
+      { id: 'github', name: 'GitHub Tooling', cat: 'Dev Tools', catFull: 'Developer Tools & CI', desc: 'Pull requests, issues, commit history, branch management, and repository search.', env: 'GITHUB_TOKEN', cmd: 'bunx kobean-skills mcp add github' },
+      { id: 'gitlab', name: 'GitLab DevOps Platform', cat: 'Dev Tools', catFull: 'Developer Tools & CI', desc: 'Merge requests, CI/CD pipeline triggers, issues, and project repository access.', env: 'GITLAB_TOKEN', cmd: 'bunx kobean-skills mcp add gitlab' },
+      { id: 'linear', name: 'Linear Project Tracking', cat: 'Dev Tools', catFull: 'Developer Tools & CI', desc: 'Issues, engineering cycles, project milestones, and backlog triage.', env: 'LINEAR_API_KEY', cmd: 'bunx kobean-skills mcp add linear' },
+      { id: 'jira', name: 'Atlassian Jira', cat: 'Dev Tools', catFull: 'Developer Tools & CI', desc: 'Enterprise issue tracking, sprints, epics, and engineering board management.', env: 'JIRA_API_TOKEN', cmd: 'bunx kobean-skills mcp add jira' },
+      { id: 'docker', name: 'Docker Engine & Compose', cat: 'Dev Tools', catFull: 'Developer Tools & CI', desc: 'Container inspection, image building, docker compose services, and container logs.', env: '', cmd: 'bunx kobean-skills mcp add docker' },
+      { id: 'kubernetes', name: 'Kubernetes Cluster', cat: 'Dev Tools', catFull: 'Developer Tools & CI', desc: 'Cluster pods, deployments, services, namespaces, and Kubernetes cluster logs.', env: '', cmd: 'bunx kobean-skills mcp add kubernetes' },
+      { id: 'sentry', name: 'Sentry Error Diagnostics', cat: 'Dev Tools', catFull: 'Developer Tools & CI', desc: 'Production error stack traces, exception tags, and issue triage for kb-debug.', env: 'SENTRY_AUTH_TOKEN', cmd: 'bunx kobean-skills mcp add sentry' },
+      { id: 'postman', name: 'Postman API Platform', cat: 'Dev Tools', catFull: 'Developer Tools & CI', desc: 'API collections, environment variables, mock servers, and automated contract tests.', env: 'POSTMAN_API_KEY', cmd: 'bunx kobean-skills mcp add postman' },
+
+      // Web & Testing (4)
+      { id: 'playwright', name: 'Playwright Browser E2E', cat: 'Web & Testing', catFull: 'Web & Testing', desc: 'Headless browser automation, clicks, form filling, and end-to-end verification.', env: '', cmd: 'bunx kobean-skills mcp add playwright' },
+      { id: 'puppeteer', name: 'Puppeteer Web Scraper', cat: 'Web & Testing', catFull: 'Web & Testing', desc: 'Browser automation, full-page screenshots, PDF generation, and web scraping.', env: '', cmd: 'bunx kobean-skills mcp add puppeteer' },
+      { id: 'chrome-devtools', name: 'Chrome DevTools Protocol', cat: 'Web & Testing', catFull: 'Web & Testing', desc: 'Live DOM inspection, CSS debugging, console logs, network tracing, and a11y trees.', env: '', cmd: 'bunx kobean-skills mcp add chrome-devtools' },
+      { id: 'fetch', name: 'Web Fetch & Markdown', cat: 'Web & Testing', catFull: 'Web & Testing', desc: 'Fetches live web pages and converts HTML to clean, context-efficient Markdown.', env: '', cmd: 'bunx kobean-skills mcp add fetch' },
+
+      // Search & Intelligence (5)
+      { id: 'brave-search', name: 'Brave Web & News Search', cat: 'Search & AI', catFull: 'Search & Intelligence', desc: 'Real-time web search and news querying without tracking or search bias.', env: 'BRAVE_API_KEY', cmd: 'bunx kobean-skills mcp add brave-search' },
+      { id: 'exa', name: 'Exa AI Neural Search', cat: 'Search & AI', catFull: 'Search & Intelligence', desc: 'Neural search engine designed specifically for LLM knowledge retrieval and research.', env: 'EXA_API_KEY', cmd: 'bunx kobean-skills mcp add exa' },
+      { id: 'tavily', name: 'Tavily Agent Search', cat: 'Search & AI', catFull: 'Search & Intelligence', desc: 'Search API built for autonomous AI agents, research synthesis, and fact verification.', env: 'TAVILY_API_KEY', cmd: 'bunx kobean-skills mcp add tavily' },
+      { id: 'memory', name: 'Knowledge Graph Memory', cat: 'Search & AI', catFull: 'Search & Intelligence', desc: 'Long-term persistent associative memory storing entities and relations across turns.', env: '', cmd: 'bunx kobean-skills mcp add memory' },
+      { id: 'arxiv', name: 'ArXiv Academic Research', cat: 'Search & AI', catFull: 'Search & Intelligence', desc: 'Searches academic scientific papers, extracts abstracts, and fetches preprints.', env: '', cmd: 'bunx kobean-skills mcp add arxiv' },
+
+      // Cloud & Big Data (4)
+      { id: 'cloudflare', name: 'Cloudflare Platform', cat: 'Cloud', catFull: 'Cloud & Big Data', desc: 'Cloudflare Workers, KV, D1 SQL databases, R2 object storage, and DNS records.', env: 'CLOUDFLARE_API_TOKEN', cmd: 'bunx kobean-skills mcp add cloudflare' },
+      { id: 'bigquery', name: 'Google Cloud BigQuery', cat: 'Cloud', catFull: 'Cloud & Big Data', desc: 'Google Cloud BigQuery enterprise datasets, tables, SQL queries, and analytics.', env: '', cmd: 'bunx kobean-skills mcp add bigquery' },
+      { id: 'aws-kb', name: 'AWS Bedrock Knowledge Base', cat: 'Cloud', catFull: 'Cloud & Big Data', desc: 'AWS Bedrock vector retrieval, S3 enterprise document chunks, and embeddings.', env: 'AWS_ACCESS_KEY_ID', cmd: 'bunx kobean-skills mcp add aws-kb' },
+      { id: 'snowflake', name: 'Snowflake Data Warehouse', cat: 'Cloud', catFull: 'Cloud & Big Data', desc: 'Snowflake enterprise data warehouse SQL queries, table schemas, and compute clusters.', env: 'SNOWFLAKE_ACCOUNT', cmd: 'bunx kobean-skills mcp add snowflake' },
+
+      // Productivity, Files & Comms (7)
+      { id: 'filesystem', name: 'Local Scoped Filesystem', cat: 'Productivity', catFull: 'Productivity & Comms', desc: 'Secure, scoped local directory read/write file access within designated boundaries.', env: '', cmd: 'bunx kobean-skills mcp add filesystem' },
+      { id: 'slack', name: 'Slack Workspace Messaging', cat: 'Productivity', catFull: 'Productivity & Comms', desc: 'Slack channel messaging, thread conversations, notifications, and user lookups.', env: 'SLACK_BOT_TOKEN', cmd: 'bunx kobean-skills mcp add slack' },
+      { id: 'discord', name: 'Discord Community Bot', cat: 'Productivity', catFull: 'Productivity & Comms', desc: 'Discord guild channel messages, voice channels, and community announcement bots.', env: 'DISCORD_BOT_TOKEN', cmd: 'bunx kobean-skills mcp add discord' },
+      { id: 'notion', name: 'Notion Workspace', cat: 'Productivity', catFull: 'Productivity & Comms', desc: 'Notion database querying, page content extraction, and documentation syncing.', env: 'NOTION_API_KEY', cmd: 'bunx kobean-skills mcp add notion' },
+      { id: 'google-drive', name: 'Google Drive & Docs', cat: 'Productivity', catFull: 'Productivity & Comms', desc: 'Google Drive file search, document reading, spreadsheets, and metadata retrieval.', env: 'GOOGLE_DRIVE_CLIENT_ID', cmd: 'bunx kobean-skills mcp add google-drive' },
+      { id: 'google-maps', name: 'Google Maps Platform', cat: 'Productivity', catFull: 'Productivity & Comms', desc: 'Google Maps Places, Geocoding, Directions, and Distance Matrix API integration.', env: 'GOOGLE_MAPS_API_KEY', cmd: 'bunx kobean-skills mcp add google-maps' },
+      { id: 'resend', name: 'Resend Transactional Email', cat: 'Productivity', catFull: 'Productivity & Comms', desc: 'Resend email delivery, transactional templates, domain verification, and events.', env: 'RESEND_API_KEY', cmd: 'bunx kobean-skills mcp add resend' }
+    ];
+
+    let currentMcpCat = 'all';
+    let currentMcpSearch = '';
+
+    function renderMcpMarketplace() {
+      const grid = document.getElementById('mcp-grid');
+      const countEl = document.getElementById('mcp-count');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      const q = currentMcpSearch.toLowerCase().trim();
+      const filtered = mcpMarketplaceData.filter(item => {
+        const matchesCat = currentMcpCat === 'all' || item.cat === currentMcpCat;
+        const matchesSearch = !q ||
+          item.id.toLowerCase().includes(q) ||
+          item.name.toLowerCase().includes(q) ||
+          item.desc.toLowerCase().includes(q) ||
+          item.catFull.toLowerCase().includes(q) ||
+          (item.env && item.env.toLowerCase().includes(q));
+        return matchesCat && matchesSearch;
+      });
+
+      if (countEl) {
+        countEl.innerText = `Showing ${filtered.length} of ${mcpMarketplaceData.length} connectors`;
+      }
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 48px 24px; background: var(--surface); border: 1px dashed var(--border); border-radius: 14px;">
+            <div style="font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 6px;">No connectors match "${currentMcpSearch}"</div>
+            <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 18px;">Try clearing your search query or add any custom MCP package directly:</div>
+            <code style="background: var(--surface-elevated); border: 1px solid var(--border); padding: 8px 14px; border-radius: 6px; color: var(--accent); font-size: 13px;">bunx kobean-skills mcp add &lt;package-name&gt;</code>
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach(c => {
+        const card = document.createElement('div');
+        card.className = 'skill-card';
+        card.innerHTML = `
+          <div>
+            <div class="skill-header">
+              <span class="skill-badge">${c.id}</span>
+              <span class="${c.env ? 'badge-env' : 'badge-zero'}">${c.env ? 'Env: ' + c.env : 'Zero Config'}</span>
+            </div>
+            <div class="skill-title">${c.name}</div>
+            <div class="skill-desc">${c.desc}</div>
+            <div class="skill-roles" style="margin-top: 8px;">
+              <span style="color: var(--text-dim);">Category:</span> <span style="color: var(--sky);">${c.catFull}</span>
+            </div>
+          </div>
+          <div class="skill-prompt-box" onclick="copySkillPrompt(this)" title="Click to copy install command">
+            <div class="skill-prompt-text">${c.cmd}</div>
+            <div class="skill-copy-action">
+              <span class="skill-copy-status">Click card to copy</span>
+              <span class="skill-copy-btn">
+                <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                <span>Copy Command</span>
+              </span>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function filterMcpCategory(cat, btn) {
+      currentMcpCat = cat;
+      const bar = btn.closest('.filter-bar');
+      if (bar) {
+        bar.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      }
+      btn.classList.add('active');
+      renderMcpMarketplace();
+    }
+
+    function handleMcpSearch(val) {
+      currentMcpSearch = val || '';
+      renderMcpMarketplace();
+    }
+
     // Initialize
     renderRoles('all');
+    renderMcpMarketplace();
   </script>
 </body>
 </html>

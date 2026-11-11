@@ -69,7 +69,9 @@ If you have already cloned KobeanSkills locally or want a machine-wide global in
 | :--- | :--- |
 | `npx kobean-skills init` | Zero-clone project setup into `.kobean/` with automated MCP & rule wiring. |
 | `npx kobean-skills mcp` | Inspect configured MCP connectors, agent sync status, and environment variables. |
-| `npx kobean-skills mcp add <preset>` | Add a vetted MCP preset (`postgres`, `github`, `playwright`, `sqlite`, etc.) and auto-sync. |
+| `npx kobean-skills mcp marketplace` | Browse 38+ vetted MCP connectors across 6 categories in terminal. |
+| `npx kobean-skills mcp search <query>` | Search marketplace connectors by keyword, technology, or provider. |
+| `npx kobean-skills mcp add <name>` | Add a vetted or custom MCP connector and auto-sync across all 4 agent files. |
 | `npx kobean-skills mcp sync` | Synchronize `.kobean/mcp.json` across Claude Code, Gemini CLI, Antigravity, and Codex. |
 | `npx kobean-skills docs` | Opens the interactive visual documentation site in your browser. |
 | `npx kobean-skills guide` | Prints the complete developer playbook and prompt cheatsheet in terminal. |
@@ -86,26 +88,36 @@ Different AI tools store Model Context Protocol (MCP) servers in incompatible lo
 - **Antigravity & Gemini CLI:** `.agents/mcp.json` & `~/.gemini/config/mcp_config.json`
 - **OpenAI Codex:** `.codex/config.toml` & `~/.codex/config.toml` (TOML `[mcp_servers.<name>]`)
 
-KobeanSkills eliminates config drift by establishing a single source of truth in **`.kobean/mcp.json`**:
+KobeanSkills eliminates config drift by establishing a single source of truth in **`.kobean/mcp.json`** and providing a built-in catalog of **38+ pre-vetted connectors**:
 
 ```bash
-# 1. Inspect configured MCP servers and sync status:
-bunx kobean-skills mcp
+# 1. Browse 38+ connectors in the Marketplace directory:
+bunx kobean-skills mcp marketplace
 
-# 2. Add vetted presets in one command (auto-syncs to all agents):
-bunx kobean-skills mcp add postgres      # Database schema inspection & queries
-bunx kobean-skills mcp add github        # PRs, issues, commits, branch management
+# 2. Search for any connector (e.g. database, supabase, linear, search):
+bunx kobean-skills mcp search database
+
+# 3. Add connectors in one command (auto-syncs to all agents):
+bunx kobean-skills mcp add postgres      # PostgreSQL database query engine
+bunx kobean-skills mcp add supabase      # Supabase tables, auth & storage
+bunx kobean-skills mcp add github        # PRs, issues, commits, branches
 bunx kobean-skills mcp add playwright    # Headless browser testing & UI automation
+bunx kobean-skills mcp add docker        # Container & compose lifecycle manager
 
-# 3. Synchronize across Claude, Gemini, Antigravity, and Codex:
+# 4. Synchronize across Claude, Gemini, Antigravity, and Codex:
 bunx kobean-skills mcp sync
-
-# 4. View all available built-in presets:
-bunx kobean-skills mcp presets
 ```
 
+### Marketplace Categories
+1. **Databases & Storage (10):** `postgres`, `sqlite`, `mysql`, `supabase`, `neon`, `redis`, `mongodb`, `clickhouse`, `pinecone`, `qdrant`
+2. **Developer Tools & CI (8):** `github`, `gitlab`, `linear`, `jira`, `docker`, `kubernetes`, `sentry`, `postman`
+3. **Web & Testing (4):** `playwright`, `puppeteer`, `chrome-devtools`, `fetch`
+4. **Search & Intelligence (5):** `brave-search`, `exa`, `tavily`, `memory`, `arxiv`
+5. **Cloud & Big Data (4):** `cloudflare`, `bigquery`, `aws-kb`, `snowflake`
+6. **Productivity & Comms (7):** `filesystem`, `slack`, `discord`, `notion`, `google-drive`, `google-maps`, `resend`
+
 ### Zero-Leak Credential Safety
-KobeanSkills preserves `${ENV_VAR}` template references in all generated configs. Your API keys (`GITHUB_TOKEN`, `DATABASE_URL`) are read securely from your environment or `.env` at runtime and are **never committed to Git in plaintext**. Kobean's `doctor` and `mcp list` audit missing variables automatically.
+KobeanSkills preserves `${ENV_VAR}` template references in all generated configs. Your API keys (`GITHUB_TOKEN`, `DATABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`) are read securely from your environment or `.env` at runtime and are **never committed to Git in plaintext**. Kobean's `doctor` and `mcp list` audit missing variables automatically.
 
 ---
 

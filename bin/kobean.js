@@ -14,9 +14,12 @@ const PKG_ROOT = path.resolve(__dirname, '..');
 const args = process.argv.slice(2);
 const command = args[0] || 'init';
 
-// Built-in vetted MCP Presets catalog
+// Built-in vetted MCP Marketplace Catalog (38 top connectors across 6 categories)
 const MCP_PRESETS = {
+  // Databases & Storage (10)
   postgres: {
+    name: 'postgres',
+    category: 'Databases & Storage',
     description: 'PostgreSQL database inspector and query runner',
     config: {
       command: 'npx',
@@ -26,6 +29,8 @@ const MCP_PRESETS = {
     sampleEnv: 'DATABASE_URL="postgresql://user:password@localhost:5432/mydb"'
   },
   sqlite: {
+    name: 'sqlite',
+    category: 'Databases & Storage',
     description: 'SQLite database inspector and SQL executor',
     config: {
       command: 'npx',
@@ -34,8 +39,118 @@ const MCP_PRESETS = {
     requiredEnv: [],
     sampleEnv: 'SQLITE_DB_PATH="./dev.db"'
   },
+  mysql: {
+    name: 'mysql',
+    category: 'Databases & Storage',
+    description: 'MySQL database runner, query execution, and schema analysis',
+    config: {
+      command: 'npx',
+      args: ['-y', '@modelcontextprotocol/server-mysql', '${MYSQL_URL}']
+    },
+    requiredEnv: ['MYSQL_URL'],
+    sampleEnv: 'MYSQL_URL="mysql://user:password@localhost:3306/mydb"'
+  },
+  supabase: {
+    name: 'supabase',
+    category: 'Databases & Storage',
+    description: 'Supabase Postgres tables, edge functions, auth, and storage management',
+    config: {
+      command: 'npx',
+      args: ['-y', '@supabase/mcp-server-supabase@latest'],
+      env: {
+        SUPABASE_URL: '${SUPABASE_URL}',
+        SUPABASE_SERVICE_ROLE_KEY: '${SUPABASE_SERVICE_ROLE_KEY}'
+      }
+    },
+    requiredEnv: ['SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY'],
+    sampleEnv: 'SUPABASE_URL="https://xxx.supabase.co"\nSUPABASE_SERVICE_ROLE_KEY="eyJ..."'
+  },
+  neon: {
+    name: 'neon',
+    category: 'Databases & Storage',
+    description: 'Neon serverless Postgres branching, migrations, and query execution',
+    config: {
+      command: 'npx',
+      args: ['-y', '@neondatabase/mcp-server-neon@latest'],
+      env: {
+        NEON_API_KEY: '${NEON_API_KEY}'
+      }
+    },
+    requiredEnv: ['NEON_API_KEY'],
+    sampleEnv: 'NEON_API_KEY="neon_api_..."'
+  },
+  redis: {
+    name: 'redis',
+    category: 'Databases & Storage',
+    description: 'Redis in-memory key-value cache, pub/sub, and data structure inspection',
+    config: {
+      command: 'npx',
+      args: ['-y', '@modelcontextprotocol/server-redis', '${REDIS_URL}']
+    },
+    requiredEnv: ['REDIS_URL'],
+    sampleEnv: 'REDIS_URL="redis://localhost:6379"'
+  },
+  mongodb: {
+    name: 'mongodb',
+    category: 'Databases & Storage',
+    description: 'MongoDB document collection queries, aggregation, and index inspection',
+    config: {
+      command: 'npx',
+      args: ['-y', '@modelcontextprotocol/server-mongodb', '${MONGODB_URI}']
+    },
+    requiredEnv: ['MONGODB_URI'],
+    sampleEnv: 'MONGODB_URI="mongodb://localhost:27017/mydb"'
+  },
+  clickhouse: {
+    name: 'clickhouse',
+    category: 'Databases & Storage',
+    description: 'ClickHouse columnar analytics database query engine and table schema inspector',
+    config: {
+      command: 'npx',
+      args: ['-y', '@modelcontextprotocol/server-clickhouse'],
+      env: {
+        CLICKHOUSE_HOST: '${CLICKHOUSE_HOST}',
+        CLICKHOUSE_PASSWORD: '${CLICKHOUSE_PASSWORD}'
+      }
+    },
+    requiredEnv: ['CLICKHOUSE_HOST', 'CLICKHOUSE_PASSWORD'],
+    sampleEnv: 'CLICKHOUSE_HOST="http://localhost:8123"\nCLICKHOUSE_PASSWORD="password"'
+  },
+  pinecone: {
+    name: 'pinecone',
+    category: 'Databases & Storage',
+    description: 'Pinecone vector database index management, upserting, and similarity search',
+    config: {
+      command: 'npx',
+      args: ['-y', '@modelcontextprotocol/server-pinecone'],
+      env: {
+        PINECONE_API_KEY: '${PINECONE_API_KEY}'
+      }
+    },
+    requiredEnv: ['PINECONE_API_KEY'],
+    sampleEnv: 'PINECONE_API_KEY="pcsk_..."'
+  },
+  qdrant: {
+    name: 'qdrant',
+    category: 'Databases & Storage',
+    description: 'Qdrant vector search engine collection management and vector payload filtering',
+    config: {
+      command: 'npx',
+      args: ['-y', '@modelcontextprotocol/server-qdrant'],
+      env: {
+        QDRANT_URL: '${QDRANT_URL}',
+        QDRANT_API_KEY: '${QDRANT_API_KEY}'
+      }
+    },
+    requiredEnv: ['QDRANT_URL'],
+    sampleEnv: 'QDRANT_URL="http://localhost:6333"\nQDRANT_API_KEY="optional_api_key"'
+  },
+
+  // Developer Tools & CI (8)
   github: {
-    description: 'GitHub issues, pull requests, commits, and branch management',
+    name: 'github',
+    category: 'Developer Tools & CI',
+    description: 'GitHub issues, pull requests, commits, branches, and repository searching',
     config: {
       command: 'npx',
       args: ['-y', '@modelcontextprotocol/server-github'],
@@ -46,8 +161,103 @@ const MCP_PRESETS = {
     requiredEnv: ['GITHUB_TOKEN'],
     sampleEnv: 'GITHUB_TOKEN="ghp_xxxxxxxxxxxxxxxxxxxx"'
   },
+  gitlab: {
+    name: 'gitlab',
+    category: 'Developer Tools & CI',
+    description: 'GitLab merge requests, pipelines, issues, and project repository access',
+    config: {
+      command: 'npx',
+      args: ['-y', '@modelcontextprotocol/server-gitlab'],
+      env: {
+        GITLAB_PERSONAL_ACCESS_TOKEN: '${GITLAB_TOKEN}'
+      }
+    },
+    requiredEnv: ['GITLAB_TOKEN'],
+    sampleEnv: 'GITLAB_TOKEN="glpat-xxxxxxxxxxxxxxxxxxxx"'
+  },
+  linear: {
+    name: 'linear',
+    category: 'Developer Tools & CI',
+    description: 'Linear issue tracker, cycles, projects, and backlog task management',
+    config: {
+      command: 'npx',
+      args: ['-y', '@modelcontextprotocol/server-linear'],
+      env: {
+        LINEAR_API_KEY: '${LINEAR_API_KEY}'
+      }
+    },
+    requiredEnv: ['LINEAR_API_KEY'],
+    sampleEnv: 'LINEAR_API_KEY="lin_api_..."'
+  },
+  jira: {
+    name: 'jira',
+    category: 'Developer Tools & CI',
+    description: 'Atlassian Jira enterprise issue tracking, sprints, and project boards',
+    config: {
+      command: 'npx',
+      args: ['-y', '@atlassian/mcp-server-jira'],
+      env: {
+        JIRA_API_TOKEN: '${JIRA_API_TOKEN}',
+        JIRA_DOMAIN: '${JIRA_DOMAIN}',
+        JIRA_EMAIL: '${JIRA_EMAIL}'
+      }
+    },
+    requiredEnv: ['JIRA_API_TOKEN', 'JIRA_DOMAIN', 'JIRA_EMAIL'],
+    sampleEnv: 'JIRA_API_TOKEN="token"\nJIRA_DOMAIN="myorg.atlassian.net"\nJIRA_EMAIL="user@org.com"'
+  },
+  docker: {
+    name: 'docker',
+    category: 'Developer Tools & CI',
+    description: 'Docker container, image, network, and compose service lifecycle manager',
+    config: {
+      command: 'npx',
+      args: ['-y', '@modelcontextprotocol/server-docker']
+    },
+    requiredEnv: [],
+    sampleEnv: ''
+  },
+  kubernetes: {
+    name: 'kubernetes',
+    category: 'Developer Tools & CI',
+    description: 'Kubernetes cluster introspection, pods, deployments, services, and event logs',
+    config: {
+      command: 'npx',
+      args: ['-y', '@modelcontextprotocol/server-kubernetes']
+    },
+    requiredEnv: [],
+    sampleEnv: 'KUBECONFIG="~/.kube/config"'
+  },
+  sentry: {
+    name: 'sentry',
+    category: 'Developer Tools & CI',
+    description: 'Sentry issue diagnostics, stack traces, and exception tag inspection for kb-debug',
+    config: {
+      command: 'npx',
+      args: ['-y', '@modelcontextprotocol/server-sentry', '--auth-token', '${SENTRY_AUTH_TOKEN}']
+    },
+    requiredEnv: ['SENTRY_AUTH_TOKEN'],
+    sampleEnv: 'SENTRY_AUTH_TOKEN="sntrys_..."'
+  },
+  postman: {
+    name: 'postman',
+    category: 'Developer Tools & CI',
+    description: 'Postman API collections, environments, workspaces, and mock server testing',
+    config: {
+      command: 'npx',
+      args: ['-y', '@postman/postman-mcp-server'],
+      env: {
+        POSTMAN_API_KEY: '${POSTMAN_API_KEY}'
+      }
+    },
+    requiredEnv: ['POSTMAN_API_KEY'],
+    sampleEnv: 'POSTMAN_API_KEY="PMAK-..."'
+  },
+
+  // Web & Testing (4)
   playwright: {
-    description: 'Headless browser automation and end-to-end web testing',
+    name: 'playwright',
+    category: 'Web & Testing',
+    description: 'Headless browser automation, navigation, element clicks, and end-to-end testing',
     config: {
       command: 'npx',
       args: ['-y', '@modelcontextprotocol/server-playwright']
@@ -56,7 +266,9 @@ const MCP_PRESETS = {
     sampleEnv: ''
   },
   puppeteer: {
-    description: 'Browser automation, screenshot rendering, and scraping',
+    name: 'puppeteer',
+    category: 'Web & Testing',
+    description: 'Chrome browser automation, viewport screenshot rendering, and web scraping',
     config: {
       command: 'npx',
       args: ['-y', '@modelcontextprotocol/server-puppeteer']
@@ -64,17 +276,21 @@ const MCP_PRESETS = {
     requiredEnv: [],
     sampleEnv: ''
   },
-  filesystem: {
-    description: 'Secure, scoped local directory read/write access',
+  'chrome-devtools': {
+    name: 'chrome-devtools',
+    category: 'Web & Testing',
+    description: 'Chrome DevTools MCP protocol for live DOM, CSS, network requests, and performance',
     config: {
       command: 'npx',
-      args: ['-y', '@modelcontextprotocol/server-filesystem', '.']
+      args: ['-y', 'chrome-devtools-mcp@latest']
     },
     requiredEnv: [],
     sampleEnv: ''
   },
   fetch: {
-    description: 'Web page fetching and HTML-to-Markdown conversion',
+    name: 'fetch',
+    category: 'Web & Testing',
+    description: 'Web page fetching and HTML-to-Markdown conversion for clean agent consumption',
     config: {
       command: 'npx',
       args: ['-y', '@modelcontextprotocol/server-fetch']
@@ -82,8 +298,12 @@ const MCP_PRESETS = {
     requiredEnv: [],
     sampleEnv: ''
   },
+
+  // Search & Intelligence (5)
   'brave-search': {
-    description: 'Real-time web search and news querying via Brave API',
+    name: 'brave-search',
+    category: 'Search & Intelligence',
+    description: 'Real-time web search and news querying via privacy-focused Brave Search API',
     config: {
       command: 'npx',
       args: ['-y', '@modelcontextprotocol/server-brave-search'],
@@ -94,8 +314,38 @@ const MCP_PRESETS = {
     requiredEnv: ['BRAVE_API_KEY'],
     sampleEnv: 'BRAVE_API_KEY="BSAxxxxxxxxxxxx"'
   },
+  exa: {
+    name: 'exa',
+    category: 'Search & Intelligence',
+    description: 'Exa AI neural web search engine optimized for LLM knowledge retrieval and scraping',
+    config: {
+      command: 'npx',
+      args: ['-y', 'exa-mcp-server'],
+      env: {
+        EXA_API_KEY: '${EXA_API_KEY}'
+      }
+    },
+    requiredEnv: ['EXA_API_KEY'],
+    sampleEnv: 'EXA_API_KEY="your-exa-api-key"'
+  },
+  tavily: {
+    name: 'tavily',
+    category: 'Search & Intelligence',
+    description: 'Tavily Search API built specifically for AI agents, research, and factual grounding',
+    config: {
+      command: 'npx',
+      args: ['-y', 'tavily-mcp'],
+      env: {
+        TAVILY_API_KEY: '${TAVILY_API_KEY}'
+      }
+    },
+    requiredEnv: ['TAVILY_API_KEY'],
+    sampleEnv: 'TAVILY_API_KEY="tvly-..."'
+  },
   memory: {
-    description: 'Knowledge graph persistent memory server',
+    name: 'memory',
+    category: 'Search & Intelligence',
+    description: 'Knowledge graph persistent associative memory storing entities and relations across sessions',
     config: {
       command: 'npx',
       args: ['-y', '@modelcontextprotocol/server-memory']
@@ -103,8 +353,93 @@ const MCP_PRESETS = {
     requiredEnv: [],
     sampleEnv: ''
   },
+  arxiv: {
+    name: 'arxiv',
+    category: 'Search & Intelligence',
+    description: 'ArXiv scientific preprint search, abstract extraction, and academic paper retrieval',
+    config: {
+      command: 'npx',
+      args: ['-y', '@modelcontextprotocol/server-arxiv']
+    },
+    requiredEnv: [],
+    sampleEnv: ''
+  },
+
+  // Cloud & Big Data (4)
+  cloudflare: {
+    name: 'cloudflare',
+    category: 'Cloud & Big Data',
+    description: 'Cloudflare Workers, KV, D1 databases, R2 storage, and DNS zone management',
+    config: {
+      command: 'npx',
+      args: ['-y', '@cloudflare/mcp-server-cloudflare'],
+      env: {
+        CLOUDFLARE_API_TOKEN: '${CLOUDFLARE_API_TOKEN}'
+      }
+    },
+    requiredEnv: ['CLOUDFLARE_API_TOKEN'],
+    sampleEnv: 'CLOUDFLARE_API_TOKEN="token"'
+  },
+  bigquery: {
+    name: 'bigquery',
+    category: 'Cloud & Big Data',
+    description: 'Google Cloud BigQuery datasets, tables, SQL queries, and schema discovery',
+    config: {
+      command: 'npx',
+      args: ['-y', '@google-cloud/bigquery-mcp']
+    },
+    requiredEnv: [],
+    sampleEnv: 'GOOGLE_APPLICATION_CREDENTIALS="~/.config/gcloud/application_default_credentials.json"'
+  },
+  'aws-kb': {
+    name: 'aws-kb',
+    category: 'Cloud & Big Data',
+    description: 'AWS Bedrock Knowledge Base vector search and enterprise document retrieval',
+    config: {
+      command: 'npx',
+      args: ['-y', '@modelcontextprotocol/server-aws-kb-retrieval'],
+      env: {
+        AWS_ACCESS_KEY_ID: '${AWS_ACCESS_KEY_ID}',
+        AWS_SECRET_ACCESS_KEY: '${AWS_SECRET_ACCESS_KEY}',
+        AWS_REGION: '${AWS_REGION}'
+      }
+    },
+    requiredEnv: ['AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY', 'AWS_REGION'],
+    sampleEnv: 'AWS_ACCESS_KEY_ID="AKIA..."\nAWS_SECRET_ACCESS_KEY="..."\nAWS_REGION="us-east-1"'
+  },
+  snowflake: {
+    name: 'snowflake',
+    category: 'Cloud & Big Data',
+    description: 'Snowflake enterprise data warehouse SQL execution, tables, and warehouse monitoring',
+    config: {
+      command: 'npx',
+      args: ['-y', '@modelcontextprotocol/server-snowflake'],
+      env: {
+        SNOWFLAKE_ACCOUNT: '${SNOWFLAKE_ACCOUNT}',
+        SNOWFLAKE_USER: '${SNOWFLAKE_USER}',
+        SNOWFLAKE_PASSWORD: '${SNOWFLAKE_PASSWORD}'
+      }
+    },
+    requiredEnv: ['SNOWFLAKE_ACCOUNT', 'SNOWFLAKE_USER', 'SNOWFLAKE_PASSWORD'],
+    sampleEnv: 'SNOWFLAKE_ACCOUNT="xy12345"\nSNOWFLAKE_USER="user"\nSNOWFLAKE_PASSWORD="pwd"'
+  },
+
+  // Productivity, Files & Comms (7)
+  filesystem: {
+    name: 'filesystem',
+    category: 'Productivity & Comms',
+    description: 'Secure, scoped local directory read/write file access within designated boundaries',
+    config: {
+      command: 'npx',
+      args: ['-y', '@modelcontextprotocol/server-filesystem', '.']
+    },
+    requiredEnv: [],
+    sampleEnv: ''
+  },
   slack: {
-    description: 'Slack channel messaging and thread management',
+    name: 'slack',
+    category: 'Productivity & Comms',
+    description: 'Slack workspace channel messaging, threads, user lookup, and notification dispatch',
     config: {
       command: 'npx',
       args: ['-y', '@modelcontextprotocol/server-slack'],
@@ -116,14 +451,75 @@ const MCP_PRESETS = {
     requiredEnv: ['SLACK_BOT_TOKEN', 'SLACK_TEAM_ID'],
     sampleEnv: 'SLACK_BOT_TOKEN="xoxb-..."\nSLACK_TEAM_ID="T01234567"'
   },
-  sentry: {
-    description: 'Sentry issue retrieval and stack trace inspection',
+  discord: {
+    name: 'discord',
+    category: 'Productivity & Comms',
+    description: 'Discord guild channel messages, voice channel info, and bot announcements',
     config: {
       command: 'npx',
-      args: ['-y', '@modelcontextprotocol/server-sentry', '--auth-token', '${SENTRY_AUTH_TOKEN}']
+      args: ['-y', '@modelcontextprotocol/server-discord'],
+      env: {
+        DISCORD_BOT_TOKEN: '${DISCORD_BOT_TOKEN}'
+      }
     },
-    requiredEnv: ['SENTRY_AUTH_TOKEN'],
-    sampleEnv: 'SENTRY_AUTH_TOKEN="sntrys_..."'
+    requiredEnv: ['DISCORD_BOT_TOKEN'],
+    sampleEnv: 'DISCORD_BOT_TOKEN="OTkx..."'
+  },
+  notion: {
+    name: 'notion',
+    category: 'Productivity & Comms',
+    description: 'Notion workspace database query, page content reading, and document updating',
+    config: {
+      command: 'npx',
+      args: ['-y', '@modelcontextprotocol/server-notion'],
+      env: {
+        NOTION_API_KEY: '${NOTION_API_KEY}'
+      }
+    },
+    requiredEnv: ['NOTION_API_KEY'],
+    sampleEnv: 'NOTION_API_KEY="secret_..."'
+  },
+  'google-drive': {
+    name: 'google-drive',
+    category: 'Productivity & Comms',
+    description: 'Google Drive file listing, document search, and spreadsheet/doc content reading',
+    config: {
+      command: 'npx',
+      args: ['-y', '@modelcontextprotocol/server-google-drive'],
+      env: {
+        GOOGLE_DRIVE_CLIENT_ID: '${GOOGLE_DRIVE_CLIENT_ID}'
+      }
+    },
+    requiredEnv: ['GOOGLE_DRIVE_CLIENT_ID'],
+    sampleEnv: 'GOOGLE_DRIVE_CLIENT_ID="client_id"'
+  },
+  'google-maps': {
+    name: 'google-maps',
+    category: 'Productivity & Comms',
+    description: 'Google Maps Places, Geocoding, Directions, and Distance Matrix API integration',
+    config: {
+      command: 'npx',
+      args: ['-y', '@modelcontextprotocol/server-google-maps'],
+      env: {
+        GOOGLE_MAPS_API_KEY: '${GOOGLE_MAPS_API_KEY}'
+      }
+    },
+    requiredEnv: ['GOOGLE_MAPS_API_KEY'],
+    sampleEnv: 'GOOGLE_MAPS_API_KEY="AIzaSy..."'
+  },
+  resend: {
+    name: 'resend',
+    category: 'Productivity & Comms',
+    description: 'Resend transactional email delivery, template testing, and domain analytics',
+    config: {
+      command: 'npx',
+      args: ['-y', '@resend/mcp-server-resend'],
+      env: {
+        RESEND_API_KEY: '${RESEND_API_KEY}'
+      }
+    },
+    requiredEnv: ['RESEND_API_KEY'],
+    sampleEnv: 'RESEND_API_KEY="re_placeholder_token"'
   }
 };
 
@@ -144,17 +540,21 @@ Core Commands:
   doctor                  Check status of companion CLI tools and MCP connectors
   help                    Show this help message
 
-MCP Connector Commands:
-  mcp                     List configured MCP servers, sync status, and environment checks
-  mcp list                Alias for 'mcp'
-  mcp add <preset>        Add a vetted MCP preset (e.g. postgres, github, playwright) & sync
-  mcp remove <name>       Remove an MCP server from configuration and update agent files
-  mcp sync [--global]     Synchronize .kobean/mcp.json across Claude, Gemini, Antigravity & Codex
-  mcp presets             List all available built-in vetted MCP presets
+MCP Connector & Marketplace Commands:
+  mcp                           List configured MCP servers, sync status, and environment checks
+  mcp marketplace [category]    Browse 38+ vetted MCP servers grouped by category
+  mcp search <keyword>          Search the marketplace for connectors (e.g. database, linear, cloud)
+  mcp add <preset>              Add a preset connector and auto-sync across all 4 agent files
+  mcp remove <name>             Remove an MCP server from configuration and update agent files
+  mcp sync [--global]           Synchronize .kobean/mcp.json across Claude, Gemini, Antigravity & Codex
+  mcp presets                   Alias for 'mcp marketplace'
 
 Examples:
   bunx kobean-skills init
+  bunx kobean-skills mcp marketplace
+  bunx kobean-skills mcp search database
   bunx kobean-skills mcp add postgres
+  bunx kobean-skills mcp add supabase
   bunx kobean-skills mcp add github
   bunx kobean-skills mcp sync
   bunx kobean-skills doctor
@@ -243,7 +643,6 @@ function findMcpConfigFile(targetDir) {
 function loadMcpConfig(targetDir) {
   const file = findMcpConfigFile(targetDir);
   if (!file) {
-    // Return empty config
     return { path: path.join(targetDir, '.kobean', 'mcp.json'), servers: {}, exists: false };
   }
   try {
@@ -435,10 +834,10 @@ function runMcpList(targetDirArg) {
   if (!configData.exists || Object.keys(configData.servers).length === 0) {
     console.log('No MCP servers currently configured.');
     console.log('\nQuick Start:');
-    console.log('  bunx kobean-skills mcp add postgres    # Add Postgres DB connector');
-    console.log('  bunx kobean-skills mcp add github      # Add GitHub repository tools');
-    console.log('  bunx kobean-skills mcp add playwright  # Add E2E browser automation');
-    console.log('  bunx kobean-skills mcp presets         # List all available presets\n');
+    console.log('  bunx kobean-skills mcp add postgres      # Add Postgres DB connector');
+    console.log('  bunx kobean-skills mcp add supabase      # Add Supabase connector');
+    console.log('  bunx kobean-skills mcp add github        # Add GitHub repository tools');
+    console.log('  bunx kobean-skills mcp marketplace       # Browse 38+ marketplace connectors\n');
     return;
   }
 
@@ -472,25 +871,126 @@ function runMcpList(targetDirArg) {
   console.log(`  Codex CLI (.codex/config.toml):     ${codexOk ? '[✓] In sync' : '[ ] Not synced (run: kobean mcp sync)'}`);
 }
 
+function runMcpMarketplace(filterCategory) {
+  console.log('\n============================================================');
+  console.log('  KOBEANSKILLS MCP MARKETPLACE & DIRECTORY (38 CONNECTORS)');
+  console.log('============================================================\n');
+
+  const categories = {};
+  for (const [id, item] of Object.entries(MCP_PRESETS)) {
+    const cat = item.category || 'Other';
+    if (!categories[cat]) categories[cat] = [];
+    categories[cat].push(item);
+  }
+
+  const selectedCategory = filterCategory ? filterCategory.toLowerCase().trim() : null;
+
+  for (const [catName, items] of Object.entries(categories)) {
+    if (selectedCategory) {
+      const matchCat = catName.toLowerCase().includes(selectedCategory) ||
+        selectedCategory.split(/\s+/).some(w => w.length > 2 && catName.toLowerCase().includes(w));
+      if (!matchCat) {
+        continue;
+      }
+    }
+
+    console.log(`\x1b[1m\x1b[33m▶ ${catName.toUpperCase()} (${items.length})\x1b[0m`);
+    console.log('------------------------------------------------------------');
+    for (const p of items) {
+      const envStr = p.requiredEnv.length > 0 ? `[Requires: ${p.requiredEnv.join(', ')}]` : '[Zero Config]';
+      console.log(`  • \x1b[36m${p.name.padEnd(16)}\x1b[0m ${p.description}`);
+      console.log(`    \x1b[90mCommand: ${p.config.command} ${(p.config.args || []).slice(0, 3).join(' ')}...  ${envStr}\x1b[0m`);
+    }
+    console.log('');
+  }
+
+  console.log('------------------------------------------------------------');
+  console.log('Quick Install:');
+  console.log('  bunx kobean-skills mcp add <name>');
+  console.log('  (e.g., bunx kobean-skills mcp add supabase)');
+  console.log('\nSearch Marketplace:');
+  console.log('  bunx kobean-skills mcp search <query>');
+  console.log('  (e.g., bunx kobean-skills mcp search database)\n');
+}
+
+function runMcpSearch(query) {
+  if (!query) {
+    console.log('[error] Please specify a search query. Example: kobean mcp search database');
+    return;
+  }
+
+  const q = query.toLowerCase().trim();
+  const matches = [];
+
+  for (const [id, item] of Object.entries(MCP_PRESETS)) {
+    const fullText = `${item.name} ${item.category} ${item.description} ${(item.config.args || []).join(' ')}`.toLowerCase();
+    if (fullText.includes(q)) {
+      matches.push(item);
+    }
+  }
+
+  console.log(`\n==> MCP Marketplace Search Results for '${query}' (${matches.length} matches):\n`);
+
+  if (matches.length === 0) {
+    console.log(`  No matching connectors found for '${query}'.`);
+    console.log('\nTip: Browse the full catalog with:');
+    console.log('  bunx kobean-skills mcp marketplace');
+    console.log('\nOr add any custom package using:');
+    console.log('  bunx kobean-skills mcp add <name>');
+    return;
+  }
+
+  for (const m of matches) {
+    const envStr = m.requiredEnv.length > 0 ? `(Requires: ${m.requiredEnv.join(', ')})` : '(Zero Config)';
+    console.log(`  • \x1b[36m${m.name.padEnd(16)}\x1b[0m [${m.category}] ${envStr}`);
+    console.log(`    ${m.description}`);
+    console.log(`    \x1b[32mbunx kobean-skills mcp add ${m.name}\x1b[0m\n`);
+  }
+}
+
 function runMcpAdd(presetName, targetDirArg) {
   if (!presetName) {
     console.error('[error] Missing preset name. Example: kobean mcp add postgres');
-    runMcpPresets();
-    process.exit(1);
-  }
-
-  const preset = MCP_PRESETS[presetName.toLowerCase()];
-  if (!preset) {
-    console.error(`[error] Unknown preset '${presetName}'.`);
-    runMcpPresets();
+    runMcpMarketplace();
     process.exit(1);
   }
 
   const targetDir = path.resolve(process.cwd(), targetDirArg || '.');
-  const configData = loadMcpConfig(targetDir);
+  const presetKey = presetName.toLowerCase();
+  let preset = MCP_PRESETS[presetKey];
 
+  if (!preset) {
+    // Check if user is adding custom format: e.g. @package or custom name
+    console.log(`[info] '${presetName}' is not in standard marketplace catalog.`);
+    console.log('Searching for close matches...');
+    const matches = Object.keys(MCP_PRESETS).filter((k) => k.includes(presetKey) || presetKey.includes(k));
+    if (matches.length > 0) {
+      console.log(`\nDid you mean:`);
+      for (const m of matches) {
+        console.log(`  bunx kobean-skills mcp add ${m}`);
+      }
+      console.log('');
+      process.exit(1);
+    }
+
+    // Fallback: create custom server definition
+    console.log(`[info] Configuring '${presetName}' as custom MCP server...`);
+    preset = {
+      name: presetName,
+      category: 'Custom',
+      description: `Custom MCP connector: ${presetName}`,
+      config: {
+        command: 'npx',
+        args: ['-y', presetName]
+      },
+      requiredEnv: [],
+      sampleEnv: ''
+    };
+  }
+
+  const configData = loadMcpConfig(targetDir);
   const mcpPath = configData.path;
-  const servers = { ...configData.servers, [presetName]: preset.config };
+  const servers = { ...configData.servers, [preset.name]: preset.config };
 
   fs.mkdirSync(path.dirname(mcpPath), { recursive: true });
   fs.writeFileSync(
@@ -506,7 +1006,7 @@ function runMcpAdd(presetName, targetDirArg) {
     'utf-8'
   );
 
-  console.log(`==> [✓] Added preset '${presetName}' to ${mcpPath}`);
+  console.log(`==> [✓] Added connector '${preset.name}' to ${mcpPath}`);
   if (preset.sampleEnv) {
     console.log(`\nNote: If required, configure the environment variable:`);
     console.log(`  ${preset.sampleEnv.replace('\n', '\n  ')}`);
@@ -546,20 +1046,6 @@ function runMcpRemove(serverName, targetDirArg) {
 
   console.log(`==> [✓] Removed '${serverName}' from ${configData.path}`);
   runMcpSync(targetDir);
-}
-
-function runMcpPresets() {
-  console.log('\nAvailable KobeanSkills Vetted MCP Presets:');
-  console.log('------------------------------------------------------------');
-  for (const [name, p] of Object.entries(MCP_PRESETS)) {
-    console.log(`  • ${name.padEnd(14)} ${p.description}`);
-    if (p.requiredEnv.length > 0) {
-      console.log(`    Requires:    ${p.requiredEnv.join(', ')}`);
-    }
-  }
-  console.log('\nTo add a preset:');
-  console.log('  bunx kobean-skills mcp add <preset-name>');
-  console.log('  (e.g., bunx kobean-skills mcp add postgres)\n');
 }
 
 function runDoctor() {
@@ -680,11 +1166,13 @@ switch (command) {
       const isGlobal = args.includes('--global');
       const target = args.find((a, i) => i > 1 && !a.startsWith('--'));
       runMcpSync(target, isGlobal);
-    } else if (subAction === 'presets') {
-      runMcpPresets();
+    } else if (subAction === 'marketplace' || subAction === 'catalog' || subAction === 'market' || subAction === 'presets') {
+      runMcpMarketplace(args[2]);
+    } else if (subAction === 'search' || subAction === 'find') {
+      runMcpSearch(args[2]);
     } else {
       console.error(`[error] Unknown mcp subcommand: ${subAction}`);
-      console.log('Available mcp actions: list, add, remove, sync, presets');
+      console.log('Available mcp actions: list, marketplace, search, add, remove, sync');
       process.exit(1);
     }
     break;

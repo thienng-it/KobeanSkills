@@ -172,17 +172,24 @@ Step 2 (In chat prompt):
 When you need your AI agents to query your database, interact with GitHub, inspect logs, or automate browsers:
 
 ```bash
-# Add connectors in one command (automatically wires Claude, Gemini, Antigravity, and Codex):
+# 1. Browse 38+ connectors in the Marketplace directory:
+bunx kobean-skills mcp marketplace
+
+# 2. Search for any connector by keyword (e.g. database, linear, supabase):
+bunx kobean-skills mcp search database
+
+# 3. Add connectors in one command (automatically wires Claude, Gemini, Antigravity, and Codex):
 bunx kobean-skills mcp add postgres      # PostgreSQL database queries & schema
+bunx kobean-skills mcp add supabase      # Supabase tables, auth & storage
 bunx kobean-skills mcp add github        # Pull requests, issues, repo management
 bunx kobean-skills mcp add playwright    # Headless browser testing & UI automation
-bunx kobean-skills mcp add sqlite        # Local SQLite database runner
+bunx kobean-skills mcp add docker        # Docker container & compose manager
 bunx kobean-skills mcp add sentry        # Sentry error logs & stack traces
 
-# Check connector status and environment audit:
+# 4. Check connector status and environment audit:
 bunx kobean-skills mcp list
 
-# Re-sync all agent config files after manual edits to .kobean/mcp.json:
+# 5. Re-sync all agent config files after manual edits to .kobean/mcp.json:
 bunx kobean-skills mcp sync
 ```
 

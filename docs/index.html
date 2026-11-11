@@ -392,15 +392,19 @@
       <p>Install KobeanSkills into any existing repository in seconds using your preferred method:</p>
 
       <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('npx')">npx (Fastest)</button>
-        <button class="tab-btn" onclick="switchTab('curl')">curl (Zero Node)</button>
+        <button class="tab-btn active" onclick="switchTab('npx')">bunx / npx (Fastest)</button>
+        <button class="tab-btn" onclick="switchTab('curl')">curl (Zero Node/Bun)</button>
         <button class="tab-btn" onclick="switchTab('docker')">Docker</button>
         <button class="tab-btn" onclick="switchTab('git')">Local Clone</button>
       </div>
 
       <div id="tab-npx" class="tab-content active">
-        <p>Run inside any repository. Unpacks <code>.kobean/</code> and configures agent discovery automatically:</p>
-        <pre><code>npx kobean-skills init<button class="copy-btn" onclick="copyCode(this)">Copy</button></code></pre>
+        <p>Run inside any repository. Works with <b>Bun</b> (~50ms instant boot) or <b>Node/npx</b>:</p>
+        <pre><code># With Bun (fastest):
+bunx kobean-skills init
+
+# Or with Node/npx:
+npx kobean-skills init<button class="copy-btn" onclick="copyCode(this)">Copy</button></code></pre>
       </div>
 
       <div id="tab-curl" class="tab-content">
@@ -646,3 +650,4 @@ Use kb-ui in bold mode to build the product landing page.<button class="copy-btn
   </script>
 </body>
 </html>
+

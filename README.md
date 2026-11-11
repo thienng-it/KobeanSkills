@@ -15,16 +15,19 @@ KobeanSkills unifies modern agent methodologies—including **GitHub Spec-Kit**,
 
 Any developer can install KobeanSkills into their existing repository using **one command without cloning this repo**:
 
-### Option 1: Via `npx` (Recommended for Node/TS developers)
+### Option 1: Via `bunx` or `npx` (Instant Zero-Clone Setup)
 
 Run from the root of any repository:
 
 ```bash
-# Initialize .kobean/ in the current repo in 1 second
+# Using Bun (Fastest ~50ms startup):
+bunx kobean-skills init
+
+# Or using Node/npx (Universal, pre-installed everywhere):
 npx kobean-skills init
 
-# Verify companion CLI tools
-npx kobean-skills doctor
+# Verify companion CLI tools:
+bunx kobean-skills doctor  # or npx kobean-skills doctor
 ```
 
 ### Option 2: Via `curl` (Zero dependencies — Works for Python, Go, Rust, etc.)

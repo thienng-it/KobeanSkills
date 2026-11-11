@@ -17,6 +17,7 @@ function showHelp() {
 KobeanSkills CLI
 
 Usage:
+  bunx kobean-skills [command] [options]  (fastest)
   npx kobean-skills [command] [options]
   kobean [command] [options]
 
@@ -71,6 +72,7 @@ function runDoctor() {
     { name: 'graphify', cmd: 'graphify --help', install: 'uv tool install graphifyy' },
     { name: 'osv-scanner', cmd: 'osv-scanner --version', install: 'brew install osv-scanner' },
     { name: 'semgrep', cmd: 'semgrep --version', install: 'brew install semgrep' },
+    { name: 'bun', cmd: 'bun --version', install: 'curl -fsSL https://bun.sh/install | bash' },
     { name: 'node', cmd: 'node --version', install: 'https://nodejs.org' },
     { name: 'git', cmd: 'git --version', install: 'brew install git' }
   ];

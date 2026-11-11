@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KobeanSkills — Documentation & Developer Guide</title>
+  <style>
+    :root {
+      --bg: #0B0D10;
+      --surface: #12151B;
+      --surface-elevated: #181C24;
+      --surface-active: #202632;
+      --border: #222938;
+      --border-focus: #38BDF8;
+      --text: #F1F5F9;
+      --text-muted: #94A3B8;
+      --text-dim: #64748B;
+      --accent: #F59E0B;
+      --accent-glow: rgba(245, 158, 11, 0.15);
+      --sky: #38BDF8;
+      --emerald: #10B981;
+      --rose: #F43F5E;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "JetBrains Mono", monospace;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-family: var(--sans); background: var(--bg); color: var(--text); }
+    body { line-height: 1.6; display: flex; min-height: 100vh; }
+
+    /* Layout */
+    aside {
+      width: 280px;
+      height: 100vh;
+      position: sticky;
+      top: 0;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+
+    main {
+      flex: 1;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 48px 32px 96px;
+    }
+
+    /* Brand Header */
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text);
+    }
+    .brand-logo {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--accent), #D97706);
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 16px;
+      color: #000;
+      box-shadow: 0 0 16px var(--accent-glow);
+    }
+    .brand-title {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .badge {
+      font-size: 11px;
+      background: var(--surface-active);
+      color: var(--accent);
+      padding: 2px 8px;
+      border-radius: 9999px;
+      border: 1px solid var(--border);
+      font-family: var(--mono);
+    }
+
+    /* Nav links */
+    .nav-group-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      font-weight: 700;
+      margin-bottom: 8px;
+      padding-left: 8px;
+    }
+    .nav-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 13.5px;
+      padding: 6px 10px;
+      border-radius: 6px;
+      display: block;
+      transition: all 0.15s ease;
+    }
+    .nav-links a:hover {
+      color: var(--text);
+      background: var(--surface-elevated);
+    }
+
+    /* Content styling */
+    h1 {
+      font-size: 38px;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 16px;
+      font-weight: 800;
+    }
+    .lead {
+      font-size: 17px;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+      max-width: 760px;
+    }
+
+    h2 {
+      font-size: 24px;
+      letter-spacing: -0.02em;
+      margin: 48px 0 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    h3 {
+      font-size: 18px;
+      letter-spacing: -0.01em;
+      margin: 28px 0 12px;
+      color: var(--text);
+    }
+    p, ul, ol {
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      font-size: 15px;
+    }
+    ul, ol { padding-left: 22px; }
+    li { margin-bottom: 6px; }
+
+    /* Code blocks */
+    pre {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 20px;
+      overflow-x: auto;
+      font-family: var(--mono);
+      font-size: 13px;
+      margin-bottom: 24px;
+      position: relative;
+    }
+    code {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: #E2E8F0;
+    }
+    p code, li code {
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--sky);
+      font-size: 12.5px;
+    }
+
+    /* Cards */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin: 20px 0 32px;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      transition: border-color 0.15s ease, transform 0.15s ease;
+    }
+    .card:hover {
+      border-color: #333F54;
+      transform: translateY(-2px);
+    }
+    .card-title {
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .card-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Copy Button */
+    .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 4px 10px;
+      border-radius: 5px;
+      font-size: 11px;
+      font-family: var(--mono);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .copy-btn:hover {
+      color: var(--text);
+      border-color: var(--text-muted);
+    }
+
+    /* Tab switcher */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+    }
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .tab-btn.active {
+      background: var(--surface-active);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* Pipeline Diagram */
+    .pipeline {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+      margin: 24px 0 32px;
+    }
+    .pipeline-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      position: relative;
+    }
+    .pipeline-num {
+      width: 28px;
+      height: 28px;
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: 9999px;
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+    .pipeline-body {
+      flex: 1;
+    }
+    .pipeline-title {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .pipeline-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* Filter pills */
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 16px 0;
+    }
+    .filter-chip {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .filter-chip.active {
+      background: var(--accent-glow);
+      border-color: var(--accent);
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    @media (max-width: 860px) {
+      body { flex-direction: column; }
+      aside { width: 100%; height: auto; position: static; border-right: none; border-bottom: 1px solid var(--border); }
+      main { padding: 32px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Sidebar -->
+  <aside>
+    <a href="#" class="brand">
+      <div class="brand-logo">K</div>
+      <div>
+        <div class="brand-title">KobeanSkills</div>
+      </div>
+      <span class="badge">v0.2.0</span>
+    </a>
+
+    <div>
+      <div class="nav-group-title">Getting Started</div>
+      <ul class="nav-links">
+        <li><a href="#quick-start">Zero-Clone Quick Start</a></li>
+        <li><a href="#pipeline">End-to-End Pipeline</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="nav-group-title">Playbooks & Prompts</div>
+      <ul class="nav-links">
+        <li><a href="#playbook-feature">1. Feature Engineering</a></li>
+        <li><a href="#playbook-ui">2. High-Craft UI/UX</a></li>
+        <li><a href="#playbook-debug">3. Root-Cause Debugging</a></li>
+        <li><a href="#playbook-review">4. Pre-PR Security & Review</a></li>
+        <li><a href="#playbook-refactor">5. Technical Debt Cleanup</a></li>
+        <li><a href="#playbook-onboard">6. Codebase Onboarding</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="nav-group-title">Architecture</div>
+      <ul class="nav-links">
+        <li><a href="#entry-skills">8 Entry Skills</a></li>
+        <li><a href="#roles">22 Specialist Roles</a></li>
+        <li><a href="#doctrine">Doctrine & Precedence</a></li>
+        <li><a href="#cli-commands">CLI & Doctor Helper</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main>
+    <h1>KobeanSkills Documentation</h1>
+    <p class="lead">
+      An Antigravity-native & Claude Code-compatible engineering skill distribution and multi-role agent orchestration system.
+    </p>
+
+    <!-- Quick Start -->
+    <section id="quick-start">
+      <h2>Quick Start (Zero Cloning Required)</h2>
+      <p>Install KobeanSkills into any existing repository in seconds using your preferred method:</p>
+
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('npx')">npx (Fastest)</button>
+        <button class="tab-btn" onclick="switchTab('curl')">curl (Zero Node)</button>
+        <button class="tab-btn" onclick="switchTab('docker')">Docker</button>
+        <button class="tab-btn" onclick="switchTab('git')">Local Clone</button>
+      </div>
+
+      <div id="tab-npx" class="tab-content active">
+        <p>Run inside any repository. Unpacks <code>.kobean/</code> and configures agent discovery automatically:</p>
+        <pre><code>npx kobean-skills init<button class="copy-btn" onclick="copyCode(this)">Copy</button></code></pre>
+      </div>
+
+      <div id="tab-curl" class="tab-content">
+        <p>Pure shell command for Python, Go, Rust, or any environment without Node installed:</p>
+        <pre><code>curl -fsSL https://raw.githubusercontent.com/thienng-it/KobeanSkills/main/setup.sh | bash<button class="copy-btn" onclick="copyCode(this)">Copy</button></code></pre>
+      </div>
+
+      <div id="tab-docker" class="tab-content">
+        <p>Run in an isolated container sandbox with companion tools (<code>bd</code>, <code>betterleaks</code>, <code>osv-scanner</code>) pre-baked:</p>
+        <pre><code>docker run --rm -v "$(pwd):/workspace" ghcr.io/thienng-it/kobean-skills:latest kobean init<button class="copy-btn" onclick="copyCode(this)">Copy</button></code></pre>
+      </div>
+
+      <div id="tab-git" class="tab-content">
+        <p>If you already cloned KobeanSkills locally, initialize any project directory:</p>
+        <pre><code>cd /path/to/any-repo
+~/Developer/KobeanSkills/init.sh<button class="copy-btn" onclick="copyCode(this)">Copy</button></code></pre>
+      </div>
+    </section>
+
+    <!-- Pipeline -->
+    <section id="pipeline">
+      <h2>End-to-End Feature Pipeline</h2>
+      <p>When you ask to build a new feature, <code>kb-router</code> chains the following autonomous pipeline:</p>
+
+      <div class="pipeline">
+        <div class="pipeline-step">
+          <div class="pipeline-num">1</div>
+          <div class="pipeline-body">
+            <div class="pipeline-title">Requirements & Security (kb-spec)</div>
+            <div class="pipeline-desc">Enforces the Ponytail Ultra gate ("should this exist?"), asks Socratic clarifying questions, and produces <code>spec.md</code> and STRIDE <code>threats.md</code>.</div>
+          </div>
+        </div>
+
+        <div class="pipeline-step">
+          <div class="pipeline-num">2</div>
+          <div class="pipeline-body">
+            <div class="pipeline-title">Architecture & Contracts (kb-plan)</div>
+            <div class="pipeline-desc">Designs OpenAPI/Zod interfaces, PostgreSQL schemas, and generates the task dependency graph in <code>.beads/</code> using <code>bd</code>.</div>
+          </div>
+        </div>
+
+        <div class="pipeline-step">
+          <div class="pipeline-num">3</div>
+          <div class="pipeline-body">
+            <div class="pipeline-title">Autonomous Implementation (kb-build)</div>
+            <div class="pipeline-desc">Fetches ready tasks from Beads, writes failing tests first (Red), implements the minimal code (Green), and obeys Ponytail code economy.</div>
+          </div>
+        </div>
+
+        <div class="pipeline-step">
+          <div class="pipeline-num">4</div>
+          <div class="pipeline-body">
+            <div class="pipeline-title">Verification & Quality Gates (kb-review)</div>
+            <div class="pipeline-desc">Hard completion gates: <code>betterleaks</code> secret scan, Trail of Bits AppSec, Core Web Vitals, WCAG 2.2 accessibility, and test suites.</div>
+          </div>
+        </div>
+
+        <div class="pipeline-step">
+          <div class="pipeline-num">5</div>
+          <div class="pipeline-body">
+            <div class="pipeline-title">Documentation & Delivery (kb-ship)</div>
+            <div class="pipeline-desc">Writes Diátaxis documentation, SemVer <code>CHANGELOG.md</code>, checks CI safety, and provides a rollback runbook.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Playbooks -->
+    <section id="playbooks">
+      <h2>Developer Playbooks (Copy-Paste Prompts)</h2>
+
+      <div id="playbook-feature">
+        <h3>1. Feature Engineering</h3>
+        <p>Use when creating new functionality or multi-file capabilities:</p>
+        <pre><code>Use kb-router to build an invitation system where admins can invite teammates via email with expiring tokens.<button class="copy-btn" onclick="copyCode(this)">Copy</button></code></pre>
+      </div>
+
+      <div id="playbook-ui">
+        <h3>2. UI/UX Craft & Art Direction</h3>
+        <p>Use for product surfaces (default) or landing pages (bold mode):</p>
+        <pre><code># Standard Dashboard / Product Surface (Impeccable craft):
+Use kb-ui to build the user analytics dashboard with complete loading, empty, and error states.
+
+# Bold Art Direction (Taste-Skill mode for landing pages & brand sites):
+Use kb-ui in bold mode to build the product landing page.<button class="copy-btn" onclick="copyCode(this)">Copy</button></code></pre>
+      </div>
+
+      <div id="playbook-debug">
+        <h3>3. Root-Cause Debugging</h3>
+        <p>The agent reproduces first, traces callers, and writes a failing regression test before writing a fix:</p>
+        <pre><code>Use kb-debug to investigate this error:
+[Paste error log, stack trace, or failing test output]<button class="copy-btn" onclick="copyCode(this)">Copy</button></code></pre>
+      </div>
+
+      <div id="playbook-review">
+        <h3>4. Pre-PR Review & Security Gate</h3>
+        <p>Audits current git changes for secrets, security bugs, bloat, and broken tests:</p>
+        <pre><code>Use kb-review to audit my current diff and check security.<button class="copy-btn" onclick="copyCode(this)">Copy</button></code></pre>
+      </div>
+
+      <div id="playbook-refactor">
+        <h3>5. Technical Debt & Simplification</h3>
+        <p>Deletes dead code and simplifies structure while proving zero behavior change:</p>
+        <pre><code>Use kb-build with the refactorer role to clean up and simplify src/server/auth.<button class="copy-btn" onclick="copyCode(this)">Copy</button></code></pre>
+      </div>
+
+      <div id="playbook-onboard">
+        <h3>6. Unfamiliar Codebase Onboarding</h3>
+        <p>Parses codebase AST into a knowledge map and generates <code>CONTEXT.md</code>:</p>
+        <pre><code>Use kb-router to onboard this repository.<button class="copy-btn" onclick="copyCode(this)">Copy</button></code></pre>
+      </div>
+    </section>
+
+    <!-- Roles Explorer -->
+    <section id="roles">
+      <h2>22 Specialist Roles Matrix</h2>
+      <p>Filter roles by lifecycle phase to see declared write boundaries and tools:</p>
+
+      <div class="filter-bar">
+        <button class="filter-chip active" onclick="filterRoles('all', this)">All (22)</button>
+        <button class="filter-chip" onclick="filterRoles('discover', this)">Discover</button>
+        <button class="filter-chip" onclick="filterRoles('spec', this)">Spec</button>
+        <button class="filter-chip" onclick="filterRoles('plan', this)">Plan</button>
+        <button class="filter-chip" onclick="filterRoles('build', this)">Build</button>
+        <button class="filter-chip" onclick="filterRoles('verify', this)">Verify</button>
+        <button class="filter-chip" onclick="filterRoles('ship', this)">Ship</button>
+      </div>
+
+      <div class="card-grid" id="roles-grid">
+        <!-- Rendered dynamically via JS below -->
+      </div>
+    </section>
+
+    <!-- CLI Commands -->
+    <section id="cli-commands">
+      <h2>CLI Helper Commands</h2>
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-title"><code>npx kobean-skills init</code></div>
+          <div class="card-desc">Initializes self-contained <code>.kobean/</code> and wires agent discovery in the current repository.</div>
+        </div>
+        <div class="card">
+          <div class="card-title"><code>npx kobean-skills doctor</code></div>
+          <div class="card-desc">Verifies whether companion CLIs (<code>bd</code>, <code>betterleaks</code>, <code>graphify</code>, <code>osv-scanner</code>) are installed.</div>
+        </div>
+        <div class="card">
+          <div class="card-title"><code>npx kobean-skills guide</code></div>
+          <div class="card-desc">Outputs the complete developer playbook and prompt cheatsheet directly in your terminal.</div>
+        </div>
+        <div class="card">
+          <div class="card-title"><code>npx kobean-skills install</code></div>
+          <div class="card-desc">Registers KobeanSkills machine-wide in <code>~/.gemini/config</code> and <code>~/.claude</code>.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Doctrine -->
+    <section id="doctrine">
+      <h2>Engineering Doctrine & Precedence</h2>
+      <ul>
+        <li><strong>Precedence Hierarchy:</strong> User Prompt &gt; <code>constitution.md</code> &gt; <code>doctrine.md</code> &gt; Role Contract &gt; Skill Runbook.</li>
+        <li><strong>Single Task State:</strong> Beads (<code>.beads/</code>) is the exclusive source of truth. Never create <code>tasks.md</code> or <code>progress.md</code>.</li>
+        <li><strong>Ponytail Economy:</strong> Write the smallest complete diff. Reuse project helpers &gt; standard library &gt; installed packages. Zero unrequested wrappers.</li>
+        <li><strong>UI Hard Bans:</strong> No neon purple/blue AI-slop gradients, no 3-card marketing clichés, no missing <code>:focus-visible</code> or broken image placeholders.</li>
+        <li><strong>Hard Completion Gates:</strong> Zero secrets (<code>betterleaks</code>), zero unmitigated <code>CRITICAL</code> AppSec findings, and 100% passing test suites.</li>
+      </ul>
+    </section>
+  </main>
+
+  <script>
+    // Tab Switcher
+    function switchTab(name) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      event.target.classList.add('active');
+      document.getElementById('tab-' + name).classList.add('active');
+    }
+
+    // Copy Button
+    function copyCode(btn) {
+      const code = btn.parentElement.innerText.replace('Copy', '').trim();
+      navigator.clipboard.writeText(code);
+      btn.innerText = 'Copied!';
+      setTimeout(() => btn.innerText = 'Copy', 1800);
+    }
+
+    // Role Matrix Data
+    const roles = [
+      { name: 'explorer', title: 'Codebase Cartographer', phase: 'discover', tools: 'graphify', writes: 'Read-Only (CONTEXT.md)', desc: 'Maps repository architecture, modules, and entry points.' },
+      { name: 'po', title: 'Product Owner', phase: 'spec', tools: 'ask_question', writes: 'specs/*/spec.md', desc: 'Enforces Ponytail Ultra existence check, Socratic clarification, and testable criteria.' },
+      { name: 'threat-modeler', title: 'AppSec Threat Modeler', phase: 'spec', tools: 'read_file', writes: 'specs/*/threats.md', desc: 'STRIDE threat matrix, DREAD scoring, and fail-closed security requirements.' },
+      { name: 'architect', title: 'Systems Architect', phase: 'plan', tools: 'bd, graphify', writes: 'specs/*/plan.md, .beads/', desc: 'Designs system architecture, ADRs, and dependency-ordered Beads task graph.' },
+      { name: 'api-designer', title: 'Contract Designer', phase: 'plan', tools: 'read_file', writes: 'contracts/**', desc: 'Contract-first OpenAPI schemas and shared Zod validation models.' },
+      { name: 'data-engineer', title: 'Data & DB Engineer', phase: 'plan', tools: 'drizzle, psql', writes: 'migrations/**, src/db/**', desc: 'PostgreSQL models, GIN/partial indexing, and zero-downtime migrations.' },
+      { name: 'ui-ux-designer', title: 'Art Director', phase: 'build', tools: 'chrome-devtools', writes: 'PRODUCT.md, src/styles/**', desc: 'Design system tokens, typography scales, and Impeccable/Taste-Skill direction.' },
+      { name: 'frontend', title: 'Frontend Engineer', phase: 'build', tools: 'vitest, playwright', writes: 'src/web/**, app/**', desc: 'Next.js/React components, state hygiene, and full 4-state UI implementations.' },
+      { name: 'backend', title: 'Backend Engineer', phase: 'build', tools: 'vitest, hono', writes: 'src/server/**', desc: 'REST/RPC handlers, business domain logic, and query-level authz checks.' },
+      { name: 'mobile', title: 'Mobile Engineer', phase: 'build', tools: 'expo', writes: 'src/mobile/**', desc: 'React Native + Expo screens with 60/120 FPS Callstack performance rules.' },
+      { name: 'ml-engineer', title: 'ML/AI Systems Engineer', phase: 'build', tools: 'uv, pytest', writes: 'src/ml/**, evals/**', desc: 'FastAPI model services, structured LLM outputs, and offline eval harnesses.' },
+      { name: 'devops', title: 'Platform & DevOps', phase: 'build', tools: 'docker, gh', writes: '.github/**, Dockerfile', desc: 'CI/CD hardening, minimal permissions, and container image optimization.' },
+      { name: 'refactorer', title: 'Code Simplifier', phase: 'build', tools: 'graphify, tests', writes: 'src/**, DEBT.md', desc: 'Deletes dead code and simplifies structure while preserving behavior.' },
+      { name: 'debugger', title: 'Root-Cause Diagnostic', phase: 'build', tools: 'tests, logs', writes: 'src/**, tests/**', desc: 'Reproduces first, traces blast radius, and writes failing regression test.' },
+      { name: 'reviewer', title: 'Code Reviewer', phase: 'verify', tools: 'graphify, diff', writes: 'Read-Only', desc: 'Two-stage spec compliance and Ponytail code bloat elimination review.' },
+      { name: 'security', title: 'Security Auditor', phase: 'verify', tools: 'betterleaks, semgrep', writes: 'Read-Only', desc: 'Hard secrets gate, Trail of Bits insecure defaults, and fp-check verification.' },
+      { name: 'supply-chain', title: 'Dependency Auditor', phase: 'verify', tools: 'osv-scanner', writes: 'Read-Only', desc: 'Audits lockfiles for CVEs, typosquatting, and unneeded dependencies.' },
+      { name: 'performance', title: 'Performance Engineer', phase: 'verify', tools: 'devtools, trace', writes: 'Read-Only', desc: 'Measurement-first Core Web Vitals (LCP, INP, CLS) and query plan auditing.' },
+      { name: 'a11y-auditor', title: 'Accessibility Auditor', phase: 'verify', tools: 'a11y-tree', writes: 'Read-Only', desc: 'Audits keyboard focus, screen readers, contrast, and WCAG 2.2 AA.' },
+      { name: 'qa', title: 'QA Verification', phase: 'verify', tools: 'playwright, vitest', writes: 'e2e/**', desc: 'Enforces verification-before-completion against all spec acceptance criteria.' },
+      { name: 'tech-writer', title: 'Technical Writer', phase: 'ship', tools: 'read_file', writes: 'README.md, docs/**', desc: 'Diátaxis documentation structure and reader-test verification.' },
+      { name: 'release-manager', title: 'Release Manager', phase: 'ship', tools: 'git, gh', writes: 'CHANGELOG.md', desc: 'Pre-release checks, SemVer bump calculation, and rollback runbooks.' }
+    ];
+
+    function renderRoles(filter) {
+      const grid = document.getElementById('roles-grid');
+      grid.innerHTML = '';
+      const list = filter === 'all' ? roles : roles.filter(r => r.phase === filter);
+      list.forEach(r => {
+        const div = document.createElement('div');
+        div.className = 'card';
+        div.innerHTML = `
+          <div class="card-title">
+            <span>${r.title}</span>
+            <span class="badge">${r.phase}</span>
+          </div>
+          <div class="card-desc">${r.desc}</div>
+          <div style="margin-top: 10px; font-size: 11.5px; font-family: var(--mono); color: var(--text-dim);">
+            <div>Writes: <span style="color: var(--sky);">${r.writes}</span></div>
+            <div>Tools: <span style="color: var(--text-muted);">${r.tools}</span></div>
+          </div>
+        `;
+        grid.appendChild(div);
+      });
+    }
+
+    function filterRoles(phase, btn) {
+      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      renderRoles(phase);
+    }
+
+    // Initial render
+    renderRoles('all');
+  </script>
+</body>
+</html>

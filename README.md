@@ -65,15 +65,19 @@ If you have already cloned KobeanSkills locally or want a machine-wide global in
 | Command | Description |
 | :--- | :--- |
 | `npx kobean-skills init` | Zero-clone project setup into `.kobean/`. |
+| `npx kobean-skills docs` | Opens the interactive visual documentation site in your browser. |
+| `npx kobean-skills guide` | Prints the complete developer playbook and prompt cheatsheet in terminal. |
 | `npx kobean-skills doctor` | Verify status of companion CLI tools (`bd`, `betterleaks`, `graphify`, `osv-scanner`). |
-| `npx kobean-skills install` | Machine-wide global installation. |
+| `npx kobean-skills install` | Machine-wide global installation into `~/.gemini` and `~/.claude`. |
 | `./scripts/install.sh --uninstall` | Cleanly removes all global symlinks and plugin registrations. |
 
 ---
 
-## Workflow Reference & Developer Playbooks
+## Documentation & Developer Playbooks
 
-For a comprehensive guide with copy-paste prompts, step-by-step walkthroughs, and steering controls, see [GUIDE.md](GUIDE.md) (or run `npx kobean-skills guide` in terminal).
+KobeanSkills provides an **interactive documentation page** at [`docs/index.html`](docs/index.html) (viewable locally by running `npx kobean-skills docs` or hosted via GitHub Pages) with an interactive 22-role matrix filter, architecture diagrams, and pipeline tabs.
+
+For quick reference in the terminal, see [GUIDE.md](GUIDE.md) (or run `npx kobean-skills guide`).
 
 | Intent | Example Prompt | Pipeline Flow |
 | :--- | :--- | :--- |

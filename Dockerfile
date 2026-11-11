@@ -50,3 +50,4 @@ RUN npm link && ./scripts/install.sh
 WORKDIR /workspace
 
 CMD ["node", "/opt/kobean/bin/kobean.js", "doctor"]
+

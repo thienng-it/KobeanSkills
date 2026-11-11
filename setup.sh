@@ -66,3 +66,4 @@ else
 fi
 
 echo "==> Installation successful! KobeanSkills is ready to use."
+

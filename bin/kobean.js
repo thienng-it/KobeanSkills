@@ -22,6 +22,7 @@ Usage:
 
 Commands:
   init [dir]        Initialize .kobean/ in target repo (default: current directory)
+  docs              Open the interactive documentation web page in your browser
   guide             Display the developer workflow guide and prompt cheatsheet
   install           Install globally into ~/.gemini and ~/.claude
   doctor            Check status of companion CLI tools (bd, betterleaks, graphify, etc.)
@@ -29,6 +30,7 @@ Commands:
 
 Examples:
   npx kobean-skills init
+  npx kobean-skills docs
   npx kobean-skills guide
   npx kobean-skills doctor
   npx kobean-skills install
@@ -89,6 +91,17 @@ function runDoctor() {
   console.log(`  Claude Code rule:   ${fs.existsSync(claudeRule) ? '[✓] Active' : '[ ] Not registered (run npx kobean install)'}`);
 }
 
+function runDocs() {
+  const docPath = path.join(PKG_ROOT, 'docs', 'index.html');
+  if (fs.existsSync(docPath)) {
+    console.log(`==> Opening documentation page in your default browser: ${docPath}`);
+    const startCmd = process.platform === 'darwin' ? 'open' : process.platform === 'win32' ? 'start' : 'xdg-open';
+    spawnSync(startCmd, [docPath], { stdio: 'inherit' });
+  } else {
+    console.error(`[error] Could not locate docs/index.html at ${docPath}`);
+  }
+}
+
 function runGuide() {
   const guidePath = path.join(PKG_ROOT, 'GUIDE.md');
   if (fs.existsSync(guidePath)) {
@@ -101,6 +114,10 @@ function runGuide() {
 switch (command) {
   case 'init':
     runInit(args[1]);
+    break;
+  case 'docs':
+  case 'doc':
+    runDocs();
     break;
   case 'guide':
   case 'cheatsheet':

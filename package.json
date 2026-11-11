@@ -9,6 +9,7 @@
   },
   "files": [
     "bin",
+    "docs",
     "doctrine.md",
     "GUIDE.md",
     "init.sh",

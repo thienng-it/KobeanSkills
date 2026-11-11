@@ -627,6 +627,123 @@
       border-radius: 6px;
     }
 
+    /* Skills Handbook Quick-Copy Cards */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 18px;
+      margin: 20px 0 44px;
+    }
+    .skill-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .skill-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .skill-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .skill-badge {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--accent);
+      background: var(--accent-surface);
+      border: 1px solid var(--accent);
+      padding: 3px 9px;
+      border-radius: 7px;
+    }
+    .skill-title {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .skill-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 10px;
+    }
+    .skill-roles {
+      font-size: 11.5px;
+      color: var(--text-dim);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .skill-prompt-box {
+      background: var(--code-bg);
+      border: 1px solid var(--code-border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+    .skill-prompt-box:hover {
+      border-color: var(--accent);
+      background: var(--surface-active);
+    }
+    .skill-prompt-text {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 12px;
+      color: var(--code-text);
+      line-height: 1.5;
+      user-select: all;
+    }
+    .skill-copy-action {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 6px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+    .skill-copy-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: var(--text-muted);
+      padding: 3px 8px;
+      border-radius: 5px;
+      font-size: 11px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+    }
+    .skill-copy-btn svg {
+      width: 11px;
+      height: 11px;
+      fill: currentColor;
+    }
+    .skill-prompt-box:hover .skill-copy-btn {
+      color: var(--text);
+      border-color: var(--accent);
+      background: var(--accent-surface);
+    }
+
     /* Mobile toggle */
     .mobile-header {
       display: none;
@@ -723,7 +840,7 @@
     <div class="nav-group">
       <div class="nav-group-title">Architecture</div>
       <ul class="nav-links">
-        <li><a href="#entry-skills">8 Entry Skills</a></li>
+        <li><a href="#entry-skills">8 Entry Skills (Handbook) <span class="badge">Fast Copy</span></a></li>
         <li><a href="#roles">22 Specialist Roles</a></li>
         <li><a href="#doctrine">Doctrine & Precedence</a></li>
         <li><a href="#cli-commands">CLI & Doctor Helper</a></li>
@@ -1106,6 +1223,214 @@ Use kb-ui in bold mode to build the product landing page.</code></pre>
       </div>
     </section>
 
+    <!-- Entry Skills Handbook & Cheatsheet -->
+    <section id="entry-skills">
+      <h2>8 Entry Skills Handbook & Cheatsheet</h2>
+      <p>Quick-reference cards for each entry skill. Click any card or copy button to immediately copy its trigger prompt into your clipboard:</p>
+
+      <div class="skills-grid">
+        <!-- 1. kb-router -->
+        <div class="skill-card">
+          <div>
+            <div class="skill-header">
+              <span class="skill-badge">kb-router</span>
+              <span class="badge">Orchestrator</span>
+            </div>
+            <div class="skill-title">Master Classifier & Pipeline Router</div>
+            <div class="skill-desc">Classifies your natural-language intent, selects the right engineering pipeline, and delegates to the right specialist roles.</div>
+            <div class="skill-roles">
+              <span>Roles:</span> All 22 Specialist Roles
+            </div>
+          </div>
+          <div class="skill-prompt-box" onclick="copySkillPrompt(this)" title="Click anywhere to copy prompt">
+            <div class="skill-prompt-text">Use kb-router to plan and execute: [describe your feature, bugfix, or refactor]</div>
+            <div class="skill-copy-action">
+              <span class="skill-copy-status">Click to copy prompt</span>
+              <span class="skill-copy-btn">
+                <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                <span>Copy Prompt</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. kb-spec -->
+        <div class="skill-card">
+          <div>
+            <div class="skill-header">
+              <span class="skill-badge">kb-spec</span>
+              <span class="badge">Specification</span>
+            </div>
+            <div class="skill-title">Requirements & Threat Modeling</div>
+            <div class="skill-desc">Applies the Ponytail Ultra existence check, Socratic edge-case clarification, and generates specs/NNN/spec.md & STRIDE threats.md.</div>
+            <div class="skill-roles">
+              <span>Roles:</span> explorer · po · threat-modeler
+            </div>
+          </div>
+          <div class="skill-prompt-box" onclick="copySkillPrompt(this)" title="Click anywhere to copy prompt">
+            <div class="skill-prompt-text">Use kb-spec to specify [feature] with clear acceptance criteria and threat model</div>
+            <div class="skill-copy-action">
+              <span class="skill-copy-status">Click to copy prompt</span>
+              <span class="skill-copy-btn">
+                <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                <span>Copy Prompt</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. kb-plan -->
+        <div class="skill-card">
+          <div>
+            <div class="skill-header">
+              <span class="skill-badge">kb-plan</span>
+              <span class="badge">Architecture</span>
+            </div>
+            <div class="skill-title">Architecture, Contracts & Task Graph</div>
+            <div class="skill-desc">Authors plan.md, database schema in data-model.md, contract-first OpenAPI/Zod specs, and the Beads (.beads/) task graph.</div>
+            <div class="skill-roles">
+              <span>Roles:</span> architect · api-designer · data-engineer
+            </div>
+          </div>
+          <div class="skill-prompt-box" onclick="copySkillPrompt(this)" title="Click anywhere to copy prompt">
+            <div class="skill-prompt-text">Use kb-plan to design architecture, schema, contracts, and Beads tasks for [spec]</div>
+            <div class="skill-copy-action">
+              <span class="skill-copy-status">Click to copy prompt</span>
+              <span class="skill-copy-btn">
+                <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                <span>Copy Prompt</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. kb-build -->
+        <div class="skill-card">
+          <div>
+            <div class="skill-header">
+              <span class="skill-badge">kb-build</span>
+              <span class="badge">Implementation</span>
+            </div>
+            <div class="skill-title">TDD Subagent Implementation</div>
+            <div class="skill-desc">Executes unblocked ready tasks from Beads with Red-Green-Refactor testing and Ponytail code economy.</div>
+            <div class="skill-roles">
+              <span>Roles:</span> backend · frontend · mobile · data-engineer · devops · refactorer
+            </div>
+          </div>
+          <div class="skill-prompt-box" onclick="copySkillPrompt(this)" title="Click anywhere to copy prompt">
+            <div class="skill-prompt-text">Use kb-build to implement the next ready task in .beads/ using TDD and minimal code</div>
+            <div class="skill-copy-action">
+              <span class="skill-copy-status">Click to copy prompt</span>
+              <span class="skill-copy-btn">
+                <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                <span>Copy Prompt</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. kb-ui -->
+        <div class="skill-card">
+          <div>
+            <div class="skill-header">
+              <span class="skill-badge">kb-ui</span>
+              <span class="badge">UI / UX Craft</span>
+            </div>
+            <div class="skill-title">Interface Design & Art Direction</div>
+            <div class="skill-desc">Impeccable craft for product surfaces and Taste-Skill bold mode for landing pages, verified in live browser.</div>
+            <div class="skill-roles">
+              <span>Roles:</span> ui-ux-designer · frontend · a11y-auditor
+            </div>
+          </div>
+          <div class="skill-prompt-box" onclick="copySkillPrompt(this)" title="Click anywhere to copy prompt">
+            <div class="skill-prompt-text">Use kb-ui to build [page/component] with full loading, empty, and error states</div>
+            <div class="skill-copy-action">
+              <span class="skill-copy-status">Click to copy prompt</span>
+              <span class="skill-copy-btn">
+                <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                <span>Copy Prompt</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. kb-debug -->
+        <div class="skill-card">
+          <div>
+            <div class="skill-header">
+              <span class="skill-badge">kb-debug</span>
+              <span class="badge">Diagnostics</span>
+            </div>
+            <div class="skill-title">Root-Cause Debugging & Regressions</div>
+            <div class="skill-desc">Reproduces the failure first, traces blast radius, and writes a failing regression test before fixing.</div>
+            <div class="skill-roles">
+              <span>Roles:</span> debugger
+            </div>
+          </div>
+          <div class="skill-prompt-box" onclick="copySkillPrompt(this)" title="Click anywhere to copy prompt">
+            <div class="skill-prompt-text">Use kb-debug to reproduce, isolate root cause, and write a failing regression test for: [paste error/log]</div>
+            <div class="skill-copy-action">
+              <span class="skill-copy-status">Click to copy prompt</span>
+              <span class="skill-copy-btn">
+                <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                <span>Copy Prompt</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7. kb-review -->
+        <div class="skill-card">
+          <div>
+            <div class="skill-header">
+              <span class="skill-badge">kb-review</span>
+              <span class="badge">Security & QA</span>
+            </div>
+            <div class="skill-title">Differential Review & Security Gates</div>
+            <div class="skill-desc">Enforces hard completion gates: betterleaks secret scanning, Trail of Bits AppSec audit, CWV, and test gates.</div>
+            <div class="skill-roles">
+              <span>Roles:</span> reviewer · security · supply-chain · performance · qa
+            </div>
+          </div>
+          <div class="skill-prompt-box" onclick="copySkillPrompt(this)" title="Click anywhere to copy prompt">
+            <div class="skill-prompt-text">Use kb-review to audit current diff for secrets, security bugs, code bloat, and broken tests</div>
+            <div class="skill-copy-action">
+              <span class="skill-copy-status">Click to copy prompt</span>
+              <span class="skill-copy-btn">
+                <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                <span>Copy Prompt</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 8. kb-ship -->
+        <div class="skill-card">
+          <div>
+            <div class="skill-header">
+              <span class="skill-badge">kb-ship</span>
+              <span class="badge">Release & Ops</span>
+            </div>
+            <div class="skill-title">Documentation & Release Delivery</div>
+            <div class="skill-desc">Authors Diátaxis technical docs, Architecture Decision Records (ADRs), SemVer CHANGELOG.md, and rollback runbooks.</div>
+            <div class="skill-roles">
+              <span>Roles:</span> tech-writer · devops · release-manager
+            </div>
+          </div>
+          <div class="skill-prompt-box" onclick="copySkillPrompt(this)" title="Click anywhere to copy prompt">
+            <div class="skill-prompt-text">Use kb-ship to verify release readiness, update documentation, and prepare CHANGELOG.md</div>
+            <div class="skill-copy-action">
+              <span class="skill-copy-status">Click to copy prompt</span>
+              <span class="skill-copy-btn">
+                <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                <span>Copy Prompt</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Roles Explorer -->
     <section id="roles">
       <h2>22 Specialist Roles Matrix</h2>
@@ -1225,6 +1550,24 @@ Use kb-ui in bold mode to build the product landing page.</code></pre>
       setTimeout(() => {
         span.innerText = originalText;
         btn.style.color = '';
+      }, 1800);
+    }
+
+    // Fast Skill Prompt Copy
+    function copySkillPrompt(box) {
+      const textEl = box.querySelector('.skill-prompt-text');
+      if (!textEl) return;
+      const text = textEl.innerText.trim();
+      navigator.clipboard.writeText(text);
+      const btnSpan = box.querySelector('.skill-copy-btn span');
+      const actionText = box.querySelector('.skill-copy-status');
+      if (btnSpan) btnSpan.innerText = 'Copied!';
+      if (actionText) actionText.innerText = 'Copied to clipboard!';
+      box.style.borderColor = '#10B981';
+      setTimeout(() => {
+        if (btnSpan) btnSpan.innerText = 'Copy Prompt';
+        if (actionText) actionText.innerText = 'Click to copy prompt';
+        box.style.borderColor = '';
       }, 1800);
     }
 

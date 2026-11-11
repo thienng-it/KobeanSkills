@@ -1,54 +1,114 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KobeanSkills — Documentation & Developer Guide</title>
+  <title>KobeanSkills — Engineering Agent Skills Distribution & Documentation</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%23F59E0B%22/><text y=%2268%22 x=%2250%22 text-anchor=%22middle%22 font-family=%22system-ui,-apple-system,sans-serif%22 font-size=%2258%22 font-weight=%22800%22 fill=%22%23000%22>K</text></svg>">
   <style>
-    :root {
-      --bg: #0B0D10;
-      --surface: #12151B;
-      --surface-elevated: #181C24;
-      --surface-active: #202632;
-      --border: #222938;
+    /* CSS Design Tokens */
+    :root[data-theme="dark"] {
+      --bg: #090B0E;
+      --surface: #10141B;
+      --surface-elevated: #171C26;
+      --surface-active: #1F2634;
+      --border: #232B3A;
+      --border-subtle: #1A212E;
       --border-focus: #38BDF8;
       --text: #F1F5F9;
       --text-muted: #94A3B8;
       --text-dim: #64748B;
       --accent: #F59E0B;
-      --accent-glow: rgba(245, 158, 11, 0.15);
+      --accent-hover: #D97706;
+      --accent-glow: rgba(245, 158, 11, 0.12);
+      --accent-surface: rgba(245, 158, 11, 0.08);
       --sky: #38BDF8;
+      --sky-glow: rgba(56, 189, 248, 0.12);
       --emerald: #10B981;
+      --emerald-glow: rgba(16, 185, 129, 0.12);
       --rose: #F43F5E;
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "JetBrains Mono", monospace;
-      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --code-bg: #0C0F15;
+      --code-border: #1E2533;
+      --code-text: #E2E8F0;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+      --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
+      --nav-hover: rgba(255, 255, 255, 0.04);
+      --terminal-header: #141822;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; font-family: var(--sans); background: var(--bg); color: var(--text); }
-    body { line-height: 1.6; display: flex; min-height: 100vh; }
+    :root[data-theme="light"] {
+      --bg: #FAFAF9;
+      --surface: #FFFFFF;
+      --surface-elevated: #F4F4F5;
+      --surface-active: #E4E4E7;
+      --border: #E2E8F0;
+      --border-subtle: #EDF2F7;
+      --border-focus: #0284C7;
+      --text: #0F172A;
+      --text-muted: #475569;
+      --text-dim: #64748B;
+      --accent: #D97706;
+      --accent-hover: #B45309;
+      --accent-glow: rgba(217, 119, 6, 0.12);
+      --accent-surface: rgba(217, 119, 6, 0.06);
+      --sky: #0284C7;
+      --sky-glow: rgba(2, 132, 199, 0.1);
+      --emerald: #059669;
+      --emerald-glow: rgba(5, 150, 105, 0.1);
+      --rose: #E11D48;
+      --code-bg: #0F172A;
+      --code-border: #1E293B;
+      --code-text: #F8FAFC;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.08);
+      --nav-hover: rgba(0, 0, 0, 0.04);
+      --terminal-header: #1E293B;
+    }
+
+    /* Reset & Base */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 15px; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      display: flex;
+      min-height: 100vh;
+      transition: background-color 0.2s ease, color 0.2s ease;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
 
     /* Layout */
     aside {
-      width: 280px;
+      width: 290px;
       height: 100vh;
       position: sticky;
       top: 0;
       background: var(--surface);
       border-right: 1px solid var(--border);
-      padding: 24px 16px;
+      padding: 24px 18px;
       display: flex;
       flex-direction: column;
-      gap: 24px;
+      gap: 22px;
       overflow-y: auto;
       flex-shrink: 0;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+      z-index: 50;
     }
+
+    aside::-webkit-scrollbar { width: 5px; }
+    aside::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 
     main {
       flex: 1;
       max-width: 980px;
       margin: 0 auto;
-      padding: 48px 32px 96px;
+      padding: 48px 40px 120px;
+      width: 100%;
     }
 
     /* Brand Header */
@@ -58,94 +118,206 @@
       gap: 12px;
       text-decoration: none;
       color: var(--text);
+      padding: 4px 6px;
     }
     .brand-logo {
-      width: 32px;
-      height: 32px;
-      background: linear-gradient(135deg, var(--accent), #D97706);
-      border-radius: 8px;
+      width: 34px;
+      height: 34px;
+      background: linear-gradient(135deg, #F59E0B, #D97706);
+      border-radius: 9px;
       display: grid;
       place-items: center;
       font-weight: 800;
-      font-size: 16px;
+      font-size: 17px;
       color: #000;
-      box-shadow: 0 0 16px var(--accent-glow);
+      box-shadow: 0 2px 8px var(--accent-glow);
+      flex-shrink: 0;
+    }
+    .brand-text {
+      display: flex;
+      flex-direction: column;
     }
     .brand-title {
-      font-size: 17px;
+      font-size: 16px;
       font-weight: 700;
       letter-spacing: -0.02em;
+      line-height: 1.2;
     }
-    .badge {
+    .brand-sub {
       font-size: 11px;
-      background: var(--surface-active);
-      color: var(--accent);
-      padding: 2px 8px;
-      border-radius: 9999px;
-      border: 1px solid var(--border);
-      font-family: var(--mono);
+      color: var(--text-dim);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
     }
 
-    /* Nav links */
+    /* Top Controls: Theme Switcher & GitHub Link */
+    .brand-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface-elevated);
+      color: var(--text-muted);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+    .btn-icon:hover {
+      color: var(--text);
+      border-color: var(--text-dim);
+      background: var(--surface-active);
+    }
+    .btn-icon svg { width: 16px; height: 16px; fill: currentColor; }
+
+    /* Navigation */
+    .nav-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
     .nav-group-title {
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: var(--text-dim);
       font-weight: 700;
-      margin-bottom: 8px;
-      padding-left: 8px;
+      margin-bottom: 6px;
+      padding-left: 10px;
     }
     .nav-links {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 2px;
     }
     .nav-links a {
       color: var(--text-muted);
       text-decoration: none;
       font-size: 13.5px;
       padding: 6px 10px;
-      border-radius: 6px;
-      display: block;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       transition: all 0.15s ease;
+      font-weight: 500;
     }
     .nav-links a:hover {
       color: var(--text);
-      background: var(--surface-elevated);
+      background: var(--nav-hover);
+    }
+    .nav-links a.active {
+      color: var(--accent);
+      background: var(--accent-surface);
+      font-weight: 600;
     }
 
-    /* Content styling */
-    h1 {
-      font-size: 38px;
-      letter-spacing: -0.03em;
+    /* Badges */
+    .badge {
+      font-size: 10.5px;
+      background: var(--surface-active);
+      color: var(--accent);
+      padding: 2px 7px;
+      border-radius: 9999px;
+      border: 1px solid var(--border);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-weight: 600;
+    }
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 9999px;
+      background: var(--emerald);
+      box-shadow: 0 0 8px var(--emerald);
+    }
+
+    /* Hero */
+    .hero-title {
+      font-size: 42px;
+      letter-spacing: -0.035em;
       line-height: 1.15;
-      margin-bottom: 16px;
       font-weight: 800;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, var(--text) 40%, var(--text-dim) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
     .lead {
-      font-size: 17px;
+      font-size: 18px;
       color: var(--text-muted);
-      margin-bottom: 40px;
-      max-width: 760px;
+      margin-bottom: 28px;
+      max-width: 800px;
+      line-height: 1.55;
     }
 
+    /* Feature Pills */
+    .hero-features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 48px;
+    }
+    .feature-tag {
+      font-size: 12.5px;
+      padding: 6px 14px;
+      border-radius: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+      box-shadow: var(--shadow-sm);
+    }
+    .feature-tag svg { width: 14px; height: 14px; color: var(--accent); }
+
+    /* Section Headings */
     h2 {
-      font-size: 24px;
-      letter-spacing: -0.02em;
-      margin: 48px 0 16px;
-      padding-bottom: 10px;
+      font-size: 25px;
+      letter-spacing: -0.025em;
+      margin: 54px 0 14px;
+      padding-bottom: 12px;
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
       gap: 10px;
+      font-weight: 700;
     }
     h3 {
       font-size: 18px;
-      letter-spacing: -0.01em;
-      margin: 28px 0 12px;
+      letter-spacing: -0.015em;
+      margin: 28px 0 10px;
       color: var(--text);
+      font-weight: 600;
     }
     p, ul, ol {
       color: var(--text-muted);
@@ -154,50 +326,222 @@
     }
     ul, ol { padding-left: 22px; }
     li { margin-bottom: 6px; }
+    strong { color: var(--text); font-weight: 600; }
 
-    /* Code blocks */
-    pre {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
+    /* Terminal Window / Code Blocks */
+    .terminal-window {
+      background: var(--code-bg);
+      border: 1px solid var(--code-border);
+      border-radius: 12px;
+      margin: 16px 0 28px;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+    }
+    .terminal-header {
+      background: var(--terminal-header);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--code-border);
+    }
+    .terminal-dots {
+      display: flex;
+      gap: 6px;
+    }
+    .terminal-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 9999px;
+      background: #475569;
+    }
+    .terminal-dot:nth-child(1) { background: #EF4444; }
+    .terminal-dot:nth-child(2) { background: #F59E0B; }
+    .terminal-dot:nth-child(3) { background: #10B981; }
+
+    .terminal-title {
+      font-size: 12px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: #94A3B8;
+      font-weight: 500;
+    }
+    .terminal-body {
       padding: 16px 20px;
       overflow-x: auto;
-      font-family: var(--mono);
-      font-size: 13px;
-      margin-bottom: 24px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: var(--code-text);
       position: relative;
     }
+    .terminal-body pre {
+      margin: 0;
+      background: transparent;
+      border: none;
+      padding: 0;
+      color: inherit;
+      font-family: inherit;
+    }
+    .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #F1F5F9;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .copy-btn:hover {
+      background: rgba(255, 255, 255, 0.18);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
     code {
-      font-family: var(--mono);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
       font-size: 13px;
-      color: #E2E8F0;
     }
     p code, li code {
       background: var(--surface-elevated);
       border: 1px solid var(--border);
       padding: 2px 6px;
-      border-radius: 4px;
+      border-radius: 5px;
       color: var(--sky);
       font-size: 12.5px;
     }
 
-    /* Cards */
+    /* Tabs Component */
+    .tabs {
+      display: flex;
+      gap: 6px;
+      margin: 16px 0;
+      padding: 4px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      width: fit-content;
+      box-shadow: var(--shadow-sm);
+    }
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 7px 14px;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .tab-btn:hover {
+      color: var(--text);
+    }
+    .tab-btn.active {
+      background: var(--surface-active);
+      color: var(--text);
+      box-shadow: var(--shadow-sm);
+    }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* Pipeline Timeline */
+    .pipeline-container {
+      position: relative;
+      margin: 28px 0 36px;
+      padding-left: 20px;
+    }
+    .pipeline-rail {
+      position: absolute;
+      top: 18px;
+      bottom: 24px;
+      left: 36px;
+      width: 2px;
+      background: linear-gradient(180deg, var(--accent) 0%, var(--border) 100%);
+    }
+    .pipeline-item {
+      display: flex;
+      gap: 20px;
+      position: relative;
+      margin-bottom: 24px;
+    }
+    .pipeline-num-badge {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      color: var(--accent);
+      font-weight: 800;
+      font-size: 14px;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      box-shadow: var(--shadow-sm);
+      z-index: 2;
+    }
+    .pipeline-item:hover .pipeline-num-badge {
+      border-color: var(--accent);
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+    .pipeline-card {
+      flex: 1;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 22px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.15s ease;
+    }
+    .pipeline-card:hover {
+      border-color: var(--text-dim);
+      box-shadow: var(--shadow-md);
+    }
+    .pipeline-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .pipeline-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .pipeline-desc {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Cards Grid */
     .card-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 16px;
-      margin: 20px 0 32px;
+      margin: 20px 0 36px;
     }
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 12px;
       padding: 20px;
-      transition: border-color 0.15s ease, transform 0.15s ease;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     .card:hover {
-      border-color: #333F54;
+      border-color: var(--text-dim);
       transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
     }
     .card-title {
       font-weight: 700;
@@ -214,141 +558,134 @@
       line-height: 1.5;
     }
 
-    /* Copy Button */
-    .copy-btn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: var(--surface-elevated);
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      padding: 4px 10px;
-      border-radius: 5px;
-      font-size: 11px;
-      font-family: var(--mono);
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-    .copy-btn:hover {
-      color: var(--text);
-      border-color: var(--text-muted);
-    }
-
-    /* Tab switcher */
-    .tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 12px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 8px;
-    }
-    .tab-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      font-size: 13px;
-      font-weight: 600;
-      padding: 6px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-    .tab-btn.active {
-      background: var(--surface-active);
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
-
-    /* Pipeline Diagram */
-    .pipeline {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 24px;
-      margin: 24px 0 32px;
-    }
-    .pipeline-step {
-      display: flex;
-      align-items: flex-start;
-      gap: 16px;
-      position: relative;
-    }
-    .pipeline-num {
-      width: 28px;
-      height: 28px;
-      background: var(--surface-elevated);
-      border: 1px solid var(--border);
-      border-radius: 9999px;
-      display: grid;
-      place-items: center;
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--accent);
-      flex-shrink: 0;
-    }
-    .pipeline-body {
-      flex: 1;
-    }
-    .pipeline-title {
-      font-size: 14.5px;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 4px;
-    }
-    .pipeline-desc {
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    /* Filter pills */
+    /* Filter Bar */
     .filter-bar {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin: 16px 0;
+      margin: 18px 0;
     }
     .filter-chip {
       background: var(--surface);
       border: 1px solid var(--border);
       color: var(--text-muted);
-      padding: 4px 12px;
+      padding: 5px 14px;
       border-radius: 9999px;
       font-size: 12px;
+      font-weight: 500;
       cursor: pointer;
-      transition: all 0.15s;
+      transition: all 0.15s ease;
+    }
+    .filter-chip:hover {
+      color: var(--text);
+      border-color: var(--text-dim);
     }
     .filter-chip.active {
-      background: var(--accent-glow);
+      background: var(--accent-surface);
       border-color: var(--accent);
       color: var(--accent);
       font-weight: 600;
     }
 
-    @media (max-width: 860px) {
+    /* Playbook Card Container */
+    .playbook-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 20px 0 32px;
+      box-shadow: var(--shadow-sm);
+    }
+    .playbook-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .playbook-tag {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--sky);
+      background: var(--sky-glow);
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    /* Mobile toggle */
+    .mobile-header {
+      display: none;
+      padding: 14px 20px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    @media (max-width: 900px) {
       body { flex-direction: column; }
-      aside { width: 100%; height: auto; position: static; border-right: none; border-bottom: 1px solid var(--border); }
-      main { padding: 32px 20px; }
+      .mobile-header { display: flex; }
+      aside {
+        display: none;
+        width: 100%;
+        height: auto;
+        position: static;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+      aside.open { display: flex; }
+      main { padding: 32px 20px 80px; }
+      .hero-title { font-size: 32px; }
+      .pipeline-rail { left: 26px; }
+      .pipeline-container { padding-left: 0; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Navigation Sidebar -->
-  <aside>
-    <a href="#" class="brand">
-      <div class="brand-logo">K</div>
-      <div>
-        <div class="brand-title">KobeanSkills</div>
-      </div>
-      <span class="badge">v0.2.0</span>
+  <!-- Mobile Top Bar -->
+  <div class="mobile-header">
+    <a href="#" class="brand" style="padding: 0;">
+      <div class="brand-logo" style="width: 28px; height: 28px; font-size: 15px;">K</div>
+      <span class="brand-title">KobeanSkills</span>
     </a>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <button class="btn-icon" onclick="toggleTheme()" title="Toggle Theme" aria-label="Toggle Theme">
+        <svg id="theme-icon-mob" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>
+      </button>
+      <button class="btn-icon" onclick="toggleMobileNav()" title="Menu" aria-label="Menu">
+        <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+      </button>
+    </div>
+  </div>
 
-    <div>
+  <!-- Sidebar -->
+  <aside id="sidebar">
+    <div class="brand-row">
+      <a href="#" class="brand">
+        <div class="brand-logo">K</div>
+        <div class="brand-text">
+          <span class="brand-title">KobeanSkills</span>
+          <span class="brand-sub">v0.2.0</span>
+        </div>
+      </a>
+      <div class="header-actions">
+        <!-- Theme Switcher -->
+        <button class="btn-icon" onclick="toggleTheme()" title="Toggle Dark/Light Mode" id="theme-toggle-btn">
+          <svg id="theme-icon" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>
+        </button>
+        <!-- GitHub Link -->
+        <a href="https://github.com/thienng-it/KobeanSkills" target="_blank" rel="noopener" class="btn-icon" title="View GitHub Repository">
+          <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="nav-group">
       <div class="nav-group-title">Getting Started</div>
       <ul class="nav-links">
         <li><a href="#quick-start">Zero-Clone Quick Start</a></li>
@@ -356,20 +693,20 @@
       </ul>
     </div>
 
-    <div>
+    <div class="nav-group">
       <div class="nav-group-title">Playbooks & Prompts</div>
       <ul class="nav-links">
-        <li><a href="#playbook-feature">1. Feature Engineering</a></li>
-        <li><a href="#playbook-ui">2. High-Craft UI/UX</a></li>
-        <li><a href="#playbook-debug">3. Root-Cause Debugging</a></li>
-        <li><a href="#playbook-review">4. Pre-PR Security & Review</a></li>
-        <li><a href="#playbook-refactor">5. Technical Debt Cleanup</a></li>
-        <li><a href="#playbook-onboard">6. Codebase Onboarding</a></li>
-        <li><a href="#playbook-bootstrap">7. Greenfield (From Zero)</a></li>
+        <li><a href="#playbook-bootstrap">1. Greenfield (From Zero) <span class="badge">New</span></a></li>
+        <li><a href="#playbook-feature">2. Feature Engineering</a></li>
+        <li><a href="#playbook-ui">3. High-Craft UI/UX</a></li>
+        <li><a href="#playbook-debug">4. Root-Cause Debugging</a></li>
+        <li><a href="#playbook-review">5. Pre-PR Review & Security</a></li>
+        <li><a href="#playbook-refactor">6. Technical Debt Cleanup</a></li>
+        <li><a href="#playbook-onboard">7. Codebase Onboarding</a></li>
       </ul>
     </div>
 
-    <div>
+    <div class="nav-group">
       <div class="nav-group-title">Architecture</div>
       <ul class="nav-links">
         <li><a href="#entry-skills">8 Entry Skills</a></li>
@@ -382,92 +719,175 @@
 
   <!-- Main Content -->
   <main>
-    <h1>KobeanSkills Documentation</h1>
+    <div class="badge-pill">
+      <span class="badge-dot"></span>
+      Universal Multi-Agent Engineering Architecture · v0.2.0
+    </div>
+
+    <h1 class="hero-title">KobeanSkills Documentation</h1>
     <p class="lead">
-      Universal engineering skill distribution and multi-role agent orchestration system natively supporting <b>Gemini CLI & Antigravity</b>, <b>Claude CLI (Claude Code)</b>, and <b>Codex CLI</b>.
+      An open, contract-first engineering skill distribution and multi-role agent orchestrator natively supporting <strong>Gemini CLI & Antigravity</strong>, <strong>Claude CLI (Claude Code)</strong>, and <strong>Codex CLI</strong>.
     </p>
+
+    <!-- Hero Badges -->
+    <div class="hero-features">
+      <div class="feature-tag">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        8 Entry Skills
+      </div>
+      <div class="feature-tag">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+        22 Specialist Roles
+      </div>
+      <div class="feature-tag">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+        Air-Gapped & Zero Runtime Deps
+      </div>
+      <div class="feature-tag">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        Zero-Clone Setup (bunx / npx / curl)
+      </div>
+    </div>
 
     <!-- Quick Start -->
     <section id="quick-start">
-      <h2>Quick Start (Zero Cloning Required)</h2>
-      <p>Install KobeanSkills into any existing repository in seconds using your preferred method:</p>
+      <h2>Zero-Clone Quick Start</h2>
+      <p>Install KobeanSkills into any existing repository or brand-new folder in seconds:</p>
 
       <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('npx')">bunx / npx (Fastest)</button>
+        <button class="tab-btn active" onclick="switchTab('bunx')">bunx (Instant ~50ms)</button>
+        <button class="tab-btn" onclick="switchTab('npx')">npx (Node/Universal)</button>
         <button class="tab-btn" onclick="switchTab('curl')">curl (Zero Node/Bun)</button>
-        <button class="tab-btn" onclick="switchTab('docker')">Docker</button>
-        <button class="tab-btn" onclick="switchTab('git')">Local Clone</button>
+        <button class="tab-btn" onclick="switchTab('docker')">Docker Sandbox</button>
       </div>
 
-      <div id="tab-npx" class="tab-content active">
-        <p>Run inside any repository. Works with <b>Bun</b> (~50ms instant boot) or <b>Node/npx</b>:</p>
-        <pre><code># With Bun (fastest):
-bunx kobean-skills init
+      <div id="tab-bunx" class="tab-content active">
+        <p>Blazing fast instant boot for developers using <b>Bun</b>:</p>
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <div class="terminal-dots"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div>
+            <div class="terminal-title">terminal — bunx</div>
+          </div>
+          <div class="terminal-body">
+            <pre><code>bunx kobean-skills init</code></pre>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+        </div>
+      </div>
 
-# Or with Node/npx:
-npx kobean-skills init<button class="copy-btn" onclick="copyCode(this)">Copy</button></code></pre>
+      <div id="tab-npx" class="tab-content">
+        <p>Universal setup for Node.js environments (pre-installed out-of-the-box):</p>
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <div class="terminal-dots"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div>
+            <div class="terminal-title">terminal — npx</div>
+          </div>
+          <div class="terminal-body">
+            <pre><code>npx kobean-skills init</code></pre>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+        </div>
       </div>
 
       <div id="tab-curl" class="tab-content">
-        <p>Pure shell command for Python, Go, Rust, or any environment without Node installed:</p>
-        <pre><code>curl -fsSL https://raw.githubusercontent.com/thienng-it/KobeanSkills/main/setup.sh | bash<button class="copy-btn" onclick="copyCode(this)">Copy</button></code></pre>
+        <p>Pure shell command for Python, Go, Rust, or minimal environments without Node/Bun installed:</p>
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <div class="terminal-dots"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div>
+            <div class="terminal-title">terminal — bash</div>
+          </div>
+          <div class="terminal-body">
+            <pre><code>curl -fsSL https://raw.githubusercontent.com/thienng-it/KobeanSkills/main/setup.sh | bash</code></pre>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+        </div>
       </div>
 
       <div id="tab-docker" class="tab-content">
         <p>Run in an isolated container sandbox with companion tools (<code>bd</code>, <code>betterleaks</code>, <code>osv-scanner</code>) pre-baked:</p>
-        <pre><code>docker run --rm -v "$(pwd):/workspace" ghcr.io/thienng-it/kobean-skills:latest kobean init<button class="copy-btn" onclick="copyCode(this)">Copy</button></code></pre>
-      </div>
-
-      <div id="tab-git" class="tab-content">
-        <p>If you already cloned KobeanSkills locally, initialize any project directory:</p>
-        <pre><code>cd /path/to/any-repo
-~/Developer/KobeanSkills/init.sh<button class="copy-btn" onclick="copyCode(this)">Copy</button></code></pre>
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <div class="terminal-dots"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div>
+            <div class="terminal-title">terminal — docker</div>
+          </div>
+          <div class="terminal-body">
+            <pre><code>docker run --rm -v "$(pwd):/workspace" ghcr.io/thienng-it/kobean-skills:latest kobean init</code></pre>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+        </div>
       </div>
     </section>
 
     <!-- Pipeline -->
     <section id="pipeline">
       <h2>End-to-End Feature Pipeline</h2>
-      <p>When you ask to build a new feature, <code>kb-router</code> chains the following autonomous pipeline:</p>
+      <p>When you ask to build a feature, <code>kb-router</code> autonomously choreographs this continuous 5-stage engineering lifecycle:</p>
 
-      <div class="pipeline">
-        <div class="pipeline-step">
-          <div class="pipeline-num">1</div>
-          <div class="pipeline-body">
-            <div class="pipeline-title">Requirements & Security (kb-spec)</div>
-            <div class="pipeline-desc">Enforces the Ponytail Ultra gate ("should this exist?"), asks Socratic clarifying questions, and produces <code>spec.md</code> and STRIDE <code>threats.md</code>.</div>
+      <div class="pipeline-container">
+        <div class="pipeline-rail"></div>
+
+        <div class="pipeline-item">
+          <div class="pipeline-num-badge">1</div>
+          <div class="pipeline-card">
+            <div class="pipeline-header">
+              <span class="pipeline-title">Requirements & Threat Modeling</span>
+              <span class="badge">kb-spec · po · threat-modeler</span>
+            </div>
+            <div class="pipeline-desc">
+              Runs Ponytail Ultra existence check ("should this exist?"), conducts Socratic clarification, and produces <code>spec.md</code> and STRIDE <code>threats.md</code>.
+            </div>
           </div>
         </div>
 
-        <div class="pipeline-step">
-          <div class="pipeline-num">2</div>
-          <div class="pipeline-body">
-            <div class="pipeline-title">Architecture & Contracts (kb-plan)</div>
-            <div class="pipeline-desc">Designs OpenAPI/Zod interfaces, PostgreSQL schemas, and generates the task dependency graph in <code>.beads/</code> using <code>bd</code>.</div>
+        <div class="pipeline-item">
+          <div class="pipeline-num-badge">2</div>
+          <div class="pipeline-card">
+            <div class="pipeline-header">
+              <span class="pipeline-title">Architecture & Contract Design</span>
+              <span class="badge">kb-plan · architect · api-designer</span>
+            </div>
+            <div class="pipeline-desc">
+              Designs type-safe OpenAPI/Zod interfaces, normalized PostgreSQL schemas, and builds the task dependency graph in <code>.beads/</code> using <code>bd</code>.
+            </div>
           </div>
         </div>
 
-        <div class="pipeline-step">
-          <div class="pipeline-num">3</div>
-          <div class="pipeline-body">
-            <div class="pipeline-title">Autonomous Implementation (kb-build)</div>
-            <div class="pipeline-desc">Fetches ready tasks from Beads, writes failing tests first (Red), implements the minimal code (Green), and obeys Ponytail code economy.</div>
+        <div class="pipeline-item">
+          <div class="pipeline-num-badge">3</div>
+          <div class="pipeline-card">
+            <div class="pipeline-header">
+              <span class="pipeline-title">Autonomous Implementation (TDD)</span>
+              <span class="badge">kb-build · backend · frontend · devops</span>
+            </div>
+            <div class="pipeline-desc">
+              Pulls ready tasks from Beads, executes Red-Green-Refactor testing, and writes the minimal clean change obeying Ponytail code economy.
+            </div>
           </div>
         </div>
 
-        <div class="pipeline-step">
-          <div class="pipeline-num">4</div>
-          <div class="pipeline-body">
-            <div class="pipeline-title">Verification & Quality Gates (kb-review)</div>
-            <div class="pipeline-desc">Hard completion gates: <code>betterleaks</code> secret scan, Trail of Bits AppSec, Core Web Vitals, WCAG 2.2 accessibility, and test suites.</div>
+        <div class="pipeline-item">
+          <div class="pipeline-num-badge">4</div>
+          <div class="pipeline-card">
+            <div class="pipeline-header">
+              <span class="pipeline-title">Differential Review & Security Gates</span>
+              <span class="badge">kb-review · security · qa · reviewer</span>
+            </div>
+            <div class="pipeline-desc">
+              Hard completion gates: <code>betterleaks</code> secret scan, Trail of Bits false-positive gate, Core Web Vitals, WCAG 2.2 accessibility, and test suites.
+            </div>
           </div>
         </div>
 
-        <div class="pipeline-step">
-          <div class="pipeline-num">5</div>
-          <div class="pipeline-body">
-            <div class="pipeline-title">Documentation & Delivery (kb-ship)</div>
-            <div class="pipeline-desc">Writes Diátaxis documentation, SemVer <code>CHANGELOG.md</code>, checks CI safety, and provides a rollback runbook.</div>
+        <div class="pipeline-item">
+          <div class="pipeline-num-badge">5</div>
+          <div class="pipeline-card">
+            <div class="pipeline-header">
+              <span class="pipeline-title">Documentation & Release Delivery</span>
+              <span class="badge">kb-ship · tech-writer · release-manager</span>
+            </div>
+            <div class="pipeline-desc">
+              Compiles Diátaxis documentation, SemVer <code>CHANGELOG.md</code>, checks CI pipeline integrity, and prepares a rollback runbook.
+            </div>
           </div>
         </div>
       </div>
@@ -476,64 +896,151 @@ npx kobean-skills init<button class="copy-btn" onclick="copyCode(this)">Copy</bu
     <!-- Playbooks -->
     <section id="playbooks">
       <h2>Developer Playbooks (Copy-Paste Prompts)</h2>
+      <p>Use these exact prompts to invoke the multi-agent system across common engineering scenarios:</p>
 
-      <div id="playbook-feature">
-        <h3>1. Feature Engineering</h3>
-        <p>Use when creating new functionality or multi-file capabilities:</p>
-        <pre><code>Use kb-router to build an invitation system where admins can invite teammates via email with expiring tokens.<button class="copy-btn" onclick="copyCode(this)">Copy</button></code></pre>
+      <!-- Playbook 1: Greenfield -->
+      <div class="playbook-box" id="playbook-bootstrap">
+        <div class="playbook-meta">
+          <span class="playbook-tag">Playbook 1</span>
+          <h3>Bootstrapping From Scratch (Greenfield Scaffolding)</h3>
+        </div>
+        <p>Scaffolds an empty repo from zero with project constitution, database schema, API contracts, and CI:</p>
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <div class="terminal-dots"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div>
+            <div class="terminal-title">prompt</div>
+          </div>
+          <div class="terminal-body">
+            <pre><code>Bootstrap a new production-ready SaaS application with Next.js App Router, PostgreSQL, and Drizzle ORM. Start with kb-spec to define the project constitution and architecture.</code></pre>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+        </div>
       </div>
 
-      <div id="playbook-ui">
-        <h3>2. UI/UX Craft & Art Direction</h3>
-        <p>Use for product surfaces (default) or landing pages (bold mode):</p>
-        <pre><code># Standard Dashboard / Product Surface (Impeccable craft):
+      <!-- Playbook 2: Feature -->
+      <div class="playbook-box" id="playbook-feature">
+        <div class="playbook-meta">
+          <span class="playbook-tag">Playbook 2</span>
+          <h3>Feature Engineering End-to-End</h3>
+        </div>
+        <p>Full lifecycle engineering from requirement validation to passing test suite:</p>
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <div class="terminal-dots"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div>
+            <div class="terminal-title">prompt</div>
+          </div>
+          <div class="terminal-body">
+            <pre><code>Use kb-router to build an invitation system where admins can invite teammates via email with expiring tokens.</code></pre>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Playbook 3: UI/UX Craft -->
+      <div class="playbook-box" id="playbook-ui">
+        <div class="playbook-meta">
+          <span class="playbook-tag">Playbook 3</span>
+          <h3>High-Craft UI/UX Design & Polish</h3>
+        </div>
+        <p>Impeccable craft for product dashboards vs. Taste-Skill bold mode for landing pages:</p>
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <div class="terminal-dots"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div>
+            <div class="terminal-title">prompt</div>
+          </div>
+          <div class="terminal-body">
+            <pre><code># Standard Dashboard / Product Surface (Impeccable craft):
 Use kb-ui to build the user analytics dashboard with complete loading, empty, and error states.
 
-# Bold Art Direction (Taste-Skill mode for landing pages & brand sites):
-Use kb-ui in bold mode to build the product landing page.<button class="copy-btn" onclick="copyCode(this)">Copy</button></code></pre>
+# Bold Art Direction (Taste-Skill mode for landing pages & marketing):
+Use kb-ui in bold mode to build the product landing page.</code></pre>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+        </div>
       </div>
 
-      <div id="playbook-debug">
-        <h3>3. Root-Cause Debugging</h3>
+      <!-- Playbook 4: Debugging -->
+      <div class="playbook-box" id="playbook-debug">
+        <div class="playbook-meta">
+          <span class="playbook-tag">Playbook 4</span>
+          <h3>Root-Cause Debugging (Fail-Closed)</h3>
+        </div>
         <p>The agent reproduces first, traces callers, and writes a failing regression test before writing a fix:</p>
-        <pre><code>Use kb-debug to investigate this error:
-[Paste error log, stack trace, or failing test output]<button class="copy-btn" onclick="copyCode(this)">Copy</button></code></pre>
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <div class="terminal-dots"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div>
+            <div class="terminal-title">prompt</div>
+          </div>
+          <div class="terminal-body">
+            <pre><code>Use kb-debug to investigate this error:
+[Paste error log, stack trace, or failing test output]</code></pre>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+        </div>
       </div>
 
-      <div id="playbook-review">
-        <h3>4. Pre-PR Review & Security Gate</h3>
-        <p>Audits current git changes for secrets, security bugs, bloat, and broken tests:</p>
-        <pre><code>Use kb-review to audit my current diff and check security.<button class="copy-btn" onclick="copyCode(this)">Copy</button></code></pre>
+      <!-- Playbook 5: Security Review -->
+      <div class="playbook-box" id="playbook-review">
+        <div class="playbook-meta">
+          <span class="playbook-tag">Playbook 5</span>
+          <h3>Pre-PR Review & Security Gate</h3>
+        </div>
+        <p>Audits current git changes for secrets, security bugs, code bloat, and broken tests:</p>
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <div class="terminal-dots"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div>
+            <div class="terminal-title">prompt</div>
+          </div>
+          <div class="terminal-body">
+            <pre><code>Use kb-review to audit my current diff and check security.</code></pre>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+        </div>
       </div>
 
-      <div id="playbook-refactor">
-        <h3>5. Technical Debt & Simplification</h3>
+      <!-- Playbook 6: Refactoring -->
+      <div class="playbook-box" id="playbook-refactor">
+        <div class="playbook-meta">
+          <span class="playbook-tag">Playbook 6</span>
+          <h3>Technical Debt & Simplification</h3>
+        </div>
         <p>Deletes dead code and simplifies structure while proving zero behavior change:</p>
-        <pre><code>Use kb-build with the refactorer role to clean up and simplify src/server/auth.<button class="copy-btn" onclick="copyCode(this)">Copy</button></code></pre>
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <div class="terminal-dots"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div>
+            <div class="terminal-title">prompt</div>
+          </div>
+          <div class="terminal-body">
+            <pre><code>Use kb-build with the refactorer role to clean up and simplify src/server/auth.</code></pre>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+        </div>
       </div>
 
-      <div id="playbook-onboard">
-        <h3>6. Unfamiliar Codebase Onboarding</h3>
+      <!-- Playbook 7: Onboarding -->
+      <div class="playbook-box" id="playbook-onboard">
+        <div class="playbook-meta">
+          <span class="playbook-tag">Playbook 7</span>
+          <h3>Codebase Cartography & Onboarding</h3>
+        </div>
         <p>Parses codebase AST into a knowledge map and generates <code>CONTEXT.md</code>:</p>
-        <pre><code>Use kb-router to onboard this repository.<button class="copy-btn" onclick="copyCode(this)">Copy</button></code></pre>
-      </div>
-
-      <div id="playbook-bootstrap">
-        <h3>7. Bootstrapping From Scratch (Greenfield Scaffolding)</h3>
-        <p>Creates an empty repo from zero with project constitution, database schema, API contracts, and CI:</p>
-        <pre><code># Step 1 (In terminal):
-mkdir my-app && cd my-app && git init
-npx kobean-skills init
-
-# Step 2 (In chat prompt):
-Bootstrap a new production-ready SaaS application with Next.js App Router, PostgreSQL, and Drizzle ORM. Start with kb-spec to define the project constitution and architecture.<button class="copy-btn" onclick="copyCode(this)">Copy</button></code></pre>
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <div class="terminal-dots"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div>
+            <div class="terminal-title">prompt</div>
+          </div>
+          <div class="terminal-body">
+            <pre><code>Use kb-router to onboard this repository.</code></pre>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+        </div>
       </div>
     </section>
 
     <!-- Roles Explorer -->
     <section id="roles">
       <h2>22 Specialist Roles Matrix</h2>
-      <p>Filter roles by lifecycle phase to see declared write boundaries and tools:</p>
+      <p>Filter roles by lifecycle phase to see declared write boundaries and companion tooling:</p>
 
       <div class="filter-bar">
         <button class="filter-chip active" onclick="filterRoles('all', this)">All (22)</button>
@@ -559,16 +1066,16 @@ Bootstrap a new production-ready SaaS application with Next.js App Router, Postg
           <div class="card-desc">Initializes self-contained <code>.kobean/</code> and wires agent discovery in the current repository.</div>
         </div>
         <div class="card">
+          <div class="card-title"><code>npx kobean-skills docs</code></div>
+          <div class="card-desc">Opens this interactive documentation web page in your default browser.</div>
+        </div>
+        <div class="card">
           <div class="card-title"><code>npx kobean-skills doctor</code></div>
-          <div class="card-desc">Verifies whether companion CLIs (<code>bd</code>, <code>betterleaks</code>, <code>graphify</code>, <code>osv-scanner</code>) are installed.</div>
+          <div class="card-desc">Verifies whether companion CLIs (<code>bd</code>, <code>betterleaks</code>, <code>graphify</code>, <code>osv-scanner</code>) and Agent CLIs are installed.</div>
         </div>
         <div class="card">
           <div class="card-title"><code>npx kobean-skills guide</code></div>
           <div class="card-desc">Outputs the complete developer playbook and prompt cheatsheet directly in your terminal.</div>
-        </div>
-        <div class="card">
-          <div class="card-title"><code>npx kobean-skills install</code></div>
-          <div class="card-desc">Registers KobeanSkills machine-wide in <code>~/.gemini/config</code>, <code>~/.claude</code>, and <code>~/.codex</code>.</div>
         </div>
       </div>
     </section>
@@ -587,20 +1094,66 @@ Bootstrap a new production-ready SaaS application with Next.js App Router, Postg
   </main>
 
   <script>
+    // Theme Management (Dark / Light Mode)
+    function getStoredTheme() {
+      const stored = localStorage.getItem('kobean-theme');
+      if (stored) return stored;
+      return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    }
+
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('kobean-theme', theme);
+      updateThemeIcons(theme);
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+      applyTheme(next);
+    }
+
+    function updateThemeIcons(theme) {
+      const sunPath = "M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z";
+      const moonPath = "M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z";
+
+      const iconPath = theme === 'dark' ? sunPath : moonPath;
+      const svgDesk = document.getElementById('theme-icon');
+      const svgMob = document.getElementById('theme-icon-mob');
+      if (svgDesk) svgDesk.innerHTML = `<path d="${iconPath}"/>`;
+      if (svgMob) svgMob.innerHTML = `<path d="${iconPath}"/>`;
+    }
+
+    // Apply on load
+    applyTheme(getStoredTheme());
+
+    // Mobile Navigation Toggle
+    function toggleMobileNav() {
+      const sidebar = document.getElementById('sidebar');
+      sidebar.classList.toggle('open');
+    }
+
     // Tab Switcher
     function switchTab(name) {
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
       event.target.classList.add('active');
-      document.getElementById('tab-' + name).classList.add('active');
+      const target = document.getElementById('tab-' + name);
+      if (target) target.classList.add('active');
     }
 
-    // Copy Button
+    // Copy Button with Micro-Animation
     function copyCode(btn) {
-      const code = btn.parentElement.innerText.replace('Copy', '').trim();
+      const parent = btn.parentElement;
+      const code = parent.querySelector('code') ? parent.querySelector('code').innerText.trim() : parent.innerText.replace('Copy', '').trim();
       navigator.clipboard.writeText(code);
+      const original = btn.innerText;
       btn.innerText = 'Copied!';
-      setTimeout(() => btn.innerText = 'Copy', 1800);
+      btn.style.color = '#10B981';
+      setTimeout(() => {
+        btn.innerText = original;
+        btn.style.color = '';
+      }, 1800);
     }
 
     // Role Matrix Data
@@ -631,6 +1184,7 @@ Bootstrap a new production-ready SaaS application with Next.js App Router, Postg
 
     function renderRoles(filter) {
       const grid = document.getElementById('roles-grid');
+      if (!grid) return;
       grid.innerHTML = '';
       const list = filter === 'all' ? roles : roles.filter(r => r.phase === filter);
       list.forEach(r => {
@@ -642,8 +1196,8 @@ Bootstrap a new production-ready SaaS application with Next.js App Router, Postg
             <span class="badge">${r.phase}</span>
           </div>
           <div class="card-desc">${r.desc}</div>
-          <div style="margin-top: 10px; font-size: 11.5px; font-family: var(--mono); color: var(--text-dim);">
-            <div>Writes: <span style="color: var(--sky);">${r.writes}</span></div>
+          <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border-subtle); font-size: 11.5px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--text-dim);">
+            <div>Writes: <span style="color: var(--sky); font-weight: 500;">${r.writes}</span></div>
             <div>Tools: <span style="color: var(--text-muted);">${r.tools}</span></div>
           </div>
         `;
@@ -657,9 +1211,8 @@ Bootstrap a new production-ready SaaS application with Next.js App Router, Postg
       renderRoles(phase);
     }
 
-    // Initial render
+    // Initialize
     renderRoles('all');
   </script>
 </body>
 </html>
-

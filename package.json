@@ -42,6 +42,14 @@
     "trail-of-bits"
   ],
   "author": "Joseph Nguyen",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thienng-it/KobeanSkills.git"
+  },
+  "homepage": "https://thienng-it.github.io/KobeanSkills/",
+  "bugs": {
+    "url": "https://github.com/thienng-it/KobeanSkills/issues"
+  }
 }
 

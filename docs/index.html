@@ -838,6 +838,13 @@
     </div>
 
     <div class="nav-group">
+      <div class="nav-group-title">MCP & Connectors</div>
+      <ul class="nav-links">
+        <li><a href="#mcp-connectors">Universal MCP Manager <span class="badge">Zero Drift</span></a></li>
+      </ul>
+    </div>
+
+    <div class="nav-group">
       <div class="nav-group-title">Architecture</div>
       <ul class="nav-links">
         <li><a href="#entry-skills">8 Entry Skills (Handbook) <span class="badge">Fast Copy</span></a></li>
@@ -1223,6 +1230,221 @@ Use kb-ui in bold mode to build the product landing page.</code></pre>
       </div>
     </section>
 
+    <!-- MCP & Connectors Manager -->
+    <section id="mcp-connectors">
+      <h2>Universal Cross-Agent MCP Manager</h2>
+      <p>Different AI agent tools expect Model Context Protocol (MCP) server configurations in completely different formats and file paths. KobeanSkills establishes <strong><code>.kobean/mcp.json</code></strong> as the single declarative source of truth and automatically synchronizes all agent runtimes with zero drift.</p>
+
+      <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-top: 18px;">
+        <div class="card">
+          <div class="card-title">Claude Code</div>
+          <div class="card-desc">Auto-synced to <code>.mcp.json</code> with native JSON schema and <code>mcpServers</code> dictionary.</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Antigravity</div>
+          <div class="card-desc">Auto-synced to <code>.agents/mcp.json</code> for seamless IDE & workspace MCP discovery.</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Gemini CLI</div>
+          <div class="card-desc">Auto-synced to <code>.gemini/mcp_config.json</code> (and <code>~/.gemini/config/mcp_config.json</code>).</div>
+        </div>
+        <div class="card">
+          <div class="card-title">OpenAI Codex</div>
+          <div class="card-desc">Auto-synced to <code>.codex/config.toml</code> (and <code>~/.codex/config.toml</code>) in native TOML blocks.</div>
+        </div>
+      </div>
+
+      <div class="playbook-box" style="margin-top: 10px;">
+        <div class="playbook-meta">
+          <span class="playbook-tag">CLI Commands</span>
+          <span style="font-size: 13.5px; color: var(--text-muted);">Manage and synchronize connectors in 1 command:</span>
+        </div>
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <div class="terminal-dots">
+              <span class="dot red"></span>
+              <span class="dot yellow"></span>
+              <span class="dot green"></span>
+            </div>
+            <span class="terminal-title">bash — MCP workflow</span>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy commands">
+              <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+              <span>Copy</span>
+            </button>
+          </div>
+          <div class="terminal-body">
+            <pre><code># 1. Audit status and environment variables across Claude, Gemini & Codex
+bunx kobean-skills mcp
+
+# 2. Add vetted presets (auto-wires all agents instantly)
+bunx kobean-skills mcp add postgres
+bunx kobean-skills mcp add github
+bunx kobean-skills mcp add playwright
+
+# 3. Synchronize after manual edits to .kobean/mcp.json
+bunx kobean-skills mcp sync</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="margin: 28px 0 12px; font-size: 18px; color: var(--text);">Vetted MCP Presets Catalog</h3>
+      <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 16px;">Click any preset card to immediately copy its install command to your clipboard:</p>
+
+      <div class="skills-grid">
+        <!-- postgres -->
+        <div class="skill-card">
+          <div>
+            <div class="skill-header">
+              <span class="skill-badge">postgres</span>
+              <span style="font-size: 11px; font-family: monospace; color: var(--accent); background: var(--accent-surface); padding: 2px 6px; border-radius: 4px;">Env: DATABASE_URL</span>
+            </div>
+            <div class="skill-title">PostgreSQL Database Connector</div>
+            <div class="skill-desc">Query runner and table schema introspection via <code>@modelcontextprotocol/server-postgres</code>.</div>
+          </div>
+          <div class="skill-prompt-box" onclick="copySkillPrompt(this)" title="Click to copy install command">
+            <div class="skill-prompt-text">bunx kobean-skills mcp add postgres</div>
+            <div class="skill-copy-action">
+              <span>Click card to copy</span>
+              <span class="copy-hint-pill">COPY</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- github -->
+        <div class="skill-card">
+          <div>
+            <div class="skill-header">
+              <span class="skill-badge">github</span>
+              <span style="font-size: 11px; font-family: monospace; color: var(--accent); background: var(--accent-surface); padding: 2px 6px; border-radius: 4px;">Env: GITHUB_TOKEN</span>
+            </div>
+            <div class="skill-title">GitHub Tooling Connector</div>
+            <div class="skill-desc">Issues, pull requests, commit searching, and branch management via <code>@modelcontextprotocol/server-github</code>.</div>
+          </div>
+          <div class="skill-prompt-box" onclick="copySkillPrompt(this)" title="Click to copy install command">
+            <div class="skill-prompt-text">bunx kobean-skills mcp add github</div>
+            <div class="skill-copy-action">
+              <span>Click card to copy</span>
+              <span class="copy-hint-pill">COPY</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- playwright -->
+        <div class="skill-card">
+          <div>
+            <div class="skill-header">
+              <span class="skill-badge">playwright</span>
+              <span style="font-size: 11px; font-family: monospace; color: var(--emerald); background: var(--emerald-glow); padding: 2px 6px; border-radius: 4px;">Zero Config</span>
+            </div>
+            <div class="skill-title">Playwright Browser Automation</div>
+            <div class="skill-desc">Headless browser interaction, navigation, clicks, and end-to-end verification via Playwright MCP.</div>
+          </div>
+          <div class="skill-prompt-box" onclick="copySkillPrompt(this)" title="Click to copy install command">
+            <div class="skill-prompt-text">bunx kobean-skills mcp add playwright</div>
+            <div class="skill-copy-action">
+              <span>Click card to copy</span>
+              <span class="copy-hint-pill">COPY</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- sqlite -->
+        <div class="skill-card">
+          <div>
+            <div class="skill-header">
+              <span class="skill-badge">sqlite</span>
+              <span style="font-size: 11px; font-family: monospace; color: var(--emerald); background: var(--emerald-glow); padding: 2px 6px; border-radius: 4px;">Zero Config</span>
+            </div>
+            <div class="skill-title">SQLite Database Connector</div>
+            <div class="skill-desc">Local database querying and schema inspection via <code>@modelcontextprotocol/server-sqlite</code>.</div>
+          </div>
+          <div class="skill-prompt-box" onclick="copySkillPrompt(this)" title="Click to copy install command">
+            <div class="skill-prompt-text">bunx kobean-skills mcp add sqlite</div>
+            <div class="skill-copy-action">
+              <span>Click card to copy</span>
+              <span class="copy-hint-pill">COPY</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- fetch -->
+        <div class="skill-card">
+          <div>
+            <div class="skill-header">
+              <span class="skill-badge">fetch</span>
+              <span style="font-size: 11px; font-family: monospace; color: var(--emerald); background: var(--emerald-glow); padding: 2px 6px; border-radius: 4px;">Zero Config</span>
+            </div>
+            <div class="skill-title">Web Fetch & Markdown</div>
+            <div class="skill-desc">Fetches live web pages and converts HTML to clean, context-efficient Markdown for agent reading.</div>
+          </div>
+          <div class="skill-prompt-box" onclick="copySkillPrompt(this)" title="Click to copy install command">
+            <div class="skill-prompt-text">bunx kobean-skills mcp add fetch</div>
+            <div class="skill-copy-action">
+              <span>Click card to copy</span>
+              <span class="copy-hint-pill">COPY</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- brave-search -->
+        <div class="skill-card">
+          <div>
+            <div class="skill-header">
+              <span class="skill-badge">brave-search</span>
+              <span style="font-size: 11px; font-family: monospace; color: var(--accent); background: var(--accent-surface); padding: 2px 6px; border-radius: 4px;">Env: BRAVE_API_KEY</span>
+            </div>
+            <div class="skill-title">Brave Web & News Search</div>
+            <div class="skill-desc">Real-time web search and documentation retrieval without search engine trackers.</div>
+          </div>
+          <div class="skill-prompt-box" onclick="copySkillPrompt(this)" title="Click to copy install command">
+            <div class="skill-prompt-text">bunx kobean-skills mcp add brave-search</div>
+            <div class="skill-copy-action">
+              <span>Click card to copy</span>
+              <span class="copy-hint-pill">COPY</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- sentry -->
+        <div class="skill-card">
+          <div>
+            <div class="skill-header">
+              <span class="skill-badge">sentry</span>
+              <span style="font-size: 11px; font-family: monospace; color: var(--accent); background: var(--accent-surface); padding: 2px 6px; border-radius: 4px;">Env: SENTRY_AUTH_TOKEN</span>
+            </div>
+            <div class="skill-title">Sentry Error Diagnostics</div>
+            <div class="skill-desc">Retrieve real-time stack traces, production exception tags, and issue summaries directly for <code>kb-debug</code>.</div>
+          </div>
+          <div class="skill-prompt-box" onclick="copySkillPrompt(this)" title="Click to copy install command">
+            <div class="skill-prompt-text">bunx kobean-skills mcp add sentry</div>
+            <div class="skill-copy-action">
+              <span>Click card to copy</span>
+              <span class="copy-hint-pill">COPY</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- memory -->
+        <div class="skill-card">
+          <div>
+            <div class="skill-header">
+              <span class="skill-badge">memory</span>
+              <span style="font-size: 11px; font-family: monospace; color: var(--emerald); background: var(--emerald-glow); padding: 2px 6px; border-radius: 4px;">Zero Config</span>
+            </div>
+            <div class="skill-title">Knowledge Graph Memory</div>
+            <div class="skill-desc">Long-term cross-session associative memory and relation storage for agents across sessions.</div>
+          </div>
+          <div class="skill-prompt-box" onclick="copySkillPrompt(this)" title="Click to copy install command">
+            <div class="skill-prompt-text">bunx kobean-skills mcp add memory</div>
+            <div class="skill-copy-action">
+              <span>Click card to copy</span>
+              <span class="copy-hint-pill">COPY</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Entry Skills Handbook & Cheatsheet -->
     <section id="entry-skills">
       <h2>8 Entry Skills Handbook & Cheatsheet</h2>
@@ -1462,6 +1684,14 @@ Use kb-ui in bold mode to build the product landing page.</code></pre>
         <div class="card">
           <div class="card-title"><code>npx kobean-skills docs</code></div>
           <div class="card-desc">Opens this interactive documentation web page in your default browser.</div>
+        </div>
+        <div class="card">
+          <div class="card-title"><code>npx kobean-skills mcp</code></div>
+          <div class="card-desc">Audits configured MCP server connectors, agent sync status, and environment variables across Claude, Gemini & Codex.</div>
+        </div>
+        <div class="card">
+          <div class="card-title"><code>npx kobean-skills mcp add &lt;preset&gt;</code></div>
+          <div class="card-desc">Adds a vetted MCP server (e.g. <code>postgres</code>, <code>github</code>, <code>playwright</code>) and auto-syncs all agent files.</div>
         </div>
         <div class="card">
           <div class="card-title"><code>npx kobean-skills doctor</code></div>

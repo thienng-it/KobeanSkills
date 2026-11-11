@@ -167,6 +167,32 @@ Step 2 (In chat prompt):
 
 ---
 
+### Playbook 8: Managing Connectors & MCP Servers (Zero-Drift)
+
+When you need your AI agents to query your database, interact with GitHub, inspect logs, or automate browsers:
+
+```bash
+# Add connectors in one command (automatically wires Claude, Gemini, Antigravity, and Codex):
+bunx kobean-skills mcp add postgres      # PostgreSQL database queries & schema
+bunx kobean-skills mcp add github        # Pull requests, issues, repo management
+bunx kobean-skills mcp add playwright    # Headless browser testing & UI automation
+bunx kobean-skills mcp add sqlite        # Local SQLite database runner
+bunx kobean-skills mcp add sentry        # Sentry error logs & stack traces
+
+# Check connector status and environment audit:
+bunx kobean-skills mcp list
+
+# Re-sync all agent config files after manual edits to .kobean/mcp.json:
+bunx kobean-skills mcp sync
+```
+
+**How Kobean keeps credentials safe:**
+- Kobean stores `${DATABASE_URL}` or `${GITHUB_TOKEN}` references in `.kobean/mcp.json` instead of plaintext passwords.
+- The sync engine exports `.mcp.json` (Claude), `.agents/mcp.json` & `.gemini/mcp_config.json` (Antigravity/Gemini), and `.codex/config.toml` (Codex) while preserving variable placeholders.
+- Kobean's `doctor` command automatically verifies whether your `.env` has all required keys filled.
+
+---
+
 ## 3. Power Controls & Steering
 
 | If you want to... | What to say |
@@ -174,8 +200,9 @@ Step 2 (In chat prompt):
 | **Question whether a feature is necessary** | `"Run kb-spec with ponytail ultra"` |
 | **Keep implementations ultra-minimal** | `"Use ponytail mode: smallest possible diff"` |
 | **Inspect task status** | Run `bd ready` or `bd list` in terminal |
-| **Check installed tools** | Run `npx kobean-skills doctor` |
-| **Clean up global links** | Run `npx kobean-skills install --uninstall` |
+| **Manage MCP connectors across agents** | Run `bunx kobean-skills mcp` |
+| **Check installed tools & MCP status** | Run `bunx kobean-skills doctor` |
+| **Clean up global links** | Run `bunx kobean-skills install --uninstall` |
 
 ---
 
@@ -184,6 +211,11 @@ Step 2 (In chat prompt):
 | File / Folder | Purpose |
 | :--- | :--- |
 | `.kobean/` | Engine folder containing skills, 22 role contracts, stack guides, and doctrine. |
+| `.kobean/mcp.json` | Single source of truth for Model Context Protocol (MCP) server connectors. |
+| `.mcp.json` | Claude Code MCP configuration (auto-synced from `.kobean/mcp.json`). |
+| `.agents/mcp.json` | Antigravity MCP configuration (auto-synced from `.kobean/mcp.json`). |
+| `.gemini/mcp_config.json` | Gemini CLI MCP configuration (auto-synced from `.kobean/mcp.json`). |
+| `.codex/config.toml` | Codex CLI MCP configuration in TOML (auto-synced from `.kobean/mcp.json`). |
 | `.kobean/constitution.md` | Your project's explicit rules and non-goals. |
 | `specs/NNN-<slug>/spec.md` | Requirements specifications with Given/When/Then acceptance tests. |
 | `specs/NNN-<slug>/plan.md` | Technical plans and file-level write assignments. |

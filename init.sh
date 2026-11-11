@@ -98,8 +98,18 @@ elif ! grep -q "kb-router" "${TARGET_DIR}/GEMINI.md" 2>/dev/null; then
   printf "\n\n<!-- KobeanSkills -->\n%s\n" "${RULE_LINE}" >> "${TARGET_DIR}/GEMINI.md"
 fi
 
+# 7. Wire Cross-Agent MCP connectors (.mcp.json, .agents/mcp.json, .codex/config.toml)
+if [[ ! -f "${KOBEAN_DIR}/mcp.json" && -f "${KOBEAN_DIR}/templates/mcp.json" ]]; then
+  cp "${KOBEAN_DIR}/templates/mcp.json" "${KOBEAN_DIR}/mcp.json"
+fi
+
+if [[ -f "${SCRIPT_DIR}/bin/kobean.js" ]]; then
+  node "${SCRIPT_DIR}/bin/kobean.js" mcp sync "${TARGET_DIR}" >/dev/null 2>&1 || true
+fi
+
 echo "  [ok] Installed self-contained .kobean/ folder"
 echo "  [ok] Wired Gemini CLI & Antigravity (.agents/skills & GEMINI.md / AGENTS.md)"
 echo "  [ok] Wired Claude CLI (.claude/skills & CLAUDE.md)"
 echo "  [ok] Wired Codex CLI (.codex/skills & AGENTS.md)"
+echo "  [ok] Wired Cross-Agent MCP connectors (.mcp.json, .agents/mcp.json, .codex/config.toml)"
 echo "==> Setup complete! Commit .kobean/ and agent links to share with your team."

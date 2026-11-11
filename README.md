@@ -67,12 +67,45 @@ If you have already cloned KobeanSkills locally or want a machine-wide global in
 
 | Command | Description |
 | :--- | :--- |
-| `npx kobean-skills init` | Zero-clone project setup into `.kobean/`. |
+| `npx kobean-skills init` | Zero-clone project setup into `.kobean/` with automated MCP & rule wiring. |
+| `npx kobean-skills mcp` | Inspect configured MCP connectors, agent sync status, and environment variables. |
+| `npx kobean-skills mcp add <preset>` | Add a vetted MCP preset (`postgres`, `github`, `playwright`, `sqlite`, etc.) and auto-sync. |
+| `npx kobean-skills mcp sync` | Synchronize `.kobean/mcp.json` across Claude Code, Gemini CLI, Antigravity, and Codex. |
 | `npx kobean-skills docs` | Opens the interactive visual documentation site in your browser. |
 | `npx kobean-skills guide` | Prints the complete developer playbook and prompt cheatsheet in terminal. |
-| `npx kobean-skills doctor` | Verify status of companion CLI tools (`bd`, `betterleaks`, `graphify`, `osv-scanner`). |
+| `npx kobean-skills doctor` | Verify status of companion CLI tools (`bd`, `betterleaks`, `graphify`) and MCP servers. |
 | `npx kobean-skills install` | Machine-wide global installation into `~/.gemini`, `~/.claude`, and `~/.codex`. |
 | `./scripts/install.sh --uninstall` | Cleanly removes all global symlinks and plugin registrations. |
+
+---
+
+## Universal Cross-Agent MCP & Connectors Manager
+
+Different AI tools store Model Context Protocol (MCP) servers in incompatible locations and formats:
+- **Claude Code:** `.mcp.json` (JSON `mcpServers`)
+- **Antigravity & Gemini CLI:** `.agents/mcp.json` & `~/.gemini/config/mcp_config.json`
+- **OpenAI Codex:** `.codex/config.toml` & `~/.codex/config.toml` (TOML `[mcp_servers.<name>]`)
+
+KobeanSkills eliminates config drift by establishing a single source of truth in **`.kobean/mcp.json`**:
+
+```bash
+# 1. Inspect configured MCP servers and sync status:
+bunx kobean-skills mcp
+
+# 2. Add vetted presets in one command (auto-syncs to all agents):
+bunx kobean-skills mcp add postgres      # Database schema inspection & queries
+bunx kobean-skills mcp add github        # PRs, issues, commits, branch management
+bunx kobean-skills mcp add playwright    # Headless browser testing & UI automation
+
+# 3. Synchronize across Claude, Gemini, Antigravity, and Codex:
+bunx kobean-skills mcp sync
+
+# 4. View all available built-in presets:
+bunx kobean-skills mcp presets
+```
+
+### Zero-Leak Credential Safety
+KobeanSkills preserves `${ENV_VAR}` template references in all generated configs. Your API keys (`GITHUB_TOKEN`, `DATABASE_URL`) are read securely from your environment or `.env` at runtime and are **never committed to Git in plaintext**. Kobean's `doctor` and `mcp list` audit missing variables automatically.
 
 ---
 

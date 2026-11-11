@@ -7,66 +7,66 @@ KobeanSkills unifies modern agent methodologies—including **GitHub Spec-Kit**,
 - **8 Entry Skills:** Progressive-disclosure interfaces that stay well within agent context limits.
 - **22 Specialist Role Contracts:** Explicit YAML definitions declaring file-path ownership, allowed tooling, and strict completion gates.
 - **Unified Doctrine:** Binding precedence rules that eliminate conflicts between process, task tracking, and design systems.
-- **Zero-Config Global Operation:** Installs once per machine; active across all workspaces without modifying target repositories.
+- **Zero-Config Project Operation:** Installs once into `.kobean/` in seconds; requires zero manual configuration.
 
 ---
 
-## Quick Setup: Single Command
+## Quick Setup: No Cloning Required
 
-Choose the setup method that best matches your workflow:
+Any developer can install KobeanSkills into their existing repository using **one command without cloning this repo**:
 
-### Option 1: Via `npx` (Fastest — Zero Git Clone Required)
+### Option 1: Via `npx` (Recommended for Node/TS developers)
 
-Run inside any project repository to initialize `.kobean/` in seconds:
+Run from the root of any repository:
 
 ```bash
-# Initialize KobeanSkills in the current repository
+# Initialize .kobean/ in the current repo in 1 second
 npx kobean-skills init
 
 # Verify companion CLI tools
 npx kobean-skills doctor
 ```
 
-### Option 2: Via Git Clone (`init.sh`)
+### Option 2: Via `curl` (Zero dependencies — Works for Python, Go, Rust, etc.)
 
-If you have cloned this repository locally or want to share it directly:
-
-```bash
-# From inside any target project:
-cd /path/to/your-repo
-/path/to/KobeanSkills/init.sh
-
-# Or as a one-liner on a fresh machine:
-git clone <repo-url> .kobean && ./.kobean/init.sh
-```
-
-### Option 3: Via Docker & Docker Compose (Containerized Sandbox)
-
-For environments where you want all companion tools (`bd`, `betterleaks`, `graphify`, `osv-scanner`) pre-baked without installing anything on your host machine:
+Run from the root of any repository:
 
 ```bash
-# Spin up the sandboxed environment with your workspace mounted
-docker compose run --rm kobean
-
-# Inside the container, doctor check and all skills are active immediately
-kobean doctor
+curl -fsSL https://raw.githubusercontent.com/thienng-it/KobeanSkills/main/setup.sh | bash
 ```
+
+### Option 3: Via Docker (Zero host tools needed)
+
+Run in any project using Docker:
+
+```bash
+docker run --rm -v "$(pwd):/workspace" ghcr.io/thienng-it/kobean-skills:latest kobean init
+```
+
+### What these single commands do:
+1. Unpacks all 8 entry skills, 22 role contracts, stack references, templates, and doctrine into **`.kobean/`** in your repository.
+2. Automatically configures Antigravity (`.agents/`) and Claude Code (`.claude/`) discovery.
+3. Leaves zero extra files or git bloat. Simply commit `.kobean/` to Git to share with your team.
 
 ---
 
-## Machine-Wide Global Installation (Optional)
+## Local & Machine-Wide Setup Options
 
-If you prefer installing KobeanSkills once globally so it activates across every project without creating project-level folders:
+If you have already cloned KobeanSkills locally or want a machine-wide global installation:
 
 ```bash
-cd ~/Developer/KobeanSkills
-./scripts/install.sh
+# Apply to current project from a local clone:
+~/Developer/KobeanSkills/init.sh
+
+# Install globally across all repositories on your Mac (~/.gemini & ~/.claude):
+~/Developer/KobeanSkills/scripts/install.sh
 ```
 
-| Flag | Description |
+| Command | Description |
 | :--- | :--- |
-| `./scripts/install.sh` | Machine-wide global installation linking entry skills into Antigravity and Claude Code. |
-| `./scripts/install.sh --with-tools` | Global installation plus automated check/install of companion CLIs (`bd`, `betterleaks`, `graphify`, `osv-scanner`). |
+| `npx kobean-skills init` | Zero-clone project setup into `.kobean/`. |
+| `npx kobean-skills doctor` | Verify status of companion CLI tools (`bd`, `betterleaks`, `graphify`, `osv-scanner`). |
+| `npx kobean-skills install` | Machine-wide global installation. |
 | `./scripts/install.sh --uninstall` | Cleanly removes all global symlinks and plugin registrations. |
 
 ---
@@ -122,6 +122,8 @@ KobeanSkills/
 ├── package.json             # npm package manifest (npx kobean-skills)
 ├── bin/
 │   └── kobean.js            # Node CLI (init, doctor, install)
+├── setup.sh                 # Zero-clone curl web installer
+├── init.sh                  # Standalone repository initializer
 ├── Dockerfile               # Pre-baked sandbox container with bd, betterleaks, osv-scanner
 ├── docker-compose.yml       # Docker Compose service definition
 ├── rules/

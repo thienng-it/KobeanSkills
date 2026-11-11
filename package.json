@@ -11,6 +11,7 @@
     "bin",
     "doctrine.md",
     "init.sh",
+    "setup.sh",
     "plugin.json",
     "README.md",
     "references",
@@ -41,3 +42,4 @@
   "author": "Joseph Nguyen",
   "license": "MIT"
 }
+

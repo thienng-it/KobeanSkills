@@ -17,17 +17,19 @@ Any developer can install KobeanSkills into their existing repository using **on
 
 ### Option 1: Via `bunx` or `npx` (Instant Zero-Clone Setup)
 
-Run from the root of any repository:
+Run from the root of any repository (works immediately on any new machine via GitHub):
 
 ```bash
 # Using Bun (Fastest ~50ms startup):
-bunx kobean-skills init
+bunx github:thienng-it/KobeanSkills init
+# (Or shorthand when published: bunx kobean-skills init)
 
 # Or using Node/npx (Universal, pre-installed everywhere):
-npx kobean-skills init
+npx github:thienng-it/KobeanSkills init
+# (Or shorthand when published: npx kobean-skills init)
 
 # Verify companion CLI tools:
-bunx kobean-skills doctor  # or npx kobean-skills doctor
+bunx github:thienng-it/KobeanSkills doctor
 ```
 
 ### Option 2: Via `curl` (Zero dependencies — Works for Python, Go, Rust, etc.)

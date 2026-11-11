@@ -13,6 +13,14 @@
 
 set -euo pipefail
 
+# Guard: If piped via curl without a script file on disk, redirect to setup.sh
+if [[ -z "${BASH_SOURCE[0]:-}" || "${BASH_SOURCE[0]}" == "bash" || ! -f "${BASH_SOURCE[0]}" ]]; then
+  echo "==> Warning: init.sh requires local source files."
+  echo "==> For zero-clone installation on a new machine, run setup.sh instead:"
+  echo "    curl -fsSL https://raw.githubusercontent.com/thienng-it/KobeanSkills/main/setup.sh | bash"
+  exit 1
+fi
+
 # 1. Determine source and target directories
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 

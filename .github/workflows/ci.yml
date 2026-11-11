@@ -14,4 +14,13 @@ jobs:
       - uses: actions/checkout@v4
       - name: Run Schema Linter
         run: ./scripts/lint.sh
+      - name: Test Pure JS Init (Clean Machine Verification)
+        run: |
+          mkdir -p /tmp/test-init-repo
+          node bin/kobean.js init /tmp/test-init-repo
+          node bin/kobean.js doctor
+      - name: Test Zero-Clone Shell Installer
+        run: |
+          mkdir -p /tmp/test-setup-repo
+          cd /tmp/test-setup-repo && bash "$GITHUB_WORKSPACE/setup.sh" .
 

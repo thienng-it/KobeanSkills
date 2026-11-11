@@ -8,6 +8,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 const { execSync, spawnSync } = require('child_process');
 
 const PKG_ROOT = path.resolve(__dirname, '..');
@@ -692,20 +693,112 @@ Usage:
   }
 }
 
+function safeSymlink(targetRelative, linkPath, isDir = false) {
+  try {
+    fs.mkdirSync(path.dirname(linkPath), { recursive: true });
+    if (fs.existsSync(linkPath) || fs.lstatSync(linkPath).isSymbolicLink()) {
+      try { fs.unlinkSync(linkPath); } catch {}
+    }
+  } catch {}
+  try {
+    const type = isDir ? (process.platform === 'win32' ? 'junction' : 'dir') : 'file';
+    fs.symlinkSync(targetRelative, linkPath, type);
+  } catch (err) {
+    // Fallback for Windows without symlink privileges
+    const resolvedTarget = path.resolve(path.dirname(linkPath), targetRelative);
+    if (fs.existsSync(resolvedTarget)) {
+      try {
+        fs.cpSync(resolvedTarget, linkPath, { recursive: true, force: true });
+      } catch (cpErr) {
+        // Ignored
+      }
+    }
+  }
+}
+
 function runInit(targetDirArg) {
   const targetDir = path.resolve(process.cwd(), targetDirArg || '.');
   console.log(`==> Initializing KobeanSkills in: ${targetDir}`);
 
-  const initScript = path.join(PKG_ROOT, 'init.sh');
-  if (fs.existsSync(initScript)) {
-    const res = spawnSync('bash', [initScript, targetDir], { stdio: 'inherit' });
-    if (res.status !== 0) {
-      process.exit(res.status || 1);
+  const kobeanDir = path.join(targetDir, '.kobean');
+  fs.mkdirSync(kobeanDir, { recursive: true });
+
+  // 1. Copy engine items into .kobean/
+  const items = ['doctrine.md', 'GUIDE.md', 'roles', 'references', 'templates', 'skills', 'rules', 'SOURCES.md'];
+  if (PKG_ROOT !== kobeanDir) {
+    for (const item of items) {
+      const src = path.join(PKG_ROOT, item);
+      const dest = path.join(kobeanDir, item);
+      if (fs.existsSync(src)) {
+        try {
+          fs.rmSync(dest, { recursive: true, force: true });
+        } catch {}
+        fs.cpSync(src, dest, { recursive: true, force: true });
+      }
     }
-  } else {
-    console.error(`[error] Could not locate init.sh at ${initScript}`);
-    process.exit(1);
   }
+
+  // 2. Wire Antigravity (.agents/), Claude (.claude/), and Codex (.codex/)
+  const skillsDir = path.join(kobeanDir, 'skills');
+  if (fs.existsSync(skillsDir)) {
+    const skillEntries = fs.readdirSync(skillsDir);
+    for (const s of skillEntries) {
+      if (s.startsWith('kb-') && fs.statSync(path.join(skillsDir, s)).isDirectory()) {
+        safeSymlink(`../../.kobean/skills/${s}`, path.join(targetDir, '.agents', 'skills', s), true);
+        safeSymlink(`../../.kobean/skills/${s}`, path.join(targetDir, '.claude', 'skills', s), true);
+        safeSymlink(`../../.kobean/skills/${s}`, path.join(targetDir, '.codex', 'skills', s), true);
+      }
+    }
+  }
+  safeSymlink('../../.kobean/rules/AGENTS.md', path.join(targetDir, '.agents', 'rules', 'kobean.md'), false);
+
+  // 3. Wire workspace rules (AGENTS.md, CLAUDE.md, GEMINI.md)
+  const ruleLine = 'For every task, follow .kobean/doctrine.md and route workflows through the kb-* skills.';
+  for (const ruleFile of ['AGENTS.md', 'CLAUDE.md', 'GEMINI.md']) {
+    const fullPath = path.join(targetDir, ruleFile);
+    if (!fs.existsSync(fullPath)) {
+      safeSymlink('.kobean/rules/AGENTS.md', fullPath, false);
+    } else {
+      try {
+        const content = fs.readFileSync(fullPath, 'utf-8');
+        if (!content.includes('kb-router')) {
+          fs.appendFileSync(fullPath, `\n\n<!-- KobeanSkills -->\n${ruleLine}\n`, 'utf-8');
+        }
+      } catch {}
+    }
+  }
+
+  // 4. Wire Cross-Agent MCP connectors
+  const targetMcp = path.join(kobeanDir, 'mcp.json');
+  const templateMcp = path.join(kobeanDir, 'templates', 'mcp.json');
+  if (!fs.existsSync(targetMcp) && fs.existsSync(templateMcp)) {
+    try {
+      fs.copyFileSync(templateMcp, targetMcp);
+    } catch {}
+  }
+  try {
+    syncMcpConfigs(targetDir, false);
+  } catch {}
+
+  // 5. Wire GitHub Pull Request template
+  const prDir = path.join(targetDir, '.github');
+  const prTarget = path.join(prDir, 'pull_request_template.md');
+  const prAlt = path.join(prDir, 'PULL_REQUEST_TEMPLATE.md');
+  const prSource = path.join(kobeanDir, 'templates', 'PULL_REQUEST_TEMPLATE.md');
+  if (!fs.existsSync(prTarget) && !fs.existsSync(prAlt) && fs.existsSync(prSource)) {
+    fs.mkdirSync(prDir, { recursive: true });
+    try {
+      fs.copyFileSync(prSource, prTarget);
+    } catch {}
+  }
+
+  console.log('  [ok] Installed self-contained .kobean/ folder');
+  console.log('  [ok] Wired Gemini CLI & Antigravity (.agents/skills & GEMINI.md / AGENTS.md)');
+  console.log('  [ok] Wired Claude CLI (.claude/skills & CLAUDE.md)');
+  console.log('  [ok] Wired Codex CLI (.codex/skills & AGENTS.md)');
+  console.log('  [ok] Wired Cross-Agent MCP connectors (.mcp.json, .agents/mcp.json, .codex/config.toml)');
+  console.log('  [ok] Wired GitHub Pull Request template (.github/pull_request_template.md)');
+  console.log('==> Setup complete! Commit .kobean/ and agent links to share with your team.');
 }
 
 function runInstall() {
@@ -906,7 +999,7 @@ function runMcpSync(targetDirArg, isGlobal = false) {
   // 5. Global sync if requested
   if (isGlobal) {
     console.log('\n==> Applying global MCP sync to user home directories:');
-    const home = process.env.HOME || '';
+    const home = os.homedir();
 
     // Global Gemini / Antigravity
     const globalGeminiMcp = path.join(home, '.gemini', 'config', 'mcp_config.json');
@@ -1216,10 +1309,11 @@ function runDoctor() {
   }
 
   console.log('\nGlobal Discovery:');
-  const geminiRule = path.join(process.env.HOME || '', '.gemini', 'GEMINI.md');
-  const agyPlugin = path.join(process.env.HOME || '', '.gemini', 'config', 'plugins', 'kobean-skills');
-  const claudeRule = path.join(process.env.HOME || '', '.claude', 'CLAUDE.md');
-  const codexRule = path.join(process.env.HOME || '', '.codex', 'AGENTS.md');
+  const home = os.homedir();
+  const geminiRule = path.join(home, '.gemini', 'GEMINI.md');
+  const agyPlugin = path.join(home, '.gemini', 'config', 'plugins', 'kobean-skills');
+  const claudeRule = path.join(home, '.claude', 'CLAUDE.md');
+  const codexRule = path.join(home, '.codex', 'AGENTS.md');
   console.log(`  Gemini CLI:         ${fs.existsSync(geminiRule) ? '[✓] Active (~/.gemini/GEMINI.md)' : '[ ] Not registered'}`);
   console.log(`  Antigravity plugin: ${fs.existsSync(agyPlugin) ? '[✓] Active (~/.gemini/config/plugins/)' : '[ ] Not registered'}`);
   console.log(`  Claude CLI:         ${fs.existsSync(claudeRule) ? '[✓] Active (~/.claude/CLAUDE.md)' : '[ ] Not registered'}`);

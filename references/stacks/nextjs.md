@@ -21,3 +21,4 @@
 - Every async surface must explicitly implement 4 states: `loading` (skeleton matching layout dimensions to keep `CLS <= 0.1`), `empty` (clear call to action), `error` (human-readable retry), and `populated`.
 - Use semantic HTML (`<button>`, `<nav>`, `<main>`, `<dialog>`) before ARIA.
 - Always style `:focus-visible` (never strip focus outlines without a high-contrast replacement).
+

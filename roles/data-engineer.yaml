@@ -38,3 +38,4 @@ done_when:
   - "Schema and migration verified with automated DB tests"
 output: >-
   Paths to data-model.md, Drizzle schema, and migration files, plus test verification output.
+

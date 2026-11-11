@@ -24,3 +24,4 @@ Never guess or apply blind micro-optimizations:
 2. Identify the single dominant bottleneck.
 3. Apply the smallest fix.
 4. Re-measure and report `before -> after` numbers.
+

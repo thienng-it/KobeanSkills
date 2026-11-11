@@ -38,3 +38,4 @@ This file records the exact upstream repositories, commits, and licenses from wh
 | `osv-scanner` | [google/osv-scanner](https://github.com/google/osv-scanner) | Supply-chain lockfile/manifest CVE scanning. |
 | `semgrep` | [semgrep/semgrep](https://github.com/semgrep/semgrep) | Static analysis security rules. |
 | `chrome-devtools-mcp` | Native Antigravity Plugin | Live DOM, accessibility tree, Core Web Vitals traces, and console/network inspection. |
+

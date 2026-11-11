@@ -29,3 +29,4 @@
 ## 5. Beads Task Graph (`.beads/`)
 > Do NOT track task status in this file. Create all execution tasks and dependencies in `.beads/` using `bd create` and `bd dep add`.
 - Root Epic / Bead IDs created: `<list IDs from bd>`
+

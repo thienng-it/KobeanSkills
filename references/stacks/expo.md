@@ -16,3 +16,4 @@
 ## 3. Startup Time (TTI) & Bundle Size
 - Avoid heavy synchronous work or barrel imports at module top-level so Hermes bytecode cold start stays fast.
 - Never store tokens or secrets in `AsyncStorage`—always use `expo-secure-store`.
+

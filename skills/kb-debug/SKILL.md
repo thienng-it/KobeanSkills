@@ -49,3 +49,4 @@ Distilled from **Superpowers** (`systematic-debugging`, `test-driven-development
 1. **Root Cause:** 1-paragraph explanation of *why* the bug happened.
 2. **Fix & Regression Test:** Links to the modified file(s) and new test.
 3. **Ponytail Footer:** Callers checked, what was skipped, and any residual risk.
+

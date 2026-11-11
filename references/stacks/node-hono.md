@@ -16,3 +16,4 @@
 - **Structured Logging:** Log JSON with `requestId`, `method`, `path`, `status`, and `durationMs`. Never log tokens, passwords, raw cookies, or PII.
 - **Timeouts & Cancellation:** Pass `AbortSignal.timeout(ms)` to every outbound `fetch` or third-party SDK call. Never make unbounded network calls.
 - **Fail-Closed Auth:** Middleware verifies session/JWT before route handlers execute, and service functions verify resource ownership (`userId` / `orgId`) in the database query itself.
+

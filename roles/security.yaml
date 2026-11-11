@@ -28,3 +28,4 @@ done_when:
 output: >-
   Security Gate Verdict (PASS | BLOCK), betterleaks output summary, and verified
   findings with source-to-sink trace and remediation.
+

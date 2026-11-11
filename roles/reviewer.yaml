@@ -27,3 +27,4 @@ done_when:
 output: >-
   Structured review report with Verdict (PASS | BLOCK), findings sorted by
   severity (CRITICAL, HIGH, MEDIUM, LOW), and bloat to cut.
+

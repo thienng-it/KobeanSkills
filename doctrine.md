@@ -78,3 +78,4 @@ When `kb-ui` or `frontend` builds or reviews any interface:
    - `betterleaks` detects any secret in the working tree or git history.
    - `reviewer` or `security` reports any `CRITICAL` or `HIGH` finding (verified via Trail of Bits `fp-check` false-positive gate).
    - `qa` reports any failing acceptance criterion from `spec.md` or failing test suite.
+

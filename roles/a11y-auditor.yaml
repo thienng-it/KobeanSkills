@@ -27,3 +27,4 @@ done_when:
 output: >-
   Accessibility Verdict (PASS | BLOCK) and actionable list of WCAG 2.2 AA
   violations with exact component:line fixes.
+

@@ -20,3 +20,4 @@
 - [ ] Rate limiting and payload size limits defined on all public endpoints.
 - [ ] Secrets loaded exclusively from environment/secret manager, never defaulted in code.
 - [ ] Authorization checked at the data/resource layer (IDOR prevention), not just route middleware.
+

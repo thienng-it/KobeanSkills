@@ -27,3 +27,4 @@ Never mix the 4 documentation quadrants in a single section:
 
 ## 4. Reader-Test Verification (`doc-coauthoring`)
 Before marking docs complete, verify every command and file path in the documentation against the actual repository so a fresh reader with zero context can copy-paste and succeed on the first try.
+

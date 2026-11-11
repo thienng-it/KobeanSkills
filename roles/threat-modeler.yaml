@@ -31,3 +31,4 @@ done_when:
 output: >-
   Path to specs/NNN-<slug>/threats.md and list of mandatory security test cases
   that architect and qa must include.
+

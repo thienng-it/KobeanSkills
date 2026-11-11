@@ -24,3 +24,4 @@
 ## 4. Dynamic Updates (Robust)
 - [ ] Async form errors connect to the input via `aria-describedby` and set `aria-invalid="true"`.
 - [ ] Toast notifications and async status banners use `role="status"` (`aria-live="polite"`) or `role="alert"`.
+

@@ -16,3 +16,4 @@ We chose **Option A** because <concise justification aligned with Ponytail & Con
 ## Consequences
 - **Positive:** <what gets easier>
 - **Negative / Trade-offs:** <what we accept or must monitor>
+

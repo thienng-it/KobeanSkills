@@ -30,3 +30,4 @@ done_when:
 output: >-
   Supply-Chain Gate Verdict (PASS | BLOCK), CVE summary, and list of any new
   packages that should be replaced with standard library code.
+

@@ -52,3 +52,4 @@ If the feature touches authentication, authorization, billing/payments, PII, fil
 ## Verification & Handoff
 - Confirm `specs/NNN-<slug>/spec.md` has zero `TODO` or `[NEEDS CLARIFICATION]` placeholders.
 - Ask the user to approve the spec (or proceed directly to [`kb-plan`](../kb-plan/SKILL.md) if the user asked for an end-to-end build).
+

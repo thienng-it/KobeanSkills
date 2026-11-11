@@ -76,3 +76,4 @@ If frontend files (`src/web/**`, `src/components/**`, `app/**`) were touched:
 ```
 
 > **Hard Rule:** Any `CRITICAL` or `HIGH` finding, any `betterleaks` hit, or any failing test sets the overall verdict to **`BLOCK`**.
+

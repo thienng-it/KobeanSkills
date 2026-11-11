@@ -51,3 +51,4 @@ Whenever a pipeline step invokes one of the 22 roles:
 ## Verification
 
 Before ending the turn, state in 1 line which pipeline and active role(s) are executing, and confirm that all required gates in `~/.kobean/doctrine.md` are scheduled.
+

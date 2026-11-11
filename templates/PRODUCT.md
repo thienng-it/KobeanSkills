@@ -26,3 +26,4 @@
 ## 5. Project-Specific Anti-Patterns (Hard Bans)
 - Never use generic blue-purple neon gradients or unstyled 3-icon feature cards.
 - Never ship a component without `loading`, `empty`, `error`, and `:focus-visible` states.
+

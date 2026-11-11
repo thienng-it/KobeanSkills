@@ -22,3 +22,4 @@
 3. **Zero Secrets in Repo:** `betterleaks` must pass with 0 findings on every commit.
 4. **Test-First (Red-Green-Refactor):** Every new behavior or bugfix includes an automated test that fails before the change and passes after.
 5. **Ponytail Economy:** Reuse existing project helpers and installed packages before adding new dependencies.
+

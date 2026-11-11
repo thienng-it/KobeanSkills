@@ -62,3 +62,4 @@ For every task:
 End every build turn with **1–2 lines**:
 - **Skipped / Cut:** What optional complexity or unrequested flexibility was intentionally omitted.
 - **Residual Risk:** Any edge case or operational constraint the user should know.
+

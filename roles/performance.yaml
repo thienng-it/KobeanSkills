@@ -27,3 +27,4 @@ done_when:
 output: >-
   Performance report with budget pass/fail table, measured traces, and ranked
   bottlenecks with minimal fixes.
+

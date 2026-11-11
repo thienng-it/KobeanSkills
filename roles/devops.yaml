@@ -36,3 +36,4 @@ done_when:
   - "Dockerfiles use multi-stage builds, non-root user, and pinned base images"
 output: >-
   Updated CI/Docker/infra files, verification output, and 1-2 line Ponytail summary.
+

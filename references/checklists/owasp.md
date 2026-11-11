@@ -35,3 +35,4 @@ Before reporting any `CRITICAL` or `HIGH` finding:
 1. Trace the exact data flow from **untrusted source** (HTTP input, webhook, file) to **sensitive sink** (DB, shell, DOM, auth decision).
 2. Check if upstream middleware, schema validation (Zod/Pydantic), or framework auto-escaping already neutralizes it.
 3. Include a concrete reproduction or exploit scenario for every reported `CRITICAL`/`HIGH` issue. Drop speculative noise.
+

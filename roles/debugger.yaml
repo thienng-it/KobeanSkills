@@ -35,3 +35,4 @@ done_when:
 output: >-
   Root-cause explanation (1 paragraph), regression test path, fix diff, and
   1-2 line Ponytail note on callers checked.
+

@@ -47,3 +47,4 @@ Never declare a UI task finished from static code alone when a dev server can be
    - Inspect the accessibility tree (`take_snapshot`) and console errors (`list_console_messages`).
    - On Antigravity, delegate deep accessibility or LCP issues to the installed `a11y-debugging` and `debug-optimize-lcp` skills.
 2. Fix any contrast, alignment, overflow, or keyboard focus defects before returning to the user.
+

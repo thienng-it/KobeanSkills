@@ -39,3 +39,4 @@ done_when:
   - "Beads issue closed via bd close <id> --reason '...'"
 output: >-
   Changed files, pytest + eval metrics table, closed Bead ID, and 1-2 line Ponytail note.
+

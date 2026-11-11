@@ -20,3 +20,4 @@
   - Never rename a column or table in a single step in production. Add new column -> dual-write / backfill -> switch reads -> drop old column in a later release.
   - Add new constraints as `NOT VALID` first, then `VALIDATE CONSTRAINT` to avoid long `ACCESS EXCLUSIVE` table locks.
 - **Transactions & N+1 Prevention:** Wrap multi-table writes in `db.transaction(async (tx) => ...)`. Never run `db.select` inside a `for` loop—use `inArray`, joins, or relational queries.
+

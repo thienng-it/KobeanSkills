@@ -33,3 +33,4 @@ done_when:
   - "Every CLI command, env var, and file path verified against the live codebase (Reader Test)"
 output: >-
   Updated documentation files and confirmation that all documented commands/paths exist.
+

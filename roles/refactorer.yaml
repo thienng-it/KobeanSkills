@@ -34,3 +34,4 @@ done_when:
   - "Net lines of code or cyclomatic complexity reduced; shortcuts logged in DEBT.md"
 output: >-
   Diff summary (lines added vs removed), test pass confirmation, and updated DEBT.md entries.
+

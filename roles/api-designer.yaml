@@ -31,3 +31,4 @@ done_when:
   - "Pagination, idempotency, auth headers, and status codes (400/401/403/404/409/422) specified"
 output: >-
   Paths to updated contract files and summary of endpoints/schemas added or modified.
+

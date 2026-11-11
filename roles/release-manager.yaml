@@ -34,3 +34,4 @@ done_when:
   - "Exact rollback command and DB migration reversibility documented"
 output: >-
   Release readiness summary, version bump + CHANGELOG diff, and rollback instructions.
+

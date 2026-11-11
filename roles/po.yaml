@@ -35,3 +35,4 @@ done_when:
 output: >-
   Path to approved specs/NNN-<slug>/spec.md plus a 3-bullet summary of scope,
   cut items, and whether threat-modeler is required.
+

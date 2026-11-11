@@ -65,3 +65,4 @@ Use these curated pairings only when initializing `PRODUCT.md` and the user has 
 | **B2B SaaS / Productivity** | `Plus Jakarta Sans` or `Instrument Sans` / `Inter` / `Geist Mono` | Warm alabaster (`#FAF9F6`), ink text (`#111315`), deep forest (`#0F5338`) or cobalt (`#1D4ED8`) primary action. |
 | **Fintech / Analytics** | `Söhne` or `General Sans` / `Plus Jakarta Sans` / `IBM Plex Mono` | High-trust paper/slate surface, strict tabular numbers, restrained navy/emerald palette. |
 | **Editorial / Studio / Commerce** | `Instrument Serif` or `Fraunces` / `DM Sans` / `Space Mono` | Warm cream (`#F6F3EC`), charcoal ink (`#1C1917`), terracotta (`#C2410C`) or espresso accents. |
+

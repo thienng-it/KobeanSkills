@@ -45,3 +45,4 @@ If `.github/workflows/**`, `Dockerfile*`, or `infra/**` are part of the ship sco
 
 ## Safety Rule
 Never run `git push --force`, publish to a public registry (`npm publish`), or deploy to production without explicit user confirmation in the chat turn.
+

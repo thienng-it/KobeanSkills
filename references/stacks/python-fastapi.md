@@ -15,3 +15,4 @@
 - **Structured Outputs:** When calling LLMs, enforce structured JSON schemas / tool schemas and validate the parsed output with Pydantic.
 - **Evaluation First:** Every prompt, RAG pipeline, or fine-tuned model change requires a reproducible offline eval dataset (`evals/`) scoring accuracy, latency, and token cost before and after the change.
 - **Reproducibility:** Pin dataset revisions, random seeds, and model checkpoints; log metrics cleanly.
+

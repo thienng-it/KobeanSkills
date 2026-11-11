@@ -37,3 +37,4 @@ done_when:
 output: >-
   QA Gate Verdict (PASS | BLOCK), scenario-to-test coverage matrix, and raw
   command output proving all suites pass.
+

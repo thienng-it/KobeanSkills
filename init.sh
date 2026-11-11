@@ -9,7 +9,7 @@
 # What it does in 1 second:
 #   1. Creates ONE clean, self-contained folder: `.kobean/` in your repository.
 #   2. Installs all 8 entry skills, 22 role contracts, references, templates, and doctrine.
-#   3. Wires Antigravity (.agents/) and Claude Code (.claude/) so they discover all skills automatically.
+#   3. Wires Antigravity (.agents/), Claude Code (.claude/), and Codex (.codex/) so they discover all skills automatically.
 
 set -euo pipefail
 
@@ -69,7 +69,15 @@ for skill_path in "${KOBEAN_DIR}"/skills/kb-*; do
   ln -sfn "../../.kobean/skills/${skill_name}" "${TARGET_DIR}/.claude/skills/${skill_name}"
 done
 
-# 5. Wire workspace rule (AGENTS.md / CLAUDE.md) if not already present
+# 5. Wire Codex discovery (.codex/)
+mkdir -p "${TARGET_DIR}/.codex/skills"
+for skill_path in "${KOBEAN_DIR}"/skills/kb-*; do
+  [ -d "${skill_path}" ] || continue
+  skill_name="$(basename "${skill_path}")"
+  ln -sfn "../../.kobean/skills/${skill_name}" "${TARGET_DIR}/.codex/skills/${skill_name}"
+done
+
+# 6. Wire workspace rule (AGENTS.md / CLAUDE.md) if not already present
 RULE_LINE="For every task, follow .kobean/doctrine.md and route workflows through the kb-* skills."
 
 if [[ ! -f "${TARGET_DIR}/AGENTS.md" ]]; then
@@ -87,4 +95,5 @@ fi
 echo "  [ok] Installed self-contained .kobean/ folder"
 echo "  [ok] Wired Antigravity discovery (.agents/skills & .agents/rules)"
 echo "  [ok] Wired Claude Code discovery (.claude/skills & CLAUDE.md)"
-echo "==> Setup complete! Commit .kobean/, .agents/, and .claude/ to share with your team."
+echo "  [ok] Wired Codex discovery (.codex/skills & AGENTS.md)"
+echo "==> Setup complete! Commit .kobean/, .agents/, .claude/, and .codex/ to share with your team."

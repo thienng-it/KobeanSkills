@@ -25,7 +25,7 @@ Commands:
   init [dir]        Initialize .kobean/ in target repo (default: current directory)
   docs              Open the interactive documentation web page in your browser
   guide             Display the developer workflow guide and prompt cheatsheet
-  install           Install globally into ~/.gemini and ~/.claude
+  install           Install globally into ~/.gemini, ~/.claude, and ~/.codex
   doctor            Check status of companion CLI tools (bd, betterleaks, graphify, etc.)
   help              Show this help message
 
@@ -89,8 +89,10 @@ function runDoctor() {
   console.log('\nGlobal Discovery:');
   const agyRule = path.join(process.env.HOME || '', '.gemini', 'config', 'plugins', 'kobean-skills');
   const claudeRule = path.join(process.env.HOME || '', '.claude', 'CLAUDE.md');
-  console.log(`  Antigravity plugin: ${fs.existsSync(agyRule) ? '[✓] Active' : '[ ] Not registered (run npx kobean install)'}`);
-  console.log(`  Claude Code rule:   ${fs.existsSync(claudeRule) ? '[✓] Active' : '[ ] Not registered (run npx kobean install)'}`);
+  const codexRule = path.join(process.env.HOME || '', '.codex', 'AGENTS.md');
+  console.log(`  Antigravity plugin: ${fs.existsSync(agyRule) ? '[✓] Active' : '[ ] Not registered (run kobean install)'}`);
+  console.log(`  Claude Code rule:   ${fs.existsSync(claudeRule) ? '[✓] Active' : '[ ] Not registered (run kobean install)'}`);
+  console.log(`  Codex CLI rule:     ${fs.existsSync(codexRule) ? '[✓] Active' : '[ ] Not registered (run kobean install)'}`);
 }
 
 function runDocs() {

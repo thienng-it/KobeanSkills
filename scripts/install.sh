@@ -16,6 +16,8 @@ AGY_SKILLS_DIR="${AGY_CONFIG_DIR}/skills"
 AGY_PLUGINS_DIR="${AGY_CONFIG_DIR}/plugins"
 CLAUDE_DIR="${HOME}/.claude"
 CLAUDE_SKILLS_DIR="${CLAUDE_DIR}/skills"
+CODEX_DIR="${HOME}/.codex"
+CODEX_SKILLS_DIR="${CODEX_DIR}/skills"
 
 MODE="global"
 WITH_TOOLS=false
@@ -89,10 +91,10 @@ if [[ "${MODE}" == "uninstall" ]]; then
     rm -f "${KOBEAN_HOME}/${item}"
   done
   rm -f "${AGY_PLUGINS_DIR}/kobean-skills"
-  rm -f "${HOME}/.gemini/GEMINI.md" "${AGY_CONFIG_DIR}/AGENTS.md" "${CLAUDE_DIR}/CLAUDE.md"
+  rm -f "${HOME}/.gemini/GEMINI.md" "${AGY_CONFIG_DIR}/AGENTS.md" "${CLAUDE_DIR}/CLAUDE.md" "${CODEX_DIR}/AGENTS.md"
   for skill_path in "${REPO_DIR}"/skills/kb-*; do
     skill_name="$(basename "${skill_path}")"
-    rm -f "${AGY_SKILLS_DIR}/${skill_name}" "${CLAUDE_SKILLS_DIR}/${skill_name}"
+    rm -f "${AGY_SKILLS_DIR}/${skill_name}" "${CLAUDE_SKILLS_DIR}/${skill_name}" "${CODEX_SKILLS_DIR}/${skill_name}"
   done
   if [[ -f "${AGY_CONFIG_DIR}/config.json" ]]; then
     python3 - "${AGY_CONFIG_DIR}/config.json" <<'PY'
@@ -115,15 +117,16 @@ if [[ "${MODE}" == "project" ]]; then
   TARGET_PROJECT="$(cd "${TARGET_PROJECT}" && pwd)"
   echo "==> Installing KobeanSkills into project: ${TARGET_PROJECT}"
   link_kobean_home
-  mkdir -p "${TARGET_PROJECT}/.agents/skills" "${TARGET_PROJECT}/.agents/rules" "${TARGET_PROJECT}/.claude/skills"
+  mkdir -p "${TARGET_PROJECT}/.agents/skills" "${TARGET_PROJECT}/.agents/rules" "${TARGET_PROJECT}/.claude/skills" "${TARGET_PROJECT}/.codex/skills"
   for skill_path in "${REPO_DIR}"/skills/kb-*; do
     [ -d "${skill_path}" ] || continue
     skill_name="$(basename "${skill_path}")"
     ln -sfn "${skill_path}" "${TARGET_PROJECT}/.agents/skills/${skill_name}"
     ln -sfn "${skill_path}" "${TARGET_PROJECT}/.claude/skills/${skill_name}"
+    ln -sfn "${skill_path}" "${TARGET_PROJECT}/.codex/skills/${skill_name}"
   done
   ln -sfn "${REPO_DIR}/rules/AGENTS.md" "${TARGET_PROJECT}/.agents/rules/kobean.md"
-  echo "==> Done! Project ${TARGET_PROJECT} now has kb-* skills and rules in .agents/ and .claude/."
+  echo "==> Done! Project ${TARGET_PROJECT} now has kb-* skills and rules in .agents/, .claude/, and .codex/."
   exit 0
 fi
 
@@ -151,20 +154,26 @@ PY
   echo "  [ok] Enabled 'kobean-skills' plugin in Antigravity (injects rules/AGENTS.md in all repos)"
 fi
 
-mkdir -p "${HOME}/.gemini" "${AGY_CONFIG_DIR}" "${CLAUDE_DIR}"
+mkdir -p "${HOME}/.gemini" "${AGY_CONFIG_DIR}" "${CLAUDE_DIR}" "${CODEX_DIR}"
 ln -sfn "${REPO_DIR}/rules/AGENTS.md" "${HOME}/.gemini/GEMINI.md"
 ln -sfn "${REPO_DIR}/rules/AGENTS.md" "${AGY_CONFIG_DIR}/AGENTS.md"
 ln -sfn "${REPO_DIR}/rules/AGENTS.md" "${CLAUDE_DIR}/CLAUDE.md"
-echo "  [ok] Linked global rules -> ~/.gemini/GEMINI.md, ~/.gemini/config/AGENTS.md, ~/.claude/CLAUDE.md"
+if [[ ! -s "${CODEX_DIR}/AGENTS.md" ]]; then
+  ln -sfn "${REPO_DIR}/rules/AGENTS.md" "${CODEX_DIR}/AGENTS.md"
+elif ! grep -q "kb-router" "${CODEX_DIR}/AGENTS.md" 2>/dev/null; then
+  printf "\n\n<!-- KobeanSkills -->\nFor every task, follow %s/doctrine.md and route workflows through the kb-* skills.\n" "${KOBEAN_HOME}" >> "${CODEX_DIR}/AGENTS.md"
+fi
+echo "  [ok] Linked global rules -> ~/.gemini/GEMINI.md, ~/.gemini/config/AGENTS.md, ~/.claude/CLAUDE.md, ~/.codex/AGENTS.md"
 
-mkdir -p "${AGY_SKILLS_DIR}" "${CLAUDE_SKILLS_DIR}"
+mkdir -p "${AGY_SKILLS_DIR}" "${CLAUDE_SKILLS_DIR}" "${CODEX_SKILLS_DIR}"
 count=0
 for skill_path in "${REPO_DIR}"/skills/kb-*; do
   [ -d "${skill_path}" ] || continue
   skill_name="$(basename "${skill_path}")"
   ln -sfn "${skill_path}" "${AGY_SKILLS_DIR}/${skill_name}"
   ln -sfn "${skill_path}" "${CLAUDE_SKILLS_DIR}/${skill_name}"
+  ln -sfn "${skill_path}" "${CODEX_SKILLS_DIR}/${skill_name}"
   count=$((count + 1))
 done
-echo "  [ok] Linked ${count} kb-* skills -> Antigravity & Claude Code"
-echo "==> Done! Open any repo in Antigravity or Claude Code—KobeanSkills is active automatically."
+echo "  [ok] Linked ${count} kb-* skills -> Antigravity, Claude Code & Codex CLI"
+echo "==> Done! Open any repo in Antigravity, Claude Code, or Codex—KobeanSkills is active automatically."

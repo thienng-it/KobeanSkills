@@ -1,6 +1,6 @@
 # KobeanSkills
 
-An Antigravity-native and Claude Code-compatible engineering skill distribution and multi-role agent orchestration system.
+An Antigravity-native, Claude Code-compatible, and OpenAI Codex-ready engineering skill distribution and multi-role agent orchestration system.
 
 KobeanSkills unifies modern agent methodologies—including **GitHub Spec-Kit**, **Superpowers**, **Beads**, **Ponytail**, **Impeccable**, **Taste-Skill**, and **Trail of Bits**—into an air-gapped, context-efficient architecture:
 
@@ -48,7 +48,7 @@ docker run --rm -v "$(pwd):/workspace" ghcr.io/thienng-it/kobean-skills:latest k
 
 ### What these single commands do:
 1. Unpacks all 8 entry skills, 22 role contracts, stack references, templates, and doctrine into **`.kobean/`** in your repository.
-2. Automatically configures Antigravity (`.agents/`) and Claude Code (`.claude/`) discovery.
+2. Automatically configures Antigravity (`.agents/`), Claude Code (`.claude/`), and OpenAI Codex (`.codex/` + `AGENTS.md`) discovery.
 3. Leaves zero extra files or git bloat. Simply commit `.kobean/` to Git to share with your team.
 
 ---
@@ -61,7 +61,7 @@ If you have already cloned KobeanSkills locally or want a machine-wide global in
 # Apply to current project from a local clone:
 ~/Developer/KobeanSkills/init.sh
 
-# Install globally across all repositories on your Mac (~/.gemini & ~/.claude):
+# Install globally across all repositories on your Mac (~/.gemini, ~/.claude, & ~/.codex):
 ~/Developer/KobeanSkills/scripts/install.sh
 ```
 
@@ -71,7 +71,7 @@ If you have already cloned KobeanSkills locally or want a machine-wide global in
 | `npx kobean-skills docs` | Opens the interactive visual documentation site in your browser. |
 | `npx kobean-skills guide` | Prints the complete developer playbook and prompt cheatsheet in terminal. |
 | `npx kobean-skills doctor` | Verify status of companion CLI tools (`bd`, `betterleaks`, `graphify`, `osv-scanner`). |
-| `npx kobean-skills install` | Machine-wide global installation into `~/.gemini` and `~/.claude`. |
+| `npx kobean-skills install` | Machine-wide global installation into `~/.gemini`, `~/.claude`, and `~/.codex`. |
 | `./scripts/install.sh --uninstall` | Cleanly removes all global symlinks and plugin registrations. |
 
 ---

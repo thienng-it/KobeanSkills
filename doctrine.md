@@ -72,6 +72,7 @@ When `kb-ui` or `frontend` builds or reviews any interface:
 2. **How to Spawn a Role Subagent:**
    - **On Antigravity:** Use `invoke_subagent(TypeName="self", Role="<Role Title>", Prompt="...")` for roles that write files or run commands, and `invoke_subagent(TypeName="research", Role="<Role Title>", Prompt="...")` for read-only discovery roles (`explorer`).
    - **On Claude Code:** Use the `Agent` / `Task` tool with the role contract embedded in the prompt.
+   - **On Codex CLI:** Dispatch role subagents or load `.kobean/roles/<role>.yaml` as the binding role contract for the execution turn.
    - Every subagent prompt **must** include: (a) path to `.kobean/roles/<role>.yaml` (or `~/.kobean/roles/<role>.yaml`), (b) path to `.kobean/doctrine.md` (or `~/.kobean/doctrine.md`), (c) exact target files/Beads issue ID, and (d) required output contract.
 3. **Hard Completion Gates:**
    Work is **blocked from shipping** if any of the following fail:

@@ -47,6 +47,7 @@ Whenever a pipeline step invokes one of the 22 roles:
      - Set `Role` to the `title` from `<role>.yaml`.
      - In `Prompt`, include: (a) the role's `mission`, `writes`, `forbidden`, and `done_when` rules, (b) the target `specs/NNN-<slug>/` or Bead ID, and (c) the required `output` format.
    - **On Claude Code:** Use the `Agent` / `Task` tool with the same prompt payload.
+   - **On Codex CLI:** Dispatch role subagents or load `.kobean/roles/<role>.yaml` as the binding role contract for the turn.
 3. **If running sequentially in the current turn** (for small tasks): adopt the role contract directly and strictly obey its `writes`, `forbidden`, and `done_when` rules.
 
 ## Verification

@@ -1,7 +1,7 @@
 {
   "name": "kobean-skills",
   "version": "0.2.0",
-  "description": "Antigravity-native & Claude Code-compatible engineering skill distribution and multi-role agent orchestrator.",
+  "description": "Antigravity-native, Claude Code-compatible, and OpenAI Codex-ready engineering skill distribution and multi-role agent orchestrator.",
   "main": "bin/kobean.js",
   "bin": {
     "kobean": "bin/kobean.js",
@@ -32,6 +32,8 @@
   "keywords": [
     "antigravity",
     "claude-code",
+    "codex",
+    "openai-codex",
     "agent-skills",
     "speckit",
     "superpowers",

@@ -39,8 +39,8 @@ Distilled from **Ponytail** (`ponytail-review`), **Superpowers** (two-stage revi
 2. **Supply-Chain Gate (if `package.json`, `pyproject.toml`, or lockfiles changed):**
    - Run `osv-scanner scan .` (or `npm audit --omit=dev` / `uv pip check`).
    - Flag any newly added package that could be replaced by < 20 lines of standard library code (Ponytail rule).
-3. **Static Analysis & Trail of Bits Checklist (`~/.kobean/references/checklists/owasp.md`):**
-   - Check changed code for IDOR (missing tenant/user filter in SQL), fail-open defaults, unvalidated inputs, missing timeouts, and CI injection.
+3. **Static Analysis & Trail of Bits Checklist:**
+   - Check changed code against `references/checklists/owasp.md` (from `.kobean/` or `~/.kobean/`) for IDOR (missing tenant/user filter in SQL), fail-open defaults, unvalidated inputs, missing timeouts, and CI injection.
    - Apply the **False-Positive Gate (`fp-check`)**: verify a real source-to-sink path before reporting any `CRITICAL` or `HIGH` security issue.
 
 ### 3. Two-Stage Code Review (`reviewer` Role)
@@ -51,7 +51,7 @@ Distilled from **Ponytail** (`ponytail-review`), **Superpowers** (two-stage revi
 
 ### 4. Conditional UI Audits (`a11y-auditor` & `performance`)
 If frontend files (`src/web/**`, `src/components/**`, `app/**`) were touched:
-- Verify against `~/.kobean/references/checklists/wcag.md` and `~/.kobean/references/checklists/perf-budgets.md` (using `chrome-devtools-mcp`, `a11y-debugging`, and `debug-optimize-lcp` on Antigravity).
+- Verify against `references/checklists/wcag.md` and `references/checklists/perf-budgets.md` (from `.kobean/` or `~/.kobean/`, using `chrome-devtools-mcp`, `a11y-debugging`, and `debug-optimize-lcp` on Antigravity).
 
 ### 5. QA Verification Gate (`qa` Role — Mandatory Before Completion)
 - Run the actual test commands (`vitest`, `playwright`, `pytest`) in the terminal **in this turn**. Never assume tests pass from earlier runs.

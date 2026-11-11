@@ -19,20 +19,21 @@ Distilled from **Addy Osmani** (`shipping-and-launch`, `git-workflow-and-version
 
 ## Procedure
 
-### 1. Pre-Ship Verification Gate (`~/.kobean/references/checklists/release.md`)
+### 1. Pre-Ship Verification Gate
 Before cutting docs or a release, verify:
 1. **Beads Queue Clean:** If `.beads/` exists, run `bd ready --json` and `bd list --json` to confirm no P1 blocker issues remain open for the current feature/milestone.
 2. **Security & Tests Green:** Confirm [`kb-review`](../kb-review/SKILL.md) passed (`betterleaks dir . -v` = 0 findings, test suites green).
+3. Read `references/checklists/release.md` (from `.kobean/` or `~/.kobean/`).
 
 ### 2. Documentation & ADRs (`tech-writer` Role)
-1. Read `~/.kobean/roles/tech-writer.yaml` and `~/.kobean/references/checklists/release.md` (Section 3: Diátaxis).
+1. Read `roles/tech-writer.yaml` and `references/checklists/release.md` (Section 3: Diátaxis).
 2. Update only the documentation sections affected by the change:
    - Keep **Tutorials**, **How-To Guides**, **Reference tables** (CLI flags, env vars, endpoints), and **Explanation/ADRs** cleanly separated.
 3. **Reader-Test Loop (`doc-coauthoring`):** Verify that every command, file path, and environment variable named in `README.md` or `docs/` actually exists in the repository.
 
 ### 3. CI/CD & Deployment Hardening (`devops` Role — If Applicable)
 If `.github/workflows/**`, `Dockerfile*`, or `infra/**` are part of the ship scope:
-1. Read `~/.kobean/roles/devops.yaml`.
+1. Read `roles/devops.yaml` (from `.kobean/` or `~/.kobean/`).
 2. Audit workflows for Trail of Bits `agentic-actions-auditor` rules: pin third-party actions to commit SHAs, use minimal `permissions:`, and never interpolate `${{ github.event.* }}` untrusted inputs directly inside `run:` shell scripts.
 
 ### 4. Changelog, Version Bump & Rollback Plan (`release-manager` Role)

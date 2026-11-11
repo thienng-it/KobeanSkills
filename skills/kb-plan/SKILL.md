@@ -22,15 +22,15 @@ Distilled from **GitHub Spec-Kit** (`plan`, `tasks`, `analyze`), **Superpowers**
 
 ### 1. Load Context & Spec
 1. Read `specs/NNN-<slug>/spec.md` (and `threats.md` if present), `.kobean/constitution.md`, and `CONTEXT.md` / `graphify-out/GRAPH_REPORT.md`.
-2. Load the relevant stack references from `~/.kobean/references/stacks/`.
+2. Load the relevant stack references from `.kobean/references/stacks/` (or `~/.kobean/references/stacks/`).
 
 ### 2. Design Contracts & Data Model First
 - **API Contract (`api-designer`):** If client-server boundaries are touched, update or create `contracts/openapi.yaml` or shared Zod schemas in `packages/contracts/` *before* planning implementation tasks.
-- **Data Model (`data-engineer`):** If persistence is touched, read `~/.kobean/references/stacks/postgres-drizzle.md` and write `specs/NNN-<slug>/data-model.md` specifying tables, column types (`text`, `timestamptz`, `numeric`), foreign key indexes, and partial/GIN indexes.
-- **ADRs:** If making a hard-to-reverse architectural choice, write `docs/adr/ADR-NNN-<slug>.md` using `~/.kobean/templates/adr.md`.
+- **Data Model (`data-engineer`):** If persistence is touched, read stack reference `postgres-drizzle.md` and write `specs/NNN-<slug>/data-model.md` specifying tables, column types (`text`, `timestamptz`, `numeric`), foreign key indexes, and partial/GIN indexes.
+- **ADRs:** If making a hard-to-reverse architectural choice, write `docs/adr/ADR-NNN-<slug>.md` using `templates/adr.md` (from `.kobean/` or `~/.kobean/`).
 
 ### 3. Write `specs/NNN-<slug>/plan.md`
-Use `~/.kobean/templates/plan.md`:
+Use `templates/plan.md` (from `.kobean/` or `~/.kobean/`):
 - List every file to create or modify and its 1-line responsibility.
 - Assign each workstream to a concrete build role (`data-engineer`, `backend`, `frontend`, `mobile`, `ml-engineer`, `devops`) with **strictly non-overlapping write paths**.
 - Specify the exact failing test files and assertions each task must write first (Red phase).

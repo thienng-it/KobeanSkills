@@ -4,16 +4,16 @@ description: >-
   Primary orchestrator for the KobeanSkills engineering system. Use when starting
   a new task, feature, UI build, bugfix, refactor, code review, security audit,
   or release to classify the request, select the right pipeline, and dispatch
-  specialist role contracts from ~/.kobean/roles/.
+  specialist role contracts from .kobean/roles/ (or ~/.kobean/roles/).
 ---
 
 # `kb-router` — Kobean Engineering Orchestrator
 
-You are the entry-point orchestrator for **KobeanSkills**. Instead of jumping straight into writing code, classify the user's request, load `~/.kobean/doctrine.md`, and run the matching pipeline below.
+You are the entry-point orchestrator for **KobeanSkills**. Instead of jumping straight into writing code, classify the user's request, load `.kobean/doctrine.md` (or `~/.kobean/doctrine.md`), and run the matching pipeline below.
 
 ## Step 1: Read Doctrine & Project Context
 
-1. Read `~/.kobean/doctrine.md` (authority hierarchy, Ponytail rules, UI bans, completion gates).
+1. Read `.kobean/doctrine.md` (or `~/.kobean/doctrine.md` if not in project root) for authority hierarchy, Ponytail rules, UI bans, and completion gates.
 2. Check the current workspace for:
    - `.kobean/constitution.md` (project rules)
    - `CONTEXT.md` or `graphify-out/GRAPH_REPORT.md` (codebase map)
@@ -34,11 +34,11 @@ You are the entry-point orchestrator for **KobeanSkills**. Instead of jumping st
 
 > **Fast-Path Rule (Ponytail Economy):** If the user asks for a trivial, unambiguous 1-file fix (< 20 lines, no schema/auth change), skip `kb-spec` and `kb-plan` and go directly to `kb-build` or `kb-debug`.
 
-## Step 3: How to Dispatch Any Specialist Role (`~/.kobean/roles/<role>.yaml`)
+## Step 3: How to Dispatch Any Specialist Role
 
 Whenever a pipeline step invokes one of the 22 roles:
 
-1. Read `~/.kobean/roles/<role>.yaml` and any files listed in its `references:` field (under `~/.kobean/references/`).
+1. Read `.kobean/roles/<role>.yaml` (or `~/.kobean/roles/<role>.yaml`) and any files listed in its `references:` field (under `.kobean/references/` or `~/.kobean/references/`).
 2. **If running in parallel or isolating context:**
    - **On Antigravity:** Call `invoke_subagent`:
      - Use `TypeName: "research"` when `subagent_type: research` (read-only roles: `explorer`, `reviewer`, `security`, `supply-chain`, `performance`, `a11y-auditor`).

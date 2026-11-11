@@ -22,10 +22,10 @@ Distilled from **Impeccable** (`pbakaus/impeccable`), **Taste-Skill** (`Leonxlnx
 
 ### 1. Activate Antigravity Web Guidance & Read Doctrine
 1. **Mandatory on Antigravity:** If building or editing HTML/CSS/DOM, read and apply the installed `modern-web-guidance` skill first so modern CSS/DOM APIs (`<dialog>`, popover, container queries, `:focus-visible`) are used instead of legacy patterns.
-2. Read `~/.kobean/references/design/impeccable-taste.md` and `~/.kobean/references/checklists/wcag.md`.
+2. Read `references/design/impeccable-taste.md` and `references/checklists/wcag.md` (from `.kobean/` or `~/.kobean/`).
 
 ### 2. Establish `PRODUCT.md` & Mode (`default` vs. `bold`)
-1. Check for `PRODUCT.md` in the project root. If missing, create it from `~/.kobean/templates/PRODUCT.md`.
+1. Check for `PRODUCT.md` in the project root. If missing, create it from `templates/PRODUCT.md` (from `.kobean/` or `~/.kobean/`).
 2. Select the design mode:
    - **`default` (Impeccable Craft):** For product UIs, dashboards, forms, tables, settings, and workflows. Focus on clarity, hierarchy, `tabular-nums`, tinted neutrals, and complete states.
    - **`bold` (Taste-Skill 2.5 Art Direction):** Triggered when the user asks for `bold`, a landing page, marketing site, or portfolio. Enforce:

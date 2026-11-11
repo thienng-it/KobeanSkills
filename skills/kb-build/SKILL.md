@@ -36,7 +36,7 @@ Distilled from **Superpowers** (`subagent-driven-development`, `test-driven-deve
 
 ### 2. Load Role Contract & Stack References
 1. Identify the role owning the task (`data-engineer`, `backend`, `frontend`, `mobile`, `ml-engineer`, `devops`, or `refactorer`).
-2. Read `~/.kobean/roles/<role>.yaml` and every file listed in its `references:` array under `~/.kobean/references/stacks/`.
+2. Read `.kobean/roles/<role>.yaml` (or `~/.kobean/roles/<role>.yaml`) and every file listed in its `references:` array under `.kobean/references/stacks/` (or `~/.kobean/references/stacks/`).
 3. **If multiple independent tasks with non-overlapping `writes` globs are ready simultaneously** (e.g., `backend` in `src/server/**` and `frontend` in `src/web/**` after `contracts/` is locked):
    - Dispatch parallel subagents using `invoke_subagent(TypeName="self", Role="<Role Title>", Prompt="...")`, passing each subagent its claimed Bead ID, role contract path, and `spec.md`/`plan.md` paths.
 

@@ -23,7 +23,7 @@ Distilled from **GitHub Spec-Kit** (`specify`, `clarify`, `constitution`), **Sup
 ### 1. Codebase Orientation & Constitution Check
 1. If the repository is non-trivial and neither `CONTEXT.md` nor `graphify-out/GRAPH_REPORT.md` exists:
    - Run `graphify` (if needed) or dispatch the `explorer` role (`invoke_subagent(TypeName="research", Role="Codebase Cartographer", ...)`) to produce `CONTEXT.md`.
-2. Check for `.kobean/constitution.md`. If missing on a project where you will build multiple features, initialize it from `~/.kobean/templates/constitution.md`.
+2. Check for `.kobean/constitution.md`. If missing on a project where you will build multiple features, initialize it from `.kobean/templates/constitution.md` (or `~/.kobean/templates/constitution.md`).
 
 ### 2. Ponytail Ultra Gate ("Should This Exist?")
 Before drafting a spec, answer these three questions in 3 concise bullets:
@@ -38,7 +38,7 @@ If the entire request can be solved by a 3-line config or existing feature, tell
 - Ask at most **1 to 4 high-impact questions** at a time using `ask_question` (on Antigravity) with concrete options and a `(Recommended)` default first.
 
 ### 4. Write `specs/NNN-<slug>/spec.md`
-Use `~/.kobean/templates/spec.md`:
+Use `.kobean/templates/spec.md` (or `~/.kobean/templates/spec.md`):
 - Number features sequentially (`specs/001-user-auth/spec.md`).
 - Write **Given / When / Then** acceptance scenarios prioritized (`P1`, `P2`).
 - For changes to an existing codebase, fill out the **Delta Summary** (`ADDED`, `MODIFIED`, `REMOVED`).
@@ -46,8 +46,8 @@ Use `~/.kobean/templates/spec.md`:
 
 ### 5. Conditional Threat Model (`specs/NNN-<slug>/threats.md`)
 If the feature touches authentication, authorization, billing/payments, PII, file uploads, webhooks, or external credentials:
-1. Load `~/.kobean/roles/threat-modeler.yaml` and `~/.kobean/references/checklists/owasp.md`.
-2. Generate `specs/NNN-<slug>/threats.md` from `~/.kobean/templates/threats.md` covering STRIDE, DREAD scores, fail-closed defaults, and IDOR checks.
+1. Load `roles/threat-modeler.yaml` and `references/checklists/owasp.md` (from `.kobean/` or `~/.kobean/`).
+2. Generate `specs/NNN-<slug>/threats.md` from `templates/threats.md` covering STRIDE, DREAD scores, fail-closed defaults, and IDOR checks.
 
 ## Verification & Handoff
 - Confirm `specs/NNN-<slug>/spec.md` has zero `TODO` or `[NEEDS CLARIFICATION]` placeholders.

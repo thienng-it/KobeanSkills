@@ -17,7 +17,7 @@
 ## 2. Core Impeccable Doctrine (Always Active)
 
 1. **`PRODUCT.md` First:**
-   Read `PRODUCT.md` in the project root before designing or coding UI. If missing, draft it from `~/.kobean/templates/PRODUCT.md` defining: kind of business, target audience, voice, font pairing, semantic color tokens, and spacing grid.
+   Read `PRODUCT.md` in the project root before designing or coding UI. If missing, draft it from `.kobean/templates/PRODUCT.md` (or `~/.kobean/templates/PRODUCT.md`) defining: kind of business, target audience, voice, font pairing, semantic color tokens, and spacing grid.
 2. **Typographic Hierarchy (`typeset`):**
    - Establish a clear 4-step scale: Display/Hero, Section Title (`h2`), Card/Group Heading (`h3`), Body (`15px–16px`, `1.5–1.6` line-height), and Caption/Meta (`12px–13px`).
    - Enforce `font-variant-numeric: tabular-nums` on every number column, price, timer, or metric card.

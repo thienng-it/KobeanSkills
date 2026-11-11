@@ -8,10 +8,10 @@ This document is the binding constitution for all `kb-*` skills and the 22 role 
 
 1. **Explicit User Instructions** in the active chat turn.
 2. **Project Constitution** (`.kobean/constitution.md` in the target repository, if present).
-3. **Kobean Doctrine** (this file: `~/.kobean/doctrine.md`).
-4. **Active Role Contract** (`~/.kobean/roles/<role>.yaml` — specifically its `writes`, `forbidden`, and `done_when` rules).
-5. **Entry Skill Procedure** (`~/.kobean/skills/kb-*/SKILL.md`).
-6. **Stack & Design Reference Checklists** (`~/.kobean/references/**`).
+3. **Kobean Doctrine** (this file: `.kobean/doctrine.md` or `~/.kobean/doctrine.md`).
+4. **Active Role Contract** (`.kobean/roles/<role>.yaml` or `~/.kobean/roles/<role>.yaml` — specifically its `writes`, `forbidden`, and `done_when` rules).
+5. **Entry Skill Procedure** (`skills/kb-*/SKILL.md`).
+6. **Stack & Design Reference Checklists** (`.kobean/references/**` or `~/.kobean/references/**`).
 
 ---
 
@@ -72,7 +72,7 @@ When `kb-ui` or `frontend` builds or reviews any interface:
 2. **How to Spawn a Role Subagent:**
    - **On Antigravity:** Use `invoke_subagent(TypeName="self", Role="<Role Title>", Prompt="...")` for roles that write files or run commands, and `invoke_subagent(TypeName="research", Role="<Role Title>", Prompt="...")` for read-only discovery roles (`explorer`).
    - **On Claude Code:** Use the `Agent` / `Task` tool with the role contract embedded in the prompt.
-   - Every subagent prompt **must** include: (a) path to `~/.kobean/roles/<role>.yaml`, (b) path to `~/.kobean/doctrine.md`, (c) exact target files/Beads issue ID, and (d) required output contract.
+   - Every subagent prompt **must** include: (a) path to `.kobean/roles/<role>.yaml` (or `~/.kobean/roles/<role>.yaml`), (b) path to `.kobean/doctrine.md` (or `~/.kobean/doctrine.md`), (c) exact target files/Beads issue ID, and (d) required output contract.
 3. **Hard Completion Gates:**
    Work is **blocked from shipping** if any of the following fail:
    - `betterleaks` detects any secret in the working tree or git history.

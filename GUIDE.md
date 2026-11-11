@@ -133,6 +133,40 @@ Prompt:
 
 ---
 
+### Playbook 7: Bootstrapping a Project From Zero (Greenfield Scaffolding)
+
+When creating a brand-new repository from scratch:
+
+```text
+Step 1 (In terminal):
+mkdir my-app && cd my-app && git init
+npx kobean-skills init   # or bunx kobean-skills init
+
+Step 2 (In chat prompt):
+"Bootstrap a new production-ready SaaS application with Next.js App Router, PostgreSQL, and Drizzle ORM. Start with kb-spec to define the project constitution and architecture."
+```
+
+**What the AI pipeline does step-by-step:**
+1. **Foundation (`kb-spec`):**
+   - Populates `constitution.md`: Tech stack choices, architectural invariants, and explicit non-goals (what will never be built).
+   - Generates `PRODUCT.md`: Brand voice, aesthetic tone, typography scale, and color tokens.
+   - Generates `specs/001-bootstrap/spec.md`: Baseline MVP requirements and user journeys.
+   - Generates `specs/001-bootstrap/threats.md`: STRIDE threat model for authentication, authorization, and data isolation.
+2. **Architecture & Schema (`kb-plan`):**
+   - Blueprints directory structure using vetted references in `.kobean/references/stacks/`.
+   - Generates `specs/001-bootstrap/data-model.md` with normalized schema, constraints, and indexes.
+   - Generates API contracts in `contracts/`.
+   - Populates `.beads/` with the dependency-ordered task graph via `bd`.
+3. **Scaffolding & Implementation (`kb-build`):**
+   - `devops`: Initializes package manager, TypeScript configuration, linter, formatter, and GitHub Actions CI.
+   - `data-engineer`: Scaffolds database connection, migrations, and seed scripts.
+   - `backend` & `frontend`: Builds out baseline routes and UI shells enforcing TDD (Red-Green-Refactor).
+4. **Initial Release (`kb-review` & `kb-ship`):**
+   - Runs `betterleaks` to ensure zero secrets in initial commits.
+   - Authorizes ADR-0001 (Architecture Decision Record) and tags initial release `v0.1.0`.
+
+---
+
 ## 3. Power Controls & Steering
 
 | If you want to... | What to say |

@@ -365,6 +365,7 @@
         <li><a href="#playbook-review">4. Pre-PR Security & Review</a></li>
         <li><a href="#playbook-refactor">5. Technical Debt Cleanup</a></li>
         <li><a href="#playbook-onboard">6. Codebase Onboarding</a></li>
+        <li><a href="#playbook-bootstrap">7. Greenfield (From Zero)</a></li>
       </ul>
     </div>
 
@@ -515,6 +516,17 @@ Use kb-ui in bold mode to build the product landing page.<button class="copy-btn
         <h3>6. Unfamiliar Codebase Onboarding</h3>
         <p>Parses codebase AST into a knowledge map and generates <code>CONTEXT.md</code>:</p>
         <pre><code>Use kb-router to onboard this repository.<button class="copy-btn" onclick="copyCode(this)">Copy</button></code></pre>
+      </div>
+
+      <div id="playbook-bootstrap">
+        <h3>7. Bootstrapping From Scratch (Greenfield Scaffolding)</h3>
+        <p>Creates an empty repo from zero with project constitution, database schema, API contracts, and CI:</p>
+        <pre><code># Step 1 (In terminal):
+mkdir my-app && cd my-app && git init
+npx kobean-skills init
+
+# Step 2 (In chat prompt):
+Bootstrap a new production-ready SaaS application with Next.js App Router, PostgreSQL, and Drizzle ORM. Start with kb-spec to define the project constitution and architecture.<button class="copy-btn" onclick="copyCode(this)">Copy</button></code></pre>
       </div>
     </section>
 

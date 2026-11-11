@@ -14,13 +14,12 @@ CLAUDE_SKILLS_DIR="${HOME}/.claude/skills"
 
 echo "==> Installing KobeanSkills from: ${REPO_DIR}"
 
-# 1. Link ~/.kobean to the repository root so skills can reference ~/.kobean/roles, etc.
-if [ -L "${KOBEAN_HOME}" ] || [ ! -e "${KOBEAN_HOME}" ]; then
-  ln -sfn "${REPO_DIR}" "${KOBEAN_HOME}"
-  echo "  [ok] Linked ${KOBEAN_HOME} -> ${REPO_DIR}"
-else
-  echo "  [warn] ${KOBEAN_HOME} exists and is not a symlink; skipping root link."
-fi
+# 1. Link shared dirs (doctrine.md, roles, references, templates) into ~/.kobean
+mkdir -p "${KOBEAN_HOME}"
+for item in doctrine.md roles references templates SOURCES.md; do
+  ln -sfn "${REPO_DIR}/${item}" "${KOBEAN_HOME}/${item}"
+done
+echo "  [ok] Linked shared KobeanSkills resources into ${KOBEAN_HOME}/"
 
 # 2. Ensure target skill directories exist
 mkdir -p "${AGY_SKILLS_DIR}"

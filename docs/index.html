@@ -887,6 +887,7 @@
         <li><a href="#playbook-review">5. Pre-PR Review & Security</a></li>
         <li><a href="#playbook-refactor">6. Technical Debt Cleanup</a></li>
         <li><a href="#playbook-onboard">7. Codebase Onboarding</a></li>
+        <li><a href="#playbook-git">8. Git & Pull Request Workflows <span class="badge">New</span></a></li>
       </ul>
     </div>
 
@@ -900,7 +901,7 @@
     <div class="nav-group">
       <div class="nav-group-title">Architecture</div>
       <ul class="nav-links">
-        <li><a href="#entry-skills">8 Entry Skills (Handbook) <span class="badge">Fast Copy</span></a></li>
+        <li><a href="#entry-skills">9 Entry Skills (Handbook) <span class="badge">Fast Copy</span></a></li>
         <li><a href="#roles">22 Specialist Roles</a></li>
         <li><a href="#doctrine">Doctrine & Precedence</a></li>
         <li><a href="#cli-commands">CLI & Doctor Helper</a></li>
@@ -1281,6 +1282,30 @@ Use kb-ui in bold mode to build the product landing page.</code></pre>
           </div>
         </div>
       </div>
+
+      <!-- Playbook 8: Git & PR Workflows -->
+      <div class="playbook-box" id="playbook-git">
+        <div class="playbook-meta">
+          <span class="playbook-tag">Playbook 8</span>
+          <h3>Git, Branching & Pull Request Workflows</h3>
+        </div>
+        <p>Safely handles branch lifecycles, Conventional Commits, rebasing on <code>main</code>, and opening PRs with elegant templates:</p>
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <div class="terminal-left">
+              <div class="terminal-dots"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div>
+              <span class="terminal-title">prompt</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy prompt">
+              <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+              <span>Copy</span>
+            </button>
+          </div>
+          <div class="terminal-body">
+            <pre><code>Use kb-git to create a branch feat/webhook-retry, commit with conventional format, rebase on main, and open a PR with the template.</code></pre>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- MCP & Connectors Manager -->
@@ -1371,7 +1396,7 @@ bunx kobean-skills mcp sync</code></pre>
 
     <!-- Entry Skills Handbook & Cheatsheet -->
     <section id="entry-skills">
-      <h2>8 Entry Skills Handbook & Cheatsheet</h2>
+      <h2>9 Entry Skills Handbook & Cheatsheet</h2>
       <p>Quick-reference cards for each entry skill. Click any card or copy button to immediately copy its trigger prompt into your clipboard:</p>
 
       <div class="skills-grid">
@@ -1565,6 +1590,31 @@ bunx kobean-skills mcp sync</code></pre>
           </div>
           <div class="skill-prompt-box" onclick="copySkillPrompt(this)" title="Click anywhere to copy prompt">
             <div class="skill-prompt-text">Use kb-ship to verify release readiness, update documentation, and prepare CHANGELOG.md</div>
+            <div class="skill-copy-action">
+              <span class="skill-copy-status">Click to copy prompt</span>
+              <span class="skill-copy-btn">
+                <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                <span>Copy Prompt</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 9. kb-git -->
+        <div class="skill-card">
+          <div>
+            <div class="skill-header">
+              <span class="skill-badge">kb-git</span>
+              <span class="badge">Git & PRs</span>
+            </div>
+            <div class="skill-title">Branching, Commits, Rebase & PR Workflows</div>
+            <div class="skill-desc">Safely manages branch lifecycles (create/rename/delete), Conventional Commits, rebasing on main/master, and GitHub PRs with elegant templates.</div>
+            <div class="skill-roles">
+              <span>Roles:</span> release-manager · devops
+            </div>
+          </div>
+          <div class="skill-prompt-box" onclick="copySkillPrompt(this)" title="Click anywhere to copy prompt">
+            <div class="skill-prompt-text">Use kb-git to create a branch feat/webhook-retry, commit with conventional format, rebase on main, and open a PR with the template</div>
             <div class="skill-copy-action">
               <span class="skill-copy-status">Click to copy prompt</span>
               <span class="skill-copy-btn">

@@ -31,6 +31,7 @@ You are the entry-point orchestrator for **KobeanSkills**. Instead of jumping st
 | **`bugfix`** | Failing test, error log, regression, broken behavior | [`kb-debug`](../kb-debug/SKILL.md) -> [`kb-review`](../kb-review/SKILL.md) |
 | **`refactor`** | "Clean up", "simplify", "pay down debt", "ponytail audit" | `explorer` *(if needed)* -> [`kb-build`](../kb-build/SKILL.md) (`refactorer` role) -> [`kb-review`](../kb-review/SKILL.md) |
 | **`review`** | "Review PR/diff", "audit security", "check performance/a11y" | [`kb-review`](../kb-review/SKILL.md) |
+| **`git`** | "commit", "push", "branch", "create/delete branch", "rebase master/main", "PR" | [`kb-git`](../kb-git/SKILL.md) -> Conventional Commits, rebase & PR template |
 | **`ship`** | "Prepare release", "update changelog/docs", "deploy/CI" | [`kb-ship`](../kb-ship/SKILL.md) |
 
 > **Fast-Path Rule (Ponytail Economy):** If the user asks for a trivial, unambiguous 1-file fix (< 20 lines, no schema/auth change), skip `kb-spec` and `kb-plan` and go directly to `kb-build` or `kb-debug`.

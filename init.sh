@@ -107,9 +107,16 @@ if [[ -f "${SCRIPT_DIR}/bin/kobean.js" ]]; then
   node "${SCRIPT_DIR}/bin/kobean.js" mcp sync "${TARGET_DIR}" >/dev/null 2>&1 || true
 fi
 
+# 8. Wire GitHub Pull Request template if not present
+if [[ ! -f "${TARGET_DIR}/.github/pull_request_template.md" && ! -f "${TARGET_DIR}/.github/PULL_REQUEST_TEMPLATE.md" && -f "${KOBEAN_DIR}/templates/PULL_REQUEST_TEMPLATE.md" ]]; then
+  mkdir -p "${TARGET_DIR}/.github"
+  cp "${KOBEAN_DIR}/templates/PULL_REQUEST_TEMPLATE.md" "${TARGET_DIR}/.github/pull_request_template.md"
+fi
+
 echo "  [ok] Installed self-contained .kobean/ folder"
 echo "  [ok] Wired Gemini CLI & Antigravity (.agents/skills & GEMINI.md / AGENTS.md)"
 echo "  [ok] Wired Claude CLI (.claude/skills & CLAUDE.md)"
 echo "  [ok] Wired Codex CLI (.codex/skills & AGENTS.md)"
 echo "  [ok] Wired Cross-Agent MCP connectors (.mcp.json, .agents/mcp.json, .codex/config.toml)"
+echo "  [ok] Wired GitHub Pull Request template (.github/pull_request_template.md)"
 echo "==> Setup complete! Commit .kobean/ and agent links to share with your team."

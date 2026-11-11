@@ -15,10 +15,10 @@ import sys
 errors = []
 warnings = []
 
-# 1. Validate 8 entry skills
+# 1. Validate entry skills
 skill_dirs = sorted(glob.glob("skills/kb-*"))
-if len(skill_dirs) != 8:
-    errors.append(f"Expected 8 entry skills in skills/kb-*, found {len(skill_dirs)}")
+if len(skill_dirs) != 9:
+    errors.append(f"Expected 9 entry skills in skills/kb-*, found {len(skill_dirs)}")
 
 for sdir in skill_dirs:
     folder_name = os.path.basename(sdir)

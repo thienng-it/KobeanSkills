@@ -200,12 +200,32 @@ bunx kobean-skills mcp sync
 
 ---
 
+### Playbook 9: Git, Branching & Pull Request Workflows
+
+When creating branches, committing changes, rebasing on master/main, or opening pull requests:
+
+```text
+Prompt:
+"Use kb-git to create branch feat/webhook-retry, commit with conventional format, rebase on main, and open a PR with the template."
+```
+
+**What the AI does step-by-step:**
+1. **Branch Lifecycle:** Checks out a clean feature branch (`feat/<slug>`, `fix/<slug>`, or `chore/<slug>`) from latest `origin/main` (or `master`).
+2. **Atomic Conventional Commits:** Runs `betterleaks` secret gate, stages specific files, and commits with `type(scope): summary`.
+3. **Linear Rebase:** Fetches latest remote and rebases on `origin/main` (or `master`), cleanly resolving conflict markers if any arise.
+4. **Lease-Protected Push:** Pushes upstream (`git push -u origin <branch>`), using `--force-with-lease` on private feature branches. Never force-pushes to master/main.
+5. **Clean Pull Request:** Uses `.github/pull_request_template.md` to craft a simple, elegant PR and opens it via `gh pr create`.
+
+---
+
 ## 3. Power Controls & Steering
 
 | If you want to... | What to say |
 | :--- | :--- |
 | **Question whether a feature is necessary** | `"Run kb-spec with ponytail ultra"` |
 | **Keep implementations ultra-minimal** | `"Use ponytail mode: smallest possible diff"` |
+| **Manage branches, rebase & open PRs** | `"Use kb-git to rebase on main and create PR"` |
+| **Scaffold clean PR template** | Run `bunx kobean-skills pr-template` |
 | **Inspect task status** | Run `bd ready` or `bd list` in terminal |
 | **Manage MCP connectors across agents** | Run `bunx kobean-skills mcp` |
 | **Check installed tools & MCP status** | Run `bunx kobean-skills doctor` |

@@ -536,6 +536,7 @@ Core Commands:
   init [dir]              Initialize .kobean/ in target repo (default: current directory)
   docs                    Open the interactive documentation web page in your browser
   guide                   Display the developer workflow guide and prompt cheatsheet
+  pr-template [dir]       Scaffold clean, elegant GitHub PR template (.github/pull_request_template.md)
   install                 Install globally into ~/.gemini, ~/.claude, and ~/.codex
   doctor                  Check status of companion CLI tools and MCP connectors
   help                    Show this help message
@@ -1133,10 +1134,30 @@ function runGuide() {
   }
 }
 
+function runPrTemplate(targetDirArg) {
+  const targetDir = path.resolve(process.cwd(), targetDirArg || '.');
+  const templateSrc = path.join(PKG_ROOT, 'templates', 'PULL_REQUEST_TEMPLATE.md');
+  const ghDir = path.join(targetDir, '.github');
+  const dest = path.join(ghDir, 'pull_request_template.md');
+
+  if (!fs.existsSync(templateSrc)) {
+    console.error('[error] Could not locate templates/PULL_REQUEST_TEMPLATE.md');
+    process.exit(1);
+  }
+
+  fs.mkdirSync(ghDir, { recursive: true });
+  fs.copyFileSync(templateSrc, dest);
+  console.log(`==> [✓] Scaffolded GitHub Pull Request template at: ${dest}`);
+}
+
 // Router
 switch (command) {
   case 'init':
     runInit(args[1]);
+    break;
+  case 'pr-template':
+  case 'pr':
+    runPrTemplate(args[1]);
     break;
   case 'docs':
   case 'doc':

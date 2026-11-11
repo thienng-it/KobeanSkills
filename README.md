@@ -4,7 +4,7 @@ A universal engineering skill distribution and multi-role agent orchestrator nat
 
 KobeanSkills unifies modern agent methodologies—including **GitHub Spec-Kit**, **Superpowers**, **Beads**, **Ponytail**, **Impeccable**, **Taste-Skill**, and **Trail of Bits**—into an air-gapped, context-efficient architecture:
 
-- **8 Entry Skills:** Progressive-disclosure interfaces that stay well within agent context limits.
+- **9 Entry Skills:** Progressive-disclosure interfaces that stay well within agent context limits.
 - **22 Specialist Role Contracts:** Explicit YAML definitions declaring file-path ownership, allowed tooling, and strict completion gates.
 - **Unified Doctrine:** Binding precedence rules that eliminate conflicts between process, task tracking, and design systems.
 - **Zero-Config Project Operation:** Installs once into `.kobean/` in seconds; requires zero manual configuration.
@@ -47,7 +47,7 @@ docker run --rm -v "$(pwd):/workspace" ghcr.io/thienng-it/kobean-skills:latest k
 ```
 
 ### What these single commands do:
-1. Unpacks all 8 entry skills, 22 role contracts, stack references, templates, and doctrine into **`.kobean/`** in your repository.
+1. Unpacks all 9 entry skills, 22 role contracts, stack references, templates, and doctrine into **`.kobean/`** in your repository.
 2. Automatically configures **Gemini CLI / Antigravity** (`.agents/` & `GEMINI.md`), **Claude CLI** (`.claude/` & `CLAUDE.md`), and **Codex CLI** (`.codex/` & `AGENTS.md`) discovery.
 3. Leaves zero extra files or git bloat. Simply commit `.kobean/` to Git to share with your team.
 
@@ -73,6 +73,7 @@ If you have already cloned KobeanSkills locally or want a machine-wide global in
 | `npx kobean-skills mcp search <query>` | Search marketplace connectors by keyword, technology, or provider. |
 | `npx kobean-skills mcp add <name>` | Add a vetted or custom MCP connector and auto-sync across all 4 agent files. |
 | `npx kobean-skills mcp sync` | Synchronize `.kobean/mcp.json` across Claude Code, Gemini CLI, Antigravity, and Codex. |
+| `npx kobean-skills pr-template` | Scaffold clean, elegant GitHub PR template (`.github/pull_request_template.md`). |
 | `npx kobean-skills docs` | Opens the interactive visual documentation site in your browser. |
 | `npx kobean-skills guide` | Prints the complete developer playbook and prompt cheatsheet in terminal. |
 | `npx kobean-skills doctor` | Verify status of companion CLI tools (`bd`, `betterleaks`, `graphify`) and MCP servers. |
@@ -134,6 +135,7 @@ For quick reference in the terminal, see [GUIDE.md](GUIDE.md) (or run `npx kobea
 | **Interface Design & Polish** | `"Redesign the dashboard"` *(or `"Build bold landing page"`)* | `kb-ui` (Impeccable / Taste-Skill + `chrome-devtools-mcp`) |
 | **Root-Cause Debugging** | `"Fix the failing auth middleware test"` | `kb-debug` (Reproduce &rarr; Blast check &rarr; Regression test &rarr; Minimal fix) |
 | **Verification & Security** | `"Review current diff and check security"` | `kb-review` (`betterleaks`, Trail of Bits AppSec, Ponytail bloat check, QA test gate) |
+| **Git & Pull Requests** | `"Create branch, rebase on main, and open PR"` | `kb-git` (Branch lifecycle, Conventional Commits, rebase master/main, PR templates) |
 | **Release & Documentation** | `"Prepare release and update docs"` | `kb-ship` (Diátaxis docs, CI hardening, SemVer `CHANGELOG.md`, rollback plan) |
 
 ---
@@ -151,6 +153,7 @@ For quick reference in the terminal, see [GUIDE.md](GUIDE.md) (or run `npx kobea
 | [`kb-ui`](skills/kb-ui/SKILL.md) | Impeccable craft, optional Taste-Skill bold art direction, and live browser verification. | `ui-ux-designer`, `frontend`, `a11y-auditor` |
 | [`kb-review`](skills/kb-review/SKILL.md) | Differential review, automated secrets gate, supply-chain checks, CWV performance, and accessibility. | `reviewer`, `security`, `supply-chain`, `performance`, `a11y-auditor`, `qa` |
 | [`kb-debug`](skills/kb-debug/SKILL.md) | Systematic reproduction, caller blast-radius tracing, and regression test implementation. | `debugger` |
+| [`kb-git`](skills/kb-git/SKILL.md) | Branch lifecycle, conventional commits, rebase master/main, clean push, and GitHub PR templates. | `release-manager`, `devops` |
 | [`kb-ship`](skills/kb-ship/SKILL.md) | Diátaxis documentation, ADRs, CI workflow hardening, SemVer changelogs, and rollback runbooks. | `tech-writer`, `devops`, `release-manager` |
 
 ### Specialist Roles (`roles/`)

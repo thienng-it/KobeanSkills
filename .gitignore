@@ -1,0 +1,5 @@
+# Vendor cache is air-gapped and optional locally; never linked into agent discovery
+vendor/
+.DS_Store
+*.pyc
+__pycache__/

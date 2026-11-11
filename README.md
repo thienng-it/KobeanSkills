@@ -1,6 +1,6 @@
 # KobeanSkills
 
-An Antigravity-native, Claude Code-compatible, and OpenAI Codex-ready engineering skill distribution and multi-role agent orchestration system.
+A universal engineering skill distribution and multi-role agent orchestrator natively supporting **Gemini CLI & Antigravity**, **Claude CLI (Claude Code)**, and **Codex CLI**.
 
 KobeanSkills unifies modern agent methodologies—including **GitHub Spec-Kit**, **Superpowers**, **Beads**, **Ponytail**, **Impeccable**, **Taste-Skill**, and **Trail of Bits**—into an air-gapped, context-efficient architecture:
 
@@ -48,7 +48,7 @@ docker run --rm -v "$(pwd):/workspace" ghcr.io/thienng-it/kobean-skills:latest k
 
 ### What these single commands do:
 1. Unpacks all 8 entry skills, 22 role contracts, stack references, templates, and doctrine into **`.kobean/`** in your repository.
-2. Automatically configures Antigravity (`.agents/`), Claude Code (`.claude/`), and OpenAI Codex (`.codex/` + `AGENTS.md`) discovery.
+2. Automatically configures **Gemini CLI / Antigravity** (`.agents/` & `GEMINI.md`), **Claude CLI** (`.claude/` & `CLAUDE.md`), and **Codex CLI** (`.codex/` & `AGENTS.md`) discovery.
 3. Leaves zero extra files or git bloat. Simply commit `.kobean/` to Git to share with your team.
 
 ---

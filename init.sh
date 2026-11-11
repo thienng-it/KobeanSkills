@@ -92,8 +92,14 @@ elif ! grep -q "kb-router" "${TARGET_DIR}/CLAUDE.md" 2>/dev/null; then
   printf "\n\n<!-- KobeanSkills -->\n%s\n" "${RULE_LINE}" >> "${TARGET_DIR}/CLAUDE.md"
 fi
 
+if [[ ! -f "${TARGET_DIR}/GEMINI.md" ]]; then
+  ln -sfn ".kobean/rules/AGENTS.md" "${TARGET_DIR}/GEMINI.md"
+elif ! grep -q "kb-router" "${TARGET_DIR}/GEMINI.md" 2>/dev/null; then
+  printf "\n\n<!-- KobeanSkills -->\n%s\n" "${RULE_LINE}" >> "${TARGET_DIR}/GEMINI.md"
+fi
+
 echo "  [ok] Installed self-contained .kobean/ folder"
-echo "  [ok] Wired Antigravity discovery (.agents/skills & .agents/rules)"
-echo "  [ok] Wired Claude Code discovery (.claude/skills & CLAUDE.md)"
-echo "  [ok] Wired Codex discovery (.codex/skills & AGENTS.md)"
-echo "==> Setup complete! Commit .kobean/, .agents/, .claude/, and .codex/ to share with your team."
+echo "  [ok] Wired Gemini CLI & Antigravity (.agents/skills & GEMINI.md / AGENTS.md)"
+echo "  [ok] Wired Claude CLI (.claude/skills & CLAUDE.md)"
+echo "  [ok] Wired Codex CLI (.codex/skills & AGENTS.md)"
+echo "==> Setup complete! Commit .kobean/ and agent links to share with your team."

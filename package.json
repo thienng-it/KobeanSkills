@@ -1,7 +1,7 @@
 {
   "name": "kobean-skills",
   "version": "0.2.0",
-  "description": "Antigravity-native, Claude Code-compatible, and OpenAI Codex-ready engineering skill distribution and multi-role agent orchestrator.",
+  "description": "Universal engineering skill distribution and multi-role agent orchestrator natively supporting Gemini CLI, Claude CLI, and Codex CLI.",
   "main": "bin/kobean.js",
   "bin": {
     "kobean": "bin/kobean.js",

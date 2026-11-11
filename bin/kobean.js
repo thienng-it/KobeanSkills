@@ -86,13 +86,30 @@ function runDoctor() {
     }
   }
 
+  console.log('\nSupported Agent CLIs:');
+  const agentClis = [
+    { name: 'Gemini CLI', cmd: 'gemini --version' },
+    { name: 'Claude CLI', cmd: 'claude --version' },
+    { name: 'Codex CLI', cmd: 'codex --version' }
+  ];
+  for (const a of agentClis) {
+    try {
+      execSync(a.cmd, { stdio: 'ignore' });
+      console.log(`  [✓] ${a.name} is installed`);
+    } catch {
+      console.log(`  [ ] ${a.name} is not installed (optional)`);
+    }
+  }
+
   console.log('\nGlobal Discovery:');
-  const agyRule = path.join(process.env.HOME || '', '.gemini', 'config', 'plugins', 'kobean-skills');
+  const geminiRule = path.join(process.env.HOME || '', '.gemini', 'GEMINI.md');
+  const agyPlugin = path.join(process.env.HOME || '', '.gemini', 'config', 'plugins', 'kobean-skills');
   const claudeRule = path.join(process.env.HOME || '', '.claude', 'CLAUDE.md');
   const codexRule = path.join(process.env.HOME || '', '.codex', 'AGENTS.md');
-  console.log(`  Antigravity plugin: ${fs.existsSync(agyRule) ? '[✓] Active' : '[ ] Not registered (run kobean install)'}`);
-  console.log(`  Claude Code rule:   ${fs.existsSync(claudeRule) ? '[✓] Active' : '[ ] Not registered (run kobean install)'}`);
-  console.log(`  Codex CLI rule:     ${fs.existsSync(codexRule) ? '[✓] Active' : '[ ] Not registered (run kobean install)'}`);
+  console.log(`  Gemini CLI:         ${fs.existsSync(geminiRule) ? '[✓] Active (~/.gemini/GEMINI.md)' : '[ ] Not registered'}`);
+  console.log(`  Antigravity plugin: ${fs.existsSync(agyPlugin) ? '[✓] Active (~/.gemini/config/plugins/)' : '[ ] Not registered'}`);
+  console.log(`  Claude CLI:         ${fs.existsSync(claudeRule) ? '[✓] Active (~/.claude/CLAUDE.md)' : '[ ] Not registered'}`);
+  console.log(`  Codex CLI:          ${fs.existsSync(codexRule) ? '[✓] Active (~/.codex/AGENTS.md)' : '[ ] Not registered'}`);
 }
 
 function runDocs() {

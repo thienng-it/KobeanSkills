@@ -339,11 +339,17 @@
     }
     .terminal-header {
       background: var(--terminal-header);
-      padding: 10px 16px;
+      padding: 9px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       border-bottom: 1px solid var(--code-border);
+      user-select: none;
+    }
+    .terminal-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
     .terminal-dots {
       display: flex;
@@ -360,10 +366,11 @@
     .terminal-dot:nth-child(3) { background: #10B981; }
 
     .terminal-title {
-      font-size: 12px;
+      font-size: 11.5px;
       font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
       color: #94A3B8;
       font-weight: 500;
+      letter-spacing: 0.02em;
     }
     .terminal-body {
       padding: 16px 20px;
@@ -372,7 +379,6 @@
       font-size: 13.5px;
       line-height: 1.6;
       color: var(--code-text);
-      position: relative;
     }
     .terminal-body pre {
       margin: 0;
@@ -381,27 +387,35 @@
       padding: 0;
       color: inherit;
       font-family: inherit;
+      white-space: pre-wrap;
+      word-break: break-word;
     }
     .copy-btn {
-      position: absolute;
-      top: 10px;
-      right: 12px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      color: #F1F5F9;
+      position: static;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: #CBD5E1;
       padding: 4px 10px;
       border-radius: 6px;
       font-size: 11px;
       font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
       cursor: pointer;
       transition: all 0.15s ease;
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
+      font-weight: 500;
     }
     .copy-btn:hover {
-      background: rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.16);
       border-color: rgba(255, 255, 255, 0.3);
+      color: #FFFFFF;
+    }
+    .copy-btn svg {
+      width: 12px;
+      height: 12px;
+      fill: currentColor;
+      flex-shrink: 0;
     }
 
     code {
@@ -765,12 +779,17 @@
         <p>Blazing fast instant boot for developers using <b>Bun</b>:</p>
         <div class="terminal-window">
           <div class="terminal-header">
-            <div class="terminal-dots"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div>
-            <div class="terminal-title">terminal — bunx</div>
+            <div class="terminal-left">
+              <div class="terminal-dots"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div>
+              <span class="terminal-title">terminal — bunx</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy command">
+              <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+              <span>Copy</span>
+            </button>
           </div>
           <div class="terminal-body">
             <pre><code>bunx kobean-skills init</code></pre>
-            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
           </div>
         </div>
       </div>
@@ -779,12 +798,17 @@
         <p>Universal setup for Node.js environments (pre-installed out-of-the-box):</p>
         <div class="terminal-window">
           <div class="terminal-header">
-            <div class="terminal-dots"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div>
-            <div class="terminal-title">terminal — npx</div>
+            <div class="terminal-left">
+              <div class="terminal-dots"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div>
+              <span class="terminal-title">terminal — npx</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy command">
+              <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+              <span>Copy</span>
+            </button>
           </div>
           <div class="terminal-body">
             <pre><code>npx kobean-skills init</code></pre>
-            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
           </div>
         </div>
       </div>
@@ -793,12 +817,17 @@
         <p>Pure shell command for Python, Go, Rust, or minimal environments without Node/Bun installed:</p>
         <div class="terminal-window">
           <div class="terminal-header">
-            <div class="terminal-dots"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div>
-            <div class="terminal-title">terminal — bash</div>
+            <div class="terminal-left">
+              <div class="terminal-dots"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div>
+              <span class="terminal-title">terminal — bash</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy command">
+              <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+              <span>Copy</span>
+            </button>
           </div>
           <div class="terminal-body">
             <pre><code>curl -fsSL https://raw.githubusercontent.com/thienng-it/KobeanSkills/main/setup.sh | bash</code></pre>
-            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
           </div>
         </div>
       </div>
@@ -807,12 +836,17 @@
         <p>Run in an isolated container sandbox with companion tools (<code>bd</code>, <code>betterleaks</code>, <code>osv-scanner</code>) pre-baked:</p>
         <div class="terminal-window">
           <div class="terminal-header">
-            <div class="terminal-dots"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div>
-            <div class="terminal-title">terminal — docker</div>
+            <div class="terminal-left">
+              <div class="terminal-dots"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div>
+              <span class="terminal-title">terminal — docker</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy command">
+              <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+              <span>Copy</span>
+            </button>
           </div>
           <div class="terminal-body">
             <pre><code>docker run --rm -v "$(pwd):/workspace" ghcr.io/thienng-it/kobean-skills:latest kobean init</code></pre>
-            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
           </div>
         </div>
       </div>
@@ -907,12 +941,17 @@
         <p>Scaffolds an empty repo from zero with project constitution, database schema, API contracts, and CI:</p>
         <div class="terminal-window">
           <div class="terminal-header">
-            <div class="terminal-dots"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div>
-            <div class="terminal-title">prompt</div>
+            <div class="terminal-left">
+              <div class="terminal-dots"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div>
+              <span class="terminal-title">prompt</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy prompt">
+              <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+              <span>Copy</span>
+            </button>
           </div>
           <div class="terminal-body">
             <pre><code>Bootstrap a new production-ready SaaS application with Next.js App Router, PostgreSQL, and Drizzle ORM. Start with kb-spec to define the project constitution and architecture.</code></pre>
-            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
           </div>
         </div>
       </div>
@@ -926,12 +965,17 @@
         <p>Full lifecycle engineering from requirement validation to passing test suite:</p>
         <div class="terminal-window">
           <div class="terminal-header">
-            <div class="terminal-dots"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div>
-            <div class="terminal-title">prompt</div>
+            <div class="terminal-left">
+              <div class="terminal-dots"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div>
+              <span class="terminal-title">prompt</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy prompt">
+              <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+              <span>Copy</span>
+            </button>
           </div>
           <div class="terminal-body">
             <pre><code>Use kb-router to build an invitation system where admins can invite teammates via email with expiring tokens.</code></pre>
-            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
           </div>
         </div>
       </div>
@@ -945,8 +989,14 @@
         <p>Impeccable craft for product dashboards vs. Taste-Skill bold mode for landing pages:</p>
         <div class="terminal-window">
           <div class="terminal-header">
-            <div class="terminal-dots"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div>
-            <div class="terminal-title">prompt</div>
+            <div class="terminal-left">
+              <div class="terminal-dots"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div>
+              <span class="terminal-title">prompt</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy prompt">
+              <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+              <span>Copy</span>
+            </button>
           </div>
           <div class="terminal-body">
             <pre><code># Standard Dashboard / Product Surface (Impeccable craft):
@@ -954,7 +1004,6 @@ Use kb-ui to build the user analytics dashboard with complete loading, empty, an
 
 # Bold Art Direction (Taste-Skill mode for landing pages & marketing):
 Use kb-ui in bold mode to build the product landing page.</code></pre>
-            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
           </div>
         </div>
       </div>
@@ -968,13 +1017,18 @@ Use kb-ui in bold mode to build the product landing page.</code></pre>
         <p>The agent reproduces first, traces callers, and writes a failing regression test before writing a fix:</p>
         <div class="terminal-window">
           <div class="terminal-header">
-            <div class="terminal-dots"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div>
-            <div class="terminal-title">prompt</div>
+            <div class="terminal-left">
+              <div class="terminal-dots"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div>
+              <span class="terminal-title">prompt</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy prompt">
+              <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+              <span>Copy</span>
+            </button>
           </div>
           <div class="terminal-body">
             <pre><code>Use kb-debug to investigate this error:
 [Paste error log, stack trace, or failing test output]</code></pre>
-            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
           </div>
         </div>
       </div>
@@ -988,12 +1042,17 @@ Use kb-ui in bold mode to build the product landing page.</code></pre>
         <p>Audits current git changes for secrets, security bugs, code bloat, and broken tests:</p>
         <div class="terminal-window">
           <div class="terminal-header">
-            <div class="terminal-dots"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div>
-            <div class="terminal-title">prompt</div>
+            <div class="terminal-left">
+              <div class="terminal-dots"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div>
+              <span class="terminal-title">prompt</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy prompt">
+              <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+              <span>Copy</span>
+            </button>
           </div>
           <div class="terminal-body">
             <pre><code>Use kb-review to audit my current diff and check security.</code></pre>
-            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
           </div>
         </div>
       </div>
@@ -1007,12 +1066,17 @@ Use kb-ui in bold mode to build the product landing page.</code></pre>
         <p>Deletes dead code and simplifies structure while proving zero behavior change:</p>
         <div class="terminal-window">
           <div class="terminal-header">
-            <div class="terminal-dots"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div>
-            <div class="terminal-title">prompt</div>
+            <div class="terminal-left">
+              <div class="terminal-dots"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div>
+              <span class="terminal-title">prompt</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy prompt">
+              <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+              <span>Copy</span>
+            </button>
           </div>
           <div class="terminal-body">
             <pre><code>Use kb-build with the refactorer role to clean up and simplify src/server/auth.</code></pre>
-            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
           </div>
         </div>
       </div>
@@ -1026,12 +1090,17 @@ Use kb-ui in bold mode to build the product landing page.</code></pre>
         <p>Parses codebase AST into a knowledge map and generates <code>CONTEXT.md</code>:</p>
         <div class="terminal-window">
           <div class="terminal-header">
-            <div class="terminal-dots"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div>
-            <div class="terminal-title">prompt</div>
+            <div class="terminal-left">
+              <div class="terminal-dots"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div></div>
+              <span class="terminal-title">prompt</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)" title="Copy prompt">
+              <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+              <span>Copy</span>
+            </button>
           </div>
           <div class="terminal-body">
             <pre><code>Use kb-router to onboard this repository.</code></pre>
-            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
           </div>
         </div>
       </div>
@@ -1144,14 +1213,17 @@ Use kb-ui in bold mode to build the product landing page.</code></pre>
 
     // Copy Button with Micro-Animation
     function copyCode(btn) {
-      const parent = btn.parentElement;
-      const code = parent.querySelector('code') ? parent.querySelector('code').innerText.trim() : parent.innerText.replace('Copy', '').trim();
-      navigator.clipboard.writeText(code);
-      const original = btn.innerText;
-      btn.innerText = 'Copied!';
+      const windowEl = btn.closest('.terminal-window');
+      const codeEl = windowEl ? windowEl.querySelector('.terminal-body code') : null;
+      if (!codeEl) return;
+      const text = codeEl.innerText.trim();
+      navigator.clipboard.writeText(text);
+      const span = btn.querySelector('span') || btn;
+      const originalText = span.innerText;
+      span.innerText = 'Copied!';
       btn.style.color = '#10B981';
       setTimeout(() => {
-        btn.innerText = original;
+        span.innerText = originalText;
         btn.style.color = '';
       }, 1800);
     }

@@ -1,18 +1,53 @@
 # KobeanSkills
 
-Private, Antigravity-first (and Claude Code-compatible) engineering skills and multi-role orchestration system.
+Portable, Antigravity-first (and Claude Code-compatible) engineering skills and 22-role orchestration system.
 
-Instead of loading 250+ noisy upstream skills into the context window or running untrusted third-party hook scripts, **KobeanSkills** distills 16 vetted open-source repositories into:
-- **8 Entry Skills (`skills/kb-*/SKILL.md`)** — lightweight progressive-disclosure entry points that fit easily inside the agent's context budget.
-- **22 Specialist Role Contracts (`roles/*.yaml`)** — strict read/write/tool/verification contracts loaded on demand when spawning subagents.
-- **1 Unified Precedence Doctrine (`doctrine.md`)** — resolves conflicts between Spec-Kit, Superpowers, Ponytail, Impeccable, Taste-Skill, and Trail of Bits.
-- **Vetted Local Tooling Only** — integrates `bd` (Beads), `graphify`, `betterleaks`, `osv-scanner`, `semgrep`, and Antigravity's native `chrome-devtools-mcp`.
+---
+
+## 1-Minute Setup (For You or Any Friend)
+
+Clone once and run `install.sh`. **Zero files need to be added to your other repositories.**
+
+```bash
+git clone <your-repo-url> ~/Developer/KobeanSkills
+cd ~/Developer/KobeanSkills
+
+# Option A: Global Zero-Config Install (Recommended — active in ALL repos automatically)
+./scripts/install.sh
+
+# Option B: Global Install + auto-install companion CLI tools (bd, betterleaks, graphify, osv-scanner)
+./scripts/install.sh --with-tools
+```
+
+Need to scope it to **just one specific project** instead of globally, or remove it cleanly?
+```bash
+# Scope to a single project (.agents/ and .claude/ inside that repo only)
+./scripts/install.sh --project /path/to/target-repo
+
+# Uninstall all global links cleanly
+./scripts/install.sh --uninstall
+```
+
+---
+
+## How to Use in Any Repository (Zero Per-Repo Config)
+
+Once installed, open **any** project in **Antigravity** or **Claude Code** and chat normally. Global rules (`rules/AGENTS.md`) and the 8 `kb-*` entry skills are active automatically:
+
+| What you want | Example prompt in any repo | Pipeline triggered |
+| :--- | :--- | :--- |
+| **Map an unfamiliar repo** | `"Onboard this repo"` | `kb-router` -> `explorer` (`graphify` -> `CONTEXT.md`) |
+| **Build a feature** | `"Build a webhook retry queue with exponential backoff"` | `kb-spec` -> `kb-plan` (`.beads/`) -> `kb-build` (TDD + Ponytail) -> `kb-review` |
+| **Design / polish UI** | `"Redesign the dashboard"` *(or `"Build a bold landing page"`)* | `kb-ui` (Impeccable / Taste-Skill + `chrome-devtools-mcp`) |
+| **Fix a bug / failing test** | `"Fix the failing auth middleware test"` | `kb-debug` (reproduce -> caller trace -> regression test -> minimal fix) |
+| **Audit PR / security** | `"Review my current diff"` | `kb-review` (`betterleaks`, Trail of Bits AppSec, Ponytail bloat, QA gate) |
+| **Prepare a release** | `"Prepare release and update docs/changelog"` | `kb-ship` (Diátaxis docs, CI audit, SemVer `CHANGELOG.md`, rollback note) |
 
 ---
 
 ## Architecture Overview
 
-| Entry Skill | Purpose | Roles Loaded On Demand |
+| Entry Skill | Purpose | Specialist Roles Loaded On Demand (`~/.kobean/roles/*.yaml`) |
 | :--- | :--- | :--- |
 | [`kb-router`](skills/kb-router/SKILL.md) | Classifies requests and selects the execution pipeline | All 22 roles |
 | [`kb-spec`](skills/kb-spec/SKILL.md) | Ponytail Ultra existence check, Socratic clarification, `spec.md`, STRIDE `threats.md` | `explorer`, `po`, `threat-modeler` |
@@ -23,17 +58,4 @@ Instead of loading 250+ noisy upstream skills into the context window or running
 | [`kb-debug`](skills/kb-debug/SKILL.md) | Reproduce-first root-cause diagnostics and regression test creation | `debugger` |
 | [`kb-ship`](skills/kb-ship/SKILL.md) | Diátaxis documentation, ADRs, CI/CD hardening, SemVer changelog, rollback plan | `tech-writer`, `devops`, `release-manager` |
 
----
-
-## Quick Start
-
-```bash
-# 1. Lint all skills, role schemas, and write-isolation rules
-./scripts/lint.sh
-
-# 2. Install symlinks into Antigravity (~/.gemini/config/skills) and Claude Code (~/.claude/skills)
-./scripts/install.sh
-```
-
 See [`doctrine.md`](doctrine.md) for the precedence hierarchy and [`SOURCES.md`](SOURCES.md) for upstream commit locks and licenses.
-

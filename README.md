@@ -71,9 +71,9 @@ If you have already cloned KobeanSkills locally or want a machine-wide global in
 
 ---
 
-## Workflow Reference
+## Workflow Reference & Developer Playbooks
 
-Workflows activate automatically through request intent or by invoking the corresponding `kb-*` skill:
+For a comprehensive guide with copy-paste prompts, step-by-step walkthroughs, and steering controls, see [GUIDE.md](GUIDE.md) (or run `npx kobean-skills guide` in terminal).
 
 | Intent | Example Prompt | Pipeline Flow |
 | :--- | :--- | :--- |

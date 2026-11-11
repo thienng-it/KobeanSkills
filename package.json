@@ -10,6 +10,7 @@
   "files": [
     "bin",
     "doctrine.md",
+    "GUIDE.md",
     "init.sh",
     "setup.sh",
     "plugin.json",

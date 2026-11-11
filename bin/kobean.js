@@ -22,12 +22,14 @@ Usage:
 
 Commands:
   init [dir]        Initialize .kobean/ in target repo (default: current directory)
+  guide             Display the developer workflow guide and prompt cheatsheet
   install           Install globally into ~/.gemini and ~/.claude
   doctor            Check status of companion CLI tools (bd, betterleaks, graphify, etc.)
   help              Show this help message
 
 Examples:
   npx kobean-skills init
+  npx kobean-skills guide
   npx kobean-skills doctor
   npx kobean-skills install
 `);
@@ -87,9 +89,22 @@ function runDoctor() {
   console.log(`  Claude Code rule:   ${fs.existsSync(claudeRule) ? '[✓] Active' : '[ ] Not registered (run npx kobean install)'}`);
 }
 
+function runGuide() {
+  const guidePath = path.join(PKG_ROOT, 'GUIDE.md');
+  if (fs.existsSync(guidePath)) {
+    console.log(fs.readFileSync(guidePath, 'utf-8'));
+  } else {
+    console.log('==> Guide file not found. Visit https://github.com/thienng-it/KobeanSkills for documentation.');
+  }
+}
+
 switch (command) {
   case 'init':
     runInit(args[1]);
+    break;
+  case 'guide':
+  case 'cheatsheet':
+    runGuide();
     break;
   case 'install':
   case 'setup':
@@ -109,3 +124,4 @@ switch (command) {
     showHelp();
     process.exit(1);
 }
+

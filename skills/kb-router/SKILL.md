@@ -24,6 +24,7 @@ You are the entry-point orchestrator for **KobeanSkills**. Instead of jumping st
 
 | Request Type | Trigger Signals | Pipeline to Execute |
 | :--- | :--- | :--- |
+| **`help`** | "How do I use this?", "What skills are available?", "Show me the guide", "help" | Display the workflow playbooks from `GUIDE.md` |
 | **`onboard`** | Unfamiliar repo, "map this codebase", or no `CONTEXT.md` / `graphify-out/` on a large project | `explorer` -> write `CONTEXT.md` |
 | **`feature`** | New capability, multi-file change, or ambiguous requirements | [`kb-spec`](../kb-spec/SKILL.md) -> [`kb-plan`](../kb-plan/SKILL.md) -> [`kb-build`](../kb-build/SKILL.md) -> [`kb-review`](../kb-review/SKILL.md) -> [`kb-ship`](../kb-ship/SKILL.md) |
 | **`ui`** | Landing page, redesign, component craft, design system, "make it bolder/cleaner" | [`kb-spec`](../kb-spec/SKILL.md) *(lite)* -> [`kb-ui`](../kb-ui/SKILL.md) -> [`kb-review`](../kb-review/SKILL.md) |

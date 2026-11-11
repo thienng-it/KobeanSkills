@@ -44,7 +44,7 @@ KOBEAN_DIR="${TARGET_DIR}/.kobean"
 # 2. Populate .kobean/ (skip copying if already running from inside .kobean/)
 mkdir -p "${KOBEAN_DIR}"
 if [[ "${SCRIPT_DIR}" != "${KOBEAN_DIR}" ]]; then
-  for item in doctrine.md roles references templates skills rules SOURCES.md; do
+  for item in doctrine.md GUIDE.md roles references templates skills rules SOURCES.md; do
     if [[ -e "${SCRIPT_DIR}/${item}" ]]; then
       rm -rf "${KOBEAN_DIR:?}/${item}"
       cp -R "${SCRIPT_DIR}/${item}" "${KOBEAN_DIR}/${item}"

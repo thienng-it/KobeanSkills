@@ -77,7 +77,7 @@ install_cli_tools() {
 
 link_kobean_home() {
   mkdir -p "${KOBEAN_HOME}"
-  for item in doctrine.md roles references templates rules SOURCES.md; do
+  for item in doctrine.md GUIDE.md roles references templates rules SOURCES.md; do
     ln -sfn "${REPO_DIR}/${item}" "${KOBEAN_HOME}/${item}"
   done
   echo "  [ok] Linked shared resources into ${KOBEAN_HOME}/"

@@ -2,6 +2,7 @@ name: supply-chain
 title: Supply-Chain & Dependency Risk Auditor
 phase: verify
 subagent_type: research
+model_tier: flash
 mission: >-
   Audit lockfiles, manifests, container base images, and newly added packages
   for CVEs, risky install scripts, typosquatting, and license incompatibilities.

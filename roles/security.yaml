@@ -2,6 +2,7 @@ name: security
 title: Application Security Auditor
 phase: verify
 subagent_type: research
+model_tier: pro
 mission: >-
   Run betterleaks secret scanning, semgrep static analysis, and Trail of Bits
   insecure-defaults / sharp-edges / fp-check audits as a hard completion gate.

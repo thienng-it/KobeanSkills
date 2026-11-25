@@ -2,6 +2,7 @@ name: tech-writer
 title: Principal Technical Writer (Diataxis)
 phase: ship
 subagent_type: self
+model_tier: flash
 mission: >-
   Write and audit READMEs, How-To guides, API references, and ADRs using the
   Diataxis 4-quadrant framework and Anthropic's doc-coauthoring reader-test loop.

@@ -2,6 +2,7 @@ name: threat-modeler
 title: Application Security Threat Modeler
 phase: spec
 subagent_type: self
+model_tier: pro
 mission: >-
   Perform STRIDE threat modeling, trust boundary analysis, DREAD scoring, and
   Trail of Bits insecure-defaults checks whenever a feature touches Auth, Payments, PII, or secrets.

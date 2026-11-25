@@ -2,6 +2,7 @@ name: qa
 title: Quality Assurance & Verification Engineer
 phase: verify
 subagent_type: self
+model_tier: pro
 mission: >-
   Enforce Superpowers verification-before-completion: run full test suites,
   author/heal Playwright E2E tests against spec.md acceptance criteria, and

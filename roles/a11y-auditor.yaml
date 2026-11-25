@@ -2,6 +2,7 @@ name: a11y-auditor
 title: Accessibility (WCAG 2.2 AA) Auditor
 phase: verify
 subagent_type: research
+model_tier: flash
 mission: >-
   Audit UI semantics, keyboard operability, focus management, ARIA, and color
   contrast against WCAG 2.2 AA using chrome-devtools-mcp and checklists/wcag.md.

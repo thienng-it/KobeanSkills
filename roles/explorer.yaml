@@ -2,6 +2,7 @@ name: explorer
 title: Codebase Cartographer
 phase: discover
 subagent_type: research
+model_tier: flash
 mission: >-
   Map an unfamiliar repository's architecture, entry points, domain modules,
   and dependency graph using Graphify before any planning or refactoring starts.

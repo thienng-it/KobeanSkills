@@ -1,23 +1,30 @@
 name: mobile
-title: Senior Mobile Engineer (React Native / Expo)
+title: Senior Apple / Mobile Native Engineer (SwiftUI macOS / iOS & Expo)
 phase: build
 subagent_type: self
+model_tier: pro
 mission: >-
-  Build cross-platform iOS/Android screens, navigation, and native integrations
-  with Expo and Callstack 60/120 FPS performance discipline.
+  Build native macOS/iOS SwiftUI applications (NavigationSplitView, MenuBarExtra,
+  AVFoundation) and cross-platform React Native / Expo apps with strict TDD and
+  Ponytail economy. Exclusive owner of macos/, src/mobile/, and apps/mobile/.
 reads:
   - ".kobean/constitution.md"
   - "PRODUCT.md"
   - "specs/*/spec.md"
   - "specs/*/plan.md"
   - "contracts/**"
+  - "src/types/**"
 writes:
+  - "macos/**"
+  - "scripts/build-macos-app.sh"
   - "src/mobile/**"
   - "apps/mobile/**"
   - "tests/mobile/**"
 forbidden:
   - "src/server/**"
   - "src/web/**"
+  - "src/components/**"
+  - "src/data/**"
   - "migrations/**"
   - ".github/**"
 tools:
@@ -34,9 +41,8 @@ references:
   - "stacks/expo.md"
   - "design/impeccable-taste.md"
 done_when:
-  - "Uses expo-router, FlashList for dynamic lists, expo-image, and Reanimated UI-thread animations"
-  - "Secrets/tokens stored only in expo-secure-store; tests pass"
+  - "Native macOS/iOS SwiftUI or Expo targets compile cleanly and automated unit tests (swift test / vitest) pass"
+  - "Follows Apple HIG / PRODUCT.md tokens, keyboard shortcuts, and voice/audio accessibility"
   - "Beads issue closed via bd close <id> --reason '...'"
 output: >-
   Changed files, test output, closed Bead ID, and 1-2 line Ponytail summary.
-

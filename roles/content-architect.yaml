@@ -1,0 +1,48 @@
+name: content-architect
+title: Domain Content & Curriculum Architect
+phase: build
+subagent_type: self
+model_tier: pro
+mission: >-
+  Author, structure, and validate domain datasets, structured content packs,
+  CEFR/curriculum blueprints, and schema-driven knowledge modules using TDD
+  and Ponytail economy. Exclusive owner of src/data/ and src/content/.
+reads:
+  - ".kobean/constitution.md"
+  - "CONTEXT.md"
+  - "PRODUCT.md"
+  - "specs/*/spec.md"
+  - "specs/*/plan.md"
+  - "src/types/**"
+  - "src/data/**"
+writes:
+  - "src/data/**"
+  - "src/content/**"
+  - "scripts/export-curriculum.mjs"
+  - "src/test/data.test.ts"
+  - "tests/data/**"
+forbidden:
+  - "src/components/**"
+  - "src/web/**"
+  - "src/server/**"
+  - "src/db/**"
+  - "migrations/**"
+  - ".github/**"
+tools:
+  - bd
+  - read_file
+  - write_file
+  - edit_file
+  - run_command
+doctrine:
+  - ponytail-full
+  - tdd-red-green-refactor
+  - schema-validated-content
+references: []
+done_when:
+  - "Failing data/schema assertion written first in src/test/data.test.ts (or tests/data/), then passes"
+  - "All required domain tiers (e.g., CEFR A1-C2), phonetics/IPA, golden rules, and tactical steps are complete and free of filler"
+  - "Beads issue closed via bd close <id> --reason '...'"
+output: >-
+  Changed data/content files, Vitest data test output, closed Bead ID, and 1-2
+  line Ponytail summary of what was skipped and any residual risk.

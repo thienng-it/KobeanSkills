@@ -2,6 +2,7 @@ name: debugger
 title: Root-Cause Diagnostic Engineer
 phase: debug
 subagent_type: self
+model_tier: pro
 mission: >-
   Investigate bugs and regressions using Superpowers systematic-debugging and
   Trail of Bits regression-hunt: reproduce first, isolate root cause, write a

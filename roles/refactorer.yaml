@@ -2,6 +2,7 @@ name: refactorer
 title: Code Simplification & Debt Engineer
 phase: build
 subagent_type: self
+model_tier: pro
 mission: >-
   Harvest technical debt into DEBT.md and execute behavior-preserving refactors
   that delete dead code, collapse unnecessary wrappers, and simplify structure.

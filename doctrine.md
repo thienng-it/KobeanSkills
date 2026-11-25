@@ -1,6 +1,6 @@
 # KobeanSkills — Engineering Doctrine & Precedence Rules
 
-This document is the binding constitution for all `kb-*` skills and the 22 role contracts in `KobeanSkills`. Whenever instructions from different upstream inspirations clash, this hierarchy wins.
+This document is the binding constitution for all `kb-*` skills and the 24 role contracts in `KobeanSkills`. Whenever instructions from different upstream inspirations clash, this hierarchy wins.
 
 ---
 
@@ -9,7 +9,7 @@ This document is the binding constitution for all `kb-*` skills and the 22 role 
 1. **Explicit User Instructions** in the active chat turn.
 2. **Project Constitution** (`.kobean/constitution.md` in the target repository, if present).
 3. **Kobean Doctrine** (this file: `.kobean/doctrine.md` or `~/.kobean/doctrine.md`).
-4. **Active Role Contract** (`.kobean/roles/<role>.yaml` or `~/.kobean/roles/<role>.yaml` — specifically its `writes`, `forbidden`, and `done_when` rules).
+4. **Active Role Contract** (`.kobean/roles/<role>.yaml` or `~/.kobean/roles/<role>.yaml` — specifically its `writes`, `forbidden`, `model_tier`, and `done_when` rules).
 5. **Entry Skill Procedure** (`skills/kb-*/SKILL.md`).
 6. **Stack & Design Reference Checklists** (`.kobean/references/**` or `~/.kobean/references/**`).
 
@@ -23,6 +23,7 @@ This document is the binding constitution for all `kb-*` skills and the 22 role 
 | **Architecture & Contracts** | `specs/NNN-<slug>/plan.md` + `contracts/openapi.yaml` + `data-model.md` | Undocumented schema/API inventions during coding. |
 | **Task State & Dependencies** | **Beads (`.beads/` via `bd`) ONLY** | Never create `tasks.md`, `progress.md`, or markdown task checklists to track execution state. |
 | **Codebase Orientation** | **`graphify`** (`graphify-out/GRAPH_REPORT.md` & `graph.json`) + `CONTEXT.md` | Blindly running dozens of broad `grep`/`find` loops before checking the structural graph. |
+| **Architecture Diagrams, Business Workflows & Deep Wiki** | **`kb-atlas`** (`atlas-architect`, `docs/atlas/**` & `docs/architecture/**`) | Unvalidated >15-node Mermaid hairballs, ASCII box art, folder-mirror docs without business intent, or unpinned/uncited claims. |
 | **Execution Loop** | **Superpowers SDD + Red-Green-Refactor TDD** | Writing implementation code before a failing test or self-check exists. |
 | **Code Economy (Build/Review)** | **Ponytail Full Mode** (smallest complete change) | Speculative abstractions, wrappers, unused config flags, or dependencies added for a few lines. |
 | **UI/UX Craft** | **Impeccable** (default) + **Taste-Skill** (opt-in `bold` mode only) | Generic "AI slop" (see Section 4). `ui-ux-pro-max` palettes/styles are lookup references only and never override Impeccable bans. |
@@ -62,15 +63,20 @@ When `kb-ui` or `frontend` builds or reviews any interface:
    - Equal left and right content edges across all sections.
    - One hero entrance (`data-enter`) + 1–2 dealt visual moments per page; subtle hover micro-interactions (2px card lift, 1.02 photo zoom inside frame).
    - No captions under visuals (credits in one footer line).
+4. **Diagram & Visual Explainer Craft (`kb-atlas` / `atlas-architect`):**
+   - Select from the 10 canonical diagram modes (`references/design/diagrams-and-workflows.md`) and cap single canvases at $\le 15$ nodes (split into Overview + linked drilldowns when denser).
+   - Enforce the **Semantic Color Rule** (colors map strictly to architectural layers across Dark/Light/Blueprint themes), pin `HEAD` SHA + verified `file:start-end` citations (`kobean atlas check`), label `EXTRACTED` vs. `INFERRED` edges honestly, and verify standalone HTML/SVG deliverables in `chrome-devtools-mcp`.
 
 ---
 
 ## 5. Subagent & Role Isolation Rules (Antigravity-First)
 
 1. **Strict Write Ownership:**
-   Every role in `roles/<role>.yaml` declares `writes` and `forbidden` globs. No two build roles write to the same file path simultaneously. If `backend` needs a migration change, it hands off to `data-engineer`. If `frontend` needs a CI change, it hands off to `devops`.
+   Every role in `roles/<role>.yaml` declares `writes` and `forbidden` globs. No two build roles write to the same file path simultaneously:
+   - `frontend` owns UI (`src/components/**`, `src/web/**`, `src/App.tsx`); `content-architect` owns structured curriculum/domain data (`src/data/**`, `src/content/**`).
+   - If `backend` needs a migration change, it hands off to `data-engineer`. If `frontend` needs a CI change, it hands off to `devops`.
 2. **How to Spawn a Role Subagent:**
-   - **On Antigravity:** Use `invoke_subagent(TypeName="self", Role="<Role Title>", Prompt="...")` for roles that write files or run commands, and `invoke_subagent(TypeName="research", Role="<Role Title>", Prompt="...")` for read-only discovery roles (`explorer`).
+   - **On Antigravity:** Use `invoke_subagent(TypeName="self", Role="<Role Title>", Model="<model>", Prompt="...")` for roles that write files or run commands, and `invoke_subagent(TypeName="research", Role="<Role Title>", Model="<model>", Prompt="...")` for read-only discovery/audit roles (`explorer`, `reviewer`, `security`, `supply-chain`, `performance`, `a11y-auditor`).
    - **On Claude Code:** Use the `Agent` / `Task` tool with the role contract embedded in the prompt.
    - **On Codex CLI:** Dispatch role subagents or load `.kobean/roles/<role>.yaml` as the binding role contract for the execution turn.
    - Every subagent prompt **must** include: (a) path to `.kobean/roles/<role>.yaml` (or `~/.kobean/roles/<role>.yaml`), (b) path to `.kobean/doctrine.md` (or `~/.kobean/doctrine.md`), (c) exact target files/Beads issue ID, and (d) required output contract.
@@ -80,3 +86,36 @@ When `kb-ui` or `frontend` builds or reviews any interface:
    - `reviewer` or `security` reports any `CRITICAL` or `HIGH` finding (verified via Trail of Bits `fp-check` false-positive gate).
    - `qa` reports any failing acceptance criterion from `spec.md` or failing test suite.
 
+---
+
+## 6. Smart Model Selection & Multi-Agent Escalation Matrix
+
+Choose models and agent topology deliberately based on cognitive complexity, blast radius, and parallelism:
+
+### 6.1 Model Tier Selection (`model_tier` in `roles/*.yaml`)
+
+| Tier | Antigravity `Model` | Claude Code | Codex CLI | Assigned Roles & Workloads |
+| :--- | :--- | :--- | :--- | :--- |
+| **Tier 1 (`flash_lite`)** | `flash_lite` | `haiku` | `codex-mini` | Trivial file/tag scans, link/schema checks, boilerplate formatting, high-volume grep/JSON filtering. |
+| **Tier 2 (`flash`)** | `flash` | `sonnet` | `gpt-5-codex` | `explorer` (`graphify` synthesis), `a11y-auditor`, `performance`, `supply-chain`, `tech-writer`, `release-manager`. |
+| **Tier 3 (`pro`)** | `pro` *(or `inherit`)* | `opus` / `sonnet-thinking` | `o3` / `gpt-5-high` | `po`, `threat-modeler`, `architect`, `api-designer`, `data-engineer`, `ui-ux-designer`, `atlas-architect`, `frontend`, `content-architect`, `backend`, `mobile`, `ml-engineer`, `devops`, `refactorer`, `debugger`, `reviewer`, `security`, `qa`. |
+
+> **Session Pin Rule:** On Antigravity, default to `inherit` when the user has explicitly selected a session model unless fanning out lightweight read-only scouts (`flash` / `flash_lite`) or when the user asks for smart model routing across subagents.
+
+### 6.2 Multi-Agent Orchestration Escalation Ladder
+
+1. **Level 1 — Inline Single-Agent (Default for `< 20` lines or single-role step):**
+   Adopt `.kobean/roles/<role>.yaml` directly in the main conversation with zero subagent spawn overhead.
+2. **Level 2 — Targeted Subagents (`invoke_subagent` for 2–3 non-overlapping roles):**
+   Spawn `research` subagents (`flash`/`pro`) to isolate noisy exploration or audits, or `self` subagents (`pro`) for parallel build slices (e.g., `frontend` on `src/components/**` + `content-architect` on `src/data/**`).
+3. **Level 3 — Programmatic Pipeline (`run_workflow` for $N \ge 3$ fan-out/fan-in slices):**
+   Use a Python `run_workflow` script (`parallel`, `pipeline`, `agent`) when fanning out across many modules (e.g., generating A1–C2 language packs for multiple languages or running 5 review roles simultaneously) and aggregating results deterministically.
+4. **Level 4 — Collaborative Swarm (`swarm` for multi-branch heavy engineering):**
+   Use `swarm` with `workspace: "share"` when multiple write-heavy workers edit and test concurrently and a dedicated `qa`/`reviewer` worker verifies before merging.
+
+### 6.3 Compiled-Package Staged Handoff & Subagent Reuse Pattern
+For compiled multi-target repositories (SwiftPM, Rust Cargo, Go workspaces) where UI targets depend on Core types:
+1. **Stage 1 (`backend`):** Build Core models/storage + TDD tests first so public symbols compile cleanly.
+2. **Stage 2 (`frontend`):** Wire state & UI strictly within UI write globs against the compiled Core contract.
+3. **Stage 3 (Parallel `reviewer` + `qa`):** Fan out read-only `research` subagents simultaneously (`reviewer` on `pro`/`inherit`, `qa` on `flash`) to audit security, data-loss edge cases, and AC coverage.
+4. **Stage 4 (Parallel Review-Fix Loop via `send_message`):** When audit findings span both Core and UI with zero overlapping files, message the *existing* `backend` and `frontend` subagents in parallel rather than spawning cold replacements — preserving warm codebase context and cutting token/latency overhead.

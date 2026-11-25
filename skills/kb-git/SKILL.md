@@ -87,15 +87,16 @@ git rebase origin/main # or origin/master
 
 ### 5. Pull Requests with Elegant Templates
 1. Verify template exists: Check `.github/pull_request_template.md` or `.kobean/templates/PULL_REQUEST_TEMPLATE.md`.
-2. Open PR via GitHub CLI:
+2. **Optional Material Architecture Delta (`kb-atlas`):** Run `kobean atlas pr-check --json` (or `node .kobean/bin/kobean.js atlas pr-check --json` if available). If `material: true` (cross-layer topology, schema/migration, API contract, or state-machine change), lightly offer an optional `kb-atlas` (`pr-delta` mode) diagram for the PR description. Stay silent on trivial diffs.
+3. Open PR via GitHub CLI:
    ```bash
    gh pr create --title "<type>(<scope>): <summary>" --body-file .github/pull_request_template.md
    ```
-3. Edit existing PR:
+4. Edit existing PR:
    ```bash
    gh pr edit [pr-number] --title "..." --body "..."
    ```
-4. Verify PR CI status:
+5. Verify PR CI status:
    ```bash
    gh pr checks
    ```

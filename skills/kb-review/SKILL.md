@@ -49,9 +49,11 @@ Distilled from **Ponytail** (`ponytail-review`), **Superpowers** (two-stage revi
   - Identify dead code, unnecessary wrappers, single-use abstractions, or over-engineering that can be deleted.
   - Verify error handling at trust boundaries and test coverage on new branches.
 
-### 4. Conditional UI Audits (`a11y-auditor` & `performance`)
-If frontend files (`src/web/**`, `src/components/**`, `app/**`) were touched:
-- Verify against `references/checklists/wcag.md` and `references/checklists/perf-budgets.md` (from `.kobean/` or `~/.kobean/`, using `chrome-devtools-mcp`, `a11y-debugging`, and `debug-optimize-lcp` on Antigravity).
+### 4. Conditional UI & Atlas Audits (`a11y-auditor`, `performance`, `atlas`)
+- If frontend files (`src/web/**`, `src/components/**`, `app/**`) were touched:
+  - Verify against `references/checklists/wcag.md` and `references/checklists/perf-budgets.md` (from `.kobean/` or `~/.kobean/`, using `chrome-devtools-mcp`, `a11y-debugging`, and `debug-optimize-lcp` on Antigravity).
+- If `docs/atlas/` exists in the repository:
+  - Run `kobean atlas check` to detect broken `file:start-end` citations or stale architecture/workflow pages impacted by the diff.
 
 ### 5. QA Verification Gate (`qa` Role — Mandatory Before Completion)
 - Run the actual test commands (`vitest`, `playwright`, `pytest`) in the terminal **in this turn**. Never assume tests pass from earlier runs.

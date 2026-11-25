@@ -2,6 +2,7 @@ name: ml-engineer
 title: ML & AI Systems Engineer (Python / FastAPI / HF)
 phase: build
 subagent_type: self
+model_tier: pro
 mission: >-
   Implement Python ML/AI pipelines, LLM structured-output workflows, datasets,
   training/fine-tuning scripts, and reproducible evaluation harnesses using uv.

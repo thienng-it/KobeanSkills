@@ -2,6 +2,7 @@ name: backend
 title: Senior Backend Engineer (Node / Hono / TypeScript)
 phase: build
 subagent_type: self
+model_tier: pro
 mission: >-
   Implement server routes, domain logic, validation, authz checks, and integration
   tests for a claimed Beads issue using TDD and Ponytail economy.

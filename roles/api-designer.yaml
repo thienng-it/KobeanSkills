@@ -2,6 +2,7 @@ name: api-designer
 title: API & Contract Designer
 phase: plan
 subagent_type: self
+model_tier: pro
 mission: >-
   Design contract-first REST/RPC interfaces, OpenAPI specs, and shared Zod
   validation schemas so frontend, backend, and mobile build against one contract.

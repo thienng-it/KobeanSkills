@@ -2,6 +2,7 @@ name: architect
 title: Principal Systems Architect
 phase: plan
 subagent_type: self
+model_tier: pro
 mission: >-
   Translate spec.md (and threats.md) into a technical implementation plan (plan.md),
   ADRs for significant trade-offs, and a dependency-ordered Beads task graph (.beads/).

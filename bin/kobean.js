@@ -15,7 +15,7 @@ const PKG_ROOT = path.resolve(__dirname, '..');
 const args = process.argv.slice(2);
 const command = args[0] || 'init';
 
-// Built-in vetted MCP Marketplace Catalog (38 top connectors across 6 categories)
+// Built-in vetted MCP Marketplace Catalog (41 top connectors across 7 categories)
 const MCP_PRESETS = {
   // Databases & Storage (10)
   postgres: {
@@ -521,6 +521,41 @@ const MCP_PRESETS = {
     },
     requiredEnv: ['RESEND_API_KEY'],
     sampleEnv: 'RESEND_API_KEY="re_placeholder_token"'
+  },
+
+  // Architecture & Diagrams (3)
+  drawio: {
+    name: 'drawio',
+    category: 'Architecture & Diagrams',
+    description: 'Editable draw.io live browser canvas MCP server for human+AI architecture diagrams',
+    config: {
+      command: 'npx',
+      args: ['-y', '@next-ai-drawio/mcp-server']
+    },
+    requiredEnv: [],
+    sampleEnv: ''
+  },
+  deepwiki: {
+    name: 'deepwiki',
+    category: 'Architecture & Diagrams',
+    description: 'Fetch external open-source repository wikis from deepwiki.com as clean Markdown',
+    config: {
+      command: 'npx',
+      args: ['-y', 'mcp-deepwiki']
+    },
+    requiredEnv: [],
+    sampleEnv: ''
+  },
+  gitdiagram: {
+    name: 'gitdiagram',
+    category: 'Architecture & Diagrams',
+    description: 'Remote MCP server for instant architecture diagrams of public GitHub repositories',
+    config: {
+      type: 'http',
+      url: 'https://gitdiagram.com/mcp'
+    },
+    requiredEnv: [],
+    sampleEnv: ''
   }
 };
 
@@ -545,28 +580,34 @@ Core Commands:
 
 MCP Connector & Marketplace Commands:
   mcp                           List configured MCP servers, sync status, and environment checks
-  mcp marketplace [category]    Browse 38+ vetted MCP servers grouped by category
-  mcp search <keyword>          Search the marketplace for connectors (e.g. database, linear, cloud)
+  mcp marketplace [category]    Browse 41+ vetted MCP servers grouped by category
+  mcp search <keyword>          Search the marketplace for connectors (e.g. database, drawio, cloud)
   mcp add <name>                Add a preset or custom connector and auto-sync all agent files
   mcp remove <name>             Remove an MCP server from configuration and update agent files
   mcp sync [--global]           Synchronize .kobean/mcp.json across Claude, Gemini, Antigravity & Codex
   mcp presets                   Alias for 'mcp marketplace'
 
+Atlas & Diagram Verification Commands:
+  atlas check [dir] [--strict]  Verify docs/atlas file:line citations and detect git freshness drift
+  atlas status [dir]            Summarize docs/atlas coverage, pinned SHA, and graphify status
+  atlas pr-check [--base ref]   Check 3-dot merge-base diff materiality for PR architecture diagrams
+
 Architecture & Inspection Commands:
-  skills [name]                 List all 9 entry skills or display a specific skill runbook
-  roles [phase|name]            List all 22 specialist role contracts or inspect a specific role
-  playbooks [query]             Browse 9 step-by-step engineering playbooks
+  skills [name]                 List all 10 entry skills or display a specific skill runbook
+  roles [phase|name]            List all 24 specialist role contracts or inspect a specific role
+  playbooks [query]             Browse 10 step-by-step engineering playbooks
 
 Examples:
   bunx kobean-skills init
   bunx kobean-skills mcp marketplace
-  bunx kobean-skills mcp search database
-  bunx kobean-skills mcp add supabase
+  bunx kobean-skills mcp add drawio
+  bunx kobean-skills atlas check
+  bunx kobean-skills atlas pr-check --json
   bunx kobean-skills skills
-  bunx kobean-skills skill git
-  bunx kobean-skills role backend
+  bunx kobean-skills skill atlas
+  bunx kobean-skills role atlas-architect
   bunx kobean-skills doctor
-  bunx kobean-skills help mcp
+  bunx kobean-skills help atlas
 `);
     return;
   }
@@ -654,19 +695,40 @@ What it inspects:
   • Global Discovery Symlinks: ~/.gemini, ~/.claude, ~/.codex
   • Active MCP Connectors & Agent Sync Status
 `);
+  } else if (t === 'atlas' || t === 'diagram' || t === 'wiki') {
+    console.log(`
+Command: kobean atlas <action> [dir] [options]
+
+Summary:
+  Deterministic citation verifier, git freshness drift detector, and PR materiality
+  pre-flight helper for kb-atlas (docs/atlas/** diagrams, workflows, and deep wikis).
+
+Actions:
+  check [dir] [--strict] [--json]     Verify every file:start-end citation exists and is within bounds,
+                                      and report stale pages whose cited files changed since headSha.
+  status [dir]                        Summarize docs/atlas artifact counts, pinned SHA, and graphify state.
+  pr-check [dir] [--base ref] [--json] Evaluate 3-dot merge-base diff materiality for PR delta diagrams.
+
+Examples:
+  bunx kobean-skills atlas check
+  bunx kobean-skills atlas check --strict
+  bunx kobean-skills atlas status
+  bunx kobean-skills atlas pr-check --base origin/main --json
+`);
   } else if (t === 'skills' || t === 'skill') {
     console.log(`
 Command: kobean skills [skill-name]
 
 Summary:
-  Inspect the 9 progressive-disclosure entry skills of KobeanSkills.
+  Inspect the 10 progressive-disclosure entry skills of KobeanSkills.
 
 Usage:
-  bunx kobean-skills skills              List all 9 skills with descriptions
+  bunx kobean-skills skills              List all 10 skills with descriptions
   bunx kobean-skills skill <name>        View the complete runbook for a skill
 
 Skills:
   kb-router     Master Classifier & Pipeline Router
+  kb-atlas      Codebase Diagrams, Business Workflows & Living Wiki
   kb-spec       Requirements Validation & STRIDE Threat Modeling
   kb-plan       Architecture Planning, Contracts & Task Graph
   kb-build      TDD Implementation & Ponytail Minimal Changes
@@ -681,12 +743,12 @@ Skills:
 Command: kobean roles [phase|role-name]
 
 Summary:
-  Inspect the 22 specialist role contracts with declared write paths, tools, and gates.
+  Inspect the 24 specialist role contracts with declared write paths, tools, and gates.
 
 Usage:
-  bunx kobean-skills roles               List all 22 roles organized by lifecycle phase
-  bunx kobean-skills roles <phase>       Filter roles by phase (discover, spec, plan, build, verify, ship)
-  bunx kobean-skills role <name>         View the YAML contract for a role (e.g. backend, security)
+  bunx kobean-skills roles               List all 24 roles organized by lifecycle phase
+  bunx kobean-skills roles <phase>       Filter roles by phase (discover, document, spec, plan, build, verify, ship)
+  bunx kobean-skills role <name>         View the YAML contract for a role (e.g. atlas-architect, backend)
 `);
   } else {
     console.log(`No dedicated manual page for '${topic}'. Run 'kobean help' to see all commands.`);
@@ -887,6 +949,9 @@ function serializeCodexToml(mcpServers) {
   let toml = '';
   for (const [name, cfg] of Object.entries(mcpServers)) {
     toml += `[mcp_servers.${name}]\n`;
+    if (cfg.url) {
+      toml += `url = ${JSON.stringify(cfg.url)}\n`;
+    }
     if (cfg.command) {
       toml += `command = ${JSON.stringify(cfg.command)}\n`;
     }
@@ -1068,9 +1133,11 @@ function runMcpList(targetDirArg) {
   const dotEnv = loadDotEnv(targetDir);
   console.log('Active MCP Servers:');
   for (const [name, cfg] of Object.entries(configData.servers)) {
-    const cmdStr = `${cfg.command || ''} ${(cfg.args || []).join(' ')}`.trim();
+    const cmdStr = cfg.url
+      ? `HTTP ${cfg.url}`
+      : `${cfg.command || ''} ${(cfg.args || []).join(' ')}`.trim();
     console.log(`\n  • [${name}]`);
-    console.log(`    Command: ${cmdStr}`);
+    console.log(`    Endpoint: ${cmdStr}`);
     const vars = extractEnvVars(cfg);
     if (vars.length > 0) {
       const varStatus = vars
@@ -1096,8 +1163,9 @@ function runMcpList(targetDirArg) {
 }
 
 function runMcpMarketplace(filterCategory) {
+  const totalCount = Object.keys(MCP_PRESETS).length;
   console.log('\n============================================================');
-  console.log('  KOBEANSKILLS MCP MARKETPLACE & DIRECTORY (38 CONNECTORS)');
+  console.log(`  KOBEANSKILLS MCP MARKETPLACE & DIRECTORY (${totalCount} CONNECTORS)`);
   console.log('============================================================\n');
 
   const categories = {};
@@ -1122,8 +1190,11 @@ function runMcpMarketplace(filterCategory) {
     console.log('------------------------------------------------------------');
     for (const p of items) {
       const envStr = p.requiredEnv.length > 0 ? `[Requires: ${p.requiredEnv.join(', ')}]` : '[Zero Config]';
+      const transport = p.config.url
+        ? `Remote URL: ${p.config.url}`
+        : `Command: ${p.config.command} ${(p.config.args || []).slice(0, 3).join(' ')}...`;
       console.log(`  • \x1b[36m${p.name.padEnd(16)}\x1b[0m ${p.description}`);
-      console.log(`    \x1b[90mCommand: ${p.config.command} ${(p.config.args || []).slice(0, 3).join(' ')}...  ${envStr}\x1b[0m`);
+      console.log(`    \x1b[90m${transport}  ${envStr}\x1b[0m`);
     }
     console.log('');
   }
@@ -1279,6 +1350,8 @@ function runDoctor() {
     { name: 'graphify', cmd: 'graphify --help', install: 'uv tool install graphifyy' },
     { name: 'osv-scanner', cmd: 'osv-scanner --version', install: 'brew install osv-scanner' },
     { name: 'semgrep', cmd: 'semgrep --version', install: 'brew install semgrep' },
+    { name: 'd2 (optional)', cmd: 'd2 --version', install: 'brew install d2' },
+    { name: 'mmdc (optional)', cmd: 'mmdc --version', install: 'npm install -g @mermaid-js/mermaid-cli' },
     { name: 'bun', cmd: 'bun --version', install: 'curl -fsSL https://bun.sh/install | bash' },
     { name: 'node', cmd: 'node --version', install: 'https://nodejs.org' },
     { name: 'git', cmd: 'git --version', install: 'brew install git' }
@@ -1401,7 +1474,7 @@ function runSkills(skillArg) {
   }
 
   console.log('\n============================================================');
-  console.log('  KOBEANSKILLS — 9 PROGRESSIVE ENTRY SKILLS');
+  console.log(`  KOBEANSKILLS — ${skillDirs.length} PROGRESSIVE ENTRY SKILLS`);
   console.log('============================================================\n');
 
   for (const d of skillDirs) {
@@ -1464,15 +1537,15 @@ function runRoles(roleArg) {
     }
 
     console.error(`[error] Role or phase '${roleArg}' not found.`);
-    console.log('Phases: discover, spec, plan, build, verify, ship');
+    console.log('Phases: discover, document, spec, plan, build, verify, ship');
     process.exit(1);
   }
 
   console.log('\n============================================================');
-  console.log('  KOBEANSKILLS — 22 SPECIALIST ROLE CONTRACTS');
+  console.log(`  KOBEANSKILLS — ${roleFiles.length} SPECIALIST ROLE CONTRACTS`);
   console.log('============================================================\n');
 
-  const phases = ['discover', 'spec', 'plan', 'build', 'verify', 'ship'];
+  const phases = ['discover', 'document', 'spec', 'plan', 'plan-build', 'design', 'build', 'build-ship', 'debug', 'verify', 'ship'];
   const grouped = {};
   for (const p of phases) grouped[p] = [];
 
@@ -1480,10 +1553,12 @@ function runRoles(roleArg) {
     const content = fs.readFileSync(path.join(rolesDir, f), 'utf-8');
     const phaseMatch = content.match(/^phase:\s*(\S+)/m);
     const titleMatch = content.match(/^title:\s*(.+)/m);
+    const modelMatch = content.match(/^model_tier:\s*(\S+)/m);
     const phase = phaseMatch ? phaseMatch[1].trim() : 'other';
     const roleObj = {
       name: path.basename(f, '.yaml'),
-      title: titleMatch ? titleMatch[1].trim() : ''
+      title: titleMatch ? titleMatch[1].trim() : '',
+      modelTier: modelMatch ? modelMatch[1].trim() : 'pro'
     };
     if (!grouped[phase]) grouped[phase] = [];
     grouped[phase].push(roleObj);
@@ -1493,7 +1568,8 @@ function runRoles(roleArg) {
     if (items.length === 0) continue;
     console.log(`\x1b[1m\x1b[33m▶ ${phase.toUpperCase()} (${items.length})\x1b[0m`);
     for (const r of items) {
-      console.log(`  • \x1b[36m${r.name.padEnd(18)}\x1b[0m ${r.title}`);
+      const tierBadge = `[${r.modelTier}]`.padEnd(7);
+      console.log(`  • \x1b[36m${r.name.padEnd(18)}\x1b[0m \x1b[90m${tierBadge}\x1b[0m ${r.title}`);
     }
     console.log('');
   }
@@ -1528,7 +1604,7 @@ function runPlaybooks(query) {
   }
 
   console.log('\n============================================================');
-  console.log('  KOBEANSKILLS — 9 CORE ENGINEERING PLAYBOOKS');
+  console.log('  KOBEANSKILLS — 10 CORE ENGINEERING PLAYBOOKS');
   console.log('============================================================\n');
 
   const titles = [
@@ -1540,7 +1616,8 @@ function runPlaybooks(query) {
     { num: 6, name: 'Technical Debt & Simplification', trigger: '"Simplify auth service with ponytail economy"' },
     { num: 7, name: 'Codebase Cartography & Onboarding', trigger: '"Onboard this repo and generate CONTEXT.md"' },
     { num: 8, name: 'Universal Cross-Agent MCP Manager', trigger: 'bunx kobean-skills mcp add <connector>' },
-    { num: 9, name: 'Git Branching, Rebase & PR Workflows', trigger: '"Create branch, rebase on main, and open PR"' }
+    { num: 9, name: 'Git Branching, Rebase & PR Workflows', trigger: '"Create branch, rebase on main, and open PR"' },
+    { num: 10, name: 'Codebase Atlas, Business Workflows & Diagrams', trigger: '"Use kb-atlas to document all business logic and draw interactive workflow diagrams"' }
   ];
 
   for (const t of titles) {
@@ -1552,11 +1629,348 @@ function runPlaybooks(query) {
   console.log('  bunx kobean-skills playbook <number-or-name>  (e.g., bunx kobean-skills playbook git)\n');
 }
 
+// Atlas Deterministic Verification, Drift & PR Materiality Helpers
+function walkAtlasFiles(dir, out = []) {
+  if (!fs.existsSync(dir)) return out;
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      walkAtlasFiles(full, out);
+    } else if (/\.(md|html|json)$/i.test(entry.name)) {
+      out.push(full);
+    }
+  }
+  return out;
+}
+
+function getLineCount(filePath, cache) {
+  if (cache.has(filePath)) return cache.get(filePath);
+  const text = fs.readFileSync(filePath, 'utf-8');
+  const count = text.length === 0 ? 0 : text.split(/\r?\n/).length;
+  cache.set(filePath, count);
+  return count;
+}
+
+function extractCitationsFromText(content, docRel) {
+  const cites = [];
+  // Matches: [path/to/file.ext:10-45], [path/to/Dockerfile:10], or [path/to/file.ext#L10-L45]
+  const mdRe = /\[((?:[A-Za-z0-9._@\-/]+\/[A-Za-z0-9._@\-]+|[A-Za-z0-9._@\-]+\.[A-Za-z0-9]+))(?::(\d+)(?:-(\d+))?|#L(\d+)(?:-L?(\d+))?)\]/g;
+  let m;
+  while ((m = mdRe.exec(content)) !== null) {
+    const start = m[2] || m[4] ? Number(m[2] || m[4]) : null;
+    const end = m[3] || m[5] ? Number(m[3] || m[5]) : start;
+    cites.push({ doc: docRel, path: m[1], line: start, endLine: end });
+  }
+  return cites;
+}
+
+function collectSourcesFromManifest(obj, docRel, cites) {
+  if (!obj || typeof obj !== 'object') return;
+  if (Array.isArray(obj)) {
+    for (const item of obj) collectSourcesFromManifest(item, docRel, cites);
+    return;
+  }
+  if (Array.isArray(obj.sources)) {
+    for (const s of obj.sources) {
+      if (s && typeof s.path === 'string' && s.path.trim()) {
+        const line = typeof s.line === 'number' ? s.line : null;
+        const endLine = typeof s.end_line === 'number' ? s.end_line : (typeof s.endLine === 'number' ? s.endLine : line);
+        cites.push({ doc: docRel, path: s.path.trim(), line, endLine });
+      }
+    }
+  }
+  for (const val of Object.values(obj)) {
+    if (val && typeof val === 'object') collectSourcesFromManifest(val, docRel, cites);
+  }
+}
+
+function runAtlasCheck(cliArgs) {
+  const isStrict = cliArgs.includes('--strict');
+  const isJson = cliArgs.includes('--json');
+  const dirArg = cliArgs.find((a) => !a.startsWith('-')) || '.';
+  const targetDir = path.resolve(process.cwd(), dirArg);
+  const atlasDir = path.join(targetDir, 'docs', 'atlas');
+
+  if (!fs.existsSync(atlasDir)) {
+    const emptyRes = { status: 'missing', atlasDir, citationsChecked: 0, errors: [], staleDocs: [] };
+    if (isJson) {
+      console.log(JSON.stringify(emptyRes, null, 2));
+    } else {
+      console.log(`[info] No docs/atlas/ directory found in ${targetDir}. Run kb-atlas to generate one.`);
+    }
+    return;
+  }
+
+  const files = walkAtlasFiles(atlasDir);
+  const citations = [];
+  const errors = [];
+  let pinnedSha = null;
+
+  for (const f of files) {
+    const docRel = path.relative(targetDir, f);
+    const content = fs.readFileSync(f, 'utf-8');
+    if (f.endsWith('.json')) {
+      try {
+        const parsed = JSON.parse(content);
+        if (path.basename(f) === 'atlas.json') {
+          pinnedSha = parsed.headSha || (parsed.repository && parsed.repository.headSha) || null;
+        }
+        collectSourcesFromManifest(parsed, docRel, citations);
+      } catch (err) {
+        errors.push({ doc: docRel, code: 'invalid_json', message: `Malformed JSON: ${err.message}` });
+      }
+    } else if (f.endsWith('.html')) {
+      const m = content.match(/<script[^>]*id=["']atlas-manifest["'][^>]*>([\s\S]*?)<\/script>/i);
+      if (m) {
+        try {
+          const parsed = JSON.parse(m[1].trim());
+          if (!pinnedSha && parsed.repository && parsed.repository.headSha && !/^0+$/.test(parsed.repository.headSha)) {
+            pinnedSha = parsed.repository.headSha;
+          }
+          collectSourcesFromManifest(parsed, docRel, citations);
+        } catch (err) {
+          errors.push({ doc: docRel, code: 'invalid_manifest', message: `Malformed atlas-manifest JSON: ${err.message}` });
+        }
+      }
+    } else if (f.endsWith('.md')) {
+      citations.push(...extractCitationsFromText(content, docRel));
+    }
+  }
+
+  const lineCache = new Map();
+  const realRoot = fs.realpathSync(targetDir);
+  const citedByFile = new Map();
+
+  for (const c of citations) {
+    const normalized = c.path.replace(/^\.\//, '');
+    const candidate = path.resolve(realRoot, normalized);
+    if (candidate !== realRoot && !candidate.startsWith(realRoot + path.sep)) {
+      errors.push({ doc: c.doc, code: 'path_escape', path: c.path, message: `Path escapes repository root: ${c.path}` });
+      continue;
+    }
+    if (!fs.existsSync(candidate) || !fs.statSync(candidate).isFile()) {
+      errors.push({ doc: c.doc, code: 'missing_file', path: c.path, message: `Cited file does not exist: ${c.path}` });
+      continue;
+    }
+    const realCandidate = fs.realpathSync(candidate);
+    if (realCandidate !== realRoot && !realCandidate.startsWith(realRoot + path.sep)) {
+      errors.push({ doc: c.doc, code: 'path_escape', path: c.path, message: `Symlink target escapes repository root: ${c.path}` });
+      continue;
+    }
+    if (!citedByFile.has(normalized)) citedByFile.set(normalized, new Set());
+    citedByFile.get(normalized).add(c.doc);
+
+    if (c.line !== null) {
+      const totalLines = getLineCount(candidate, lineCache);
+      const endLine = c.endLine !== null ? c.endLine : c.line;
+      if (c.line < 1 || endLine < c.line || endLine > totalLines) {
+        errors.push({
+          doc: c.doc,
+          code: 'line_out_of_bounds',
+          path: c.path,
+          line: c.line,
+          endLine,
+          totalLines,
+          message: `Line range ${c.line}-${endLine} out of bounds for ${c.path} (${totalLines} lines)`
+        });
+      }
+    }
+  }
+
+  // Freshness / git drift detection
+  const staleDocsSet = new Set();
+  const changedSincePin = [];
+  if (pinnedSha && /^[0-9a-f]{7,40}$/i.test(pinnedSha) && !/^0+$/.test(pinnedSha)) {
+    const diffRes = spawnSync('git', ['-C', targetDir, 'diff', '--name-only', `${pinnedSha}..HEAD`], { encoding: 'utf-8' });
+    if (diffRes.status === 0 && diffRes.stdout) {
+      for (const rel of diffRes.stdout.split(/\r?\n/).map((s) => s.trim()).filter(Boolean)) {
+        changedSincePin.push(rel);
+        if (citedByFile.has(rel)) {
+          for (const d of citedByFile.get(rel)) staleDocsSet.add(d);
+        }
+      }
+    }
+    const statusRes = spawnSync('git', ['-C', targetDir, 'status', '--porcelain'], { encoding: 'utf-8' });
+    if (statusRes.status === 0 && statusRes.stdout) {
+      for (const line of statusRes.stdout.split(/\r?\n/).filter(Boolean)) {
+        const rel = line.slice(3).trim();
+        if (citedByFile.has(rel)) {
+          if (!changedSincePin.includes(rel)) changedSincePin.push(rel);
+          for (const d of citedByFile.get(rel)) staleDocsSet.add(d);
+        }
+      }
+    }
+  }
+
+  const staleDocs = Array.from(staleDocsSet).sort();
+  const status = errors.length > 0 ? 'failed' : staleDocs.length > 0 ? 'stale' : 'fresh';
+  const result = { status, pinnedSha, filesScanned: files.length, citationsChecked: citations.length, errors, staleDocs, changedSincePin };
+
+  if (isJson) {
+    console.log(JSON.stringify(result, null, 2));
+  } else {
+    console.log(`==> KobeanSkills Atlas Check (${targetDir})`);
+    console.log(`  Files scanned:     ${files.length}`);
+    console.log(`  Citations checked: ${citations.length}`);
+    console.log(`  Pinned HEAD SHA:   ${pinnedSha || 'none'}`);
+    if (errors.length > 0) {
+      console.log(`\n  [✗] ${errors.length} citation/manifest error(s):`);
+      for (const e of errors) console.log(`      - ${e.doc}: ${e.message}`);
+    } else {
+      console.log(`  [✓] 0 broken file or line-range citations`);
+    }
+    if (staleDocs.length > 0) {
+      console.log(`\n  [!] ${staleDocs.length} stale atlas doc(s) impacted since ${pinnedSha.slice(0, 8)}:`);
+      for (const d of staleDocs) console.log(`      - ${d}`);
+    } else {
+      console.log(`  [✓] Freshness: up to date`);
+    }
+  }
+
+  if (errors.length > 0 || (isStrict && staleDocs.length > 0)) {
+    process.exit(1);
+  }
+}
+
+function runAtlasStatus(cliArgs) {
+  const dirArg = cliArgs.find((a) => !a.startsWith('-')) || '.';
+  const targetDir = path.resolve(process.cwd(), dirArg);
+  const atlasDir = path.join(targetDir, 'docs', 'atlas');
+  const graphJson = path.join(targetDir, 'graphify-out', 'graph.json');
+  const atlasJsonPath = path.join(atlasDir, 'atlas.json');
+
+  console.log(`==> KobeanSkills Atlas Status (${targetDir})\n`);
+  console.log(`  Graphify AST index: ${fs.existsSync(graphJson) ? '[✓] graphify-out/graph.json present' : '[ ] Not generated (run: graphify)'}`);
+  if (!fs.existsSync(atlasDir)) {
+    console.log(`  Atlas directory:    [ ] docs/atlas/ not created yet (trigger kb-atlas)`);
+    return;
+  }
+
+  const files = walkAtlasFiles(atlasDir);
+  const mdCount = files.filter((f) => f.endsWith('.md')).length;
+  const htmlCount = files.filter((f) => f.endsWith('.html')).length;
+  let headSha = 'unpinned';
+  if (fs.existsSync(atlasJsonPath)) {
+    try {
+      const parsed = JSON.parse(fs.readFileSync(atlasJsonPath, 'utf-8'));
+      headSha = parsed.headSha || (parsed.repository && parsed.repository.headSha) || 'unpinned';
+    } catch {}
+  }
+  const curHead = spawnSync('git', ['-C', targetDir, 'rev-parse', 'HEAD'], { encoding: 'utf-8' });
+  const currentSha = curHead.status === 0 ? curHead.stdout.trim() : 'unknown';
+
+  console.log(`  Atlas directory:    [✓] docs/atlas/ (${mdCount} Markdown, ${htmlCount} HTML explainers)`);
+  console.log(`  Pinned SHA:         ${headSha}`);
+  console.log(`  Current HEAD SHA:   ${currentSha}`);
+}
+
+function runAtlasPrCheck(cliArgs) {
+  const isJson = cliArgs.includes('--json');
+  let baseRef = null;
+  let dirArg = '.';
+  for (let i = 0; i < cliArgs.length; i++) {
+    if (cliArgs[i] === '--base' && cliArgs[i + 1]) {
+      baseRef = cliArgs[++i];
+    } else if (!cliArgs[i].startsWith('-')) {
+      dirArg = cliArgs[i];
+    }
+  }
+  const targetDir = path.resolve(process.cwd(), dirArg);
+
+  const candidates = baseRef ? [baseRef] : ['origin/main', 'origin/master', 'main', 'master', 'HEAD~1'];
+  let resolvedBase = null;
+  let mergeBase = null;
+  for (const ref of candidates) {
+    const mb = spawnSync('git', ['-C', targetDir, 'merge-base', ref, 'HEAD'], { encoding: 'utf-8' });
+    if (mb.status === 0 && mb.stdout.trim()) {
+      resolvedBase = ref;
+      mergeBase = mb.stdout.trim();
+      break;
+    }
+  }
+
+  if (!mergeBase) {
+    const out = { material: false, base: baseRef, reasons: ['Could not resolve git merge-base'], changedFiles: [] };
+    console.log(isJson ? JSON.stringify(out, null, 2) : '[info] Could not resolve git merge-base for PR materiality check.');
+    return;
+  }
+
+  const numstat = spawnSync('git', ['-C', targetDir, 'diff', '--numstat', `${mergeBase}...HEAD`], { encoding: 'utf-8' });
+  const rows = (numstat.stdout || '').split(/\r?\n/).filter(Boolean);
+  const prodFiles = [];
+  let prodLines = 0;
+  const reasons = new Set();
+  const topModules = new Set();
+
+  const nonMaterialRe = /(^docs\/|\.md$|^tests?\/|\.test\.|\.spec\.|lock\.json$|yarn\.lock$|pnpm-lock\.yaml$|\.eslintrc|\.prettierrc)/i;
+  const schemaRe = /(migrations\/|schema\.prisma|\.sql$|drizzle|alembic)/i;
+  const contractRe = /(contracts\/|openapi|swagger|\.graphql$|\.proto$)/i;
+  const workflowRe = /(queue|worker|workflow|state[-_]?machine|cron|webhook|scheduler|retry)/i;
+
+  for (const row of rows) {
+    const parts = row.split('\t');
+    if (parts.length < 3) continue;
+    const added = parts[0] === '-' ? 0 : Number(parts[0]) || 0;
+    const deleted = parts[1] === '-' ? 0 : Number(parts[1]) || 0;
+    const file = parts[2];
+
+    if (schemaRe.test(file)) reasons.add('database-schema-or-migration');
+    if (contractRe.test(file)) reasons.add('api-or-event-contract');
+    if (nonMaterialRe.test(file)) continue;
+
+    prodFiles.push(file);
+    prodLines += added + deleted;
+    if (workflowRe.test(file)) reasons.add('async-workflow-or-state-transition');
+    const segs = file.split('/');
+    topModules.add(segs.length > 1 ? segs.slice(0, 2).join('/') : segs[0]);
+  }
+
+  if (topModules.size >= 3 && prodLines >= 40) {
+    reasons.add(`cross-module-topology (${topModules.size} modules, ${prodLines} lines)`);
+  }
+
+  const material = reasons.size > 0;
+  const payload = {
+    material,
+    base: resolvedBase,
+    mergeBase,
+    productionFilesChanged: prodFiles.length,
+    productionLinesChanged: prodLines,
+    reasons: Array.from(reasons),
+    changedFiles: prodFiles
+  };
+
+  if (isJson) {
+    console.log(JSON.stringify(payload, null, 2));
+  } else {
+    console.log(`==> KobeanSkills PR Materiality Check (${resolvedBase} -> HEAD)`);
+    console.log(`  Material for PR diagram: ${material ? 'YES (offer kb-atlas pr-delta)' : 'NO (stay silent)'}`);
+    console.log(`  Production delta:        ${prodFiles.length} file(s), ${prodLines} line(s)`);
+    if (reasons.size > 0) console.log(`  Triggers:                ${Array.from(reasons).join(', ')}`);
+  }
+}
+
 // Router
 switch (command) {
   case 'init':
     runInit(args[1]);
     break;
+  case 'atlas': {
+    const subAction = args[1] || 'check';
+    const rest = args.slice(2);
+    if (subAction === 'check' || subAction === 'verify') {
+      runAtlasCheck(rest);
+    } else if (subAction === 'status') {
+      runAtlasStatus(rest);
+    } else if (subAction === 'pr-check' || subAction === 'pr') {
+      runAtlasPrCheck(rest);
+    } else {
+      console.error(`[error] Unknown atlas subcommand: ${subAction}`);
+      console.log('Available atlas actions: check, status, pr-check');
+      process.exit(1);
+    }
+    break;
+  }
   case 'pr-template':
   case 'pr':
     runPrTemplate(args[1]);

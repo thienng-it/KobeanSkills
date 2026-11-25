@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# lint.sh — Structural, schema, write-isolation, and security linter for KobeanSkills
+# lint.sh — Structural, schema, write-isolation, model-tier, and security linter for KobeanSkills
 
 set -euo pipefail
 
@@ -17,8 +17,8 @@ warnings = []
 
 # 1. Validate entry skills
 skill_dirs = sorted(glob.glob("skills/kb-*"))
-if len(skill_dirs) != 9:
-    errors.append(f"Expected 9 entry skills in skills/kb-*, found {len(skill_dirs)}")
+if len(skill_dirs) != 10:
+    errors.append(f"Expected 10 entry skills in skills/kb-*, found {len(skill_dirs)}")
 
 for sdir in skill_dirs:
     folder_name = os.path.basename(sdir)
@@ -52,18 +52,21 @@ for root_dir in ("skills", "roles", "references", "templates"):
             if f.endswith((".sh", ".py", ".js", ".mjs", ".ts")) and not f.endswith(".d.ts"):
                 errors.append(f"Disallowed executable script in content directory: {os.path.join(root, f)}")
 
-# 3. Validate 22 role contracts
+# 3. Validate 24 role contracts
 role_files = sorted(glob.glob("roles/*.yaml"))
-if len(role_files) != 22:
-    errors.append(f"Expected 22 role YAML files in roles/, found {len(role_files)}")
+if len(role_files) != 24:
+    errors.append(f"Expected 24 role YAML files in roles/, found {len(role_files)}")
 
 required_keys = [
-    "name:", "title:", "phase:", "subagent_type:", "mission:",
+    "name:", "title:", "phase:", "subagent_type:", "model_tier:", "mission:",
     "reads:", "writes:", "forbidden:", "tools:", "doctrine:",
     "references:", "done_when:", "output:"
 ]
 
-parallel_build_roles = {"frontend", "backend", "mobile", "ml-engineer", "data-engineer", "devops"}
+parallel_build_roles = {
+    "frontend", "content-architect", "backend", "mobile",
+    "ml-engineer", "data-engineer", "devops"
+}
 build_writes = {}
 
 for rfile in role_files:
@@ -78,6 +81,9 @@ for rfile in role_files:
     st = re.search(r"^subagent_type:\s*(\S+)", text, re.M)
     if not st or st.group(1) not in ("self", "research"):
         errors.append(f"{rfile}: subagent_type must be 'self' or 'research'")
+    mt = re.search(r"^model_tier:\s*(\S+)", text, re.M)
+    if not mt or mt.group(1) not in ("flash_lite", "flash", "pro"):
+        errors.append(f"{rfile}: model_tier must be 'flash_lite', 'flash', or 'pro'")
     if st and st.group(1) == "research":
         if "writes: []" not in text:
             errors.append(f"{rfile}: read-only 'research' role must have 'writes: []'")
@@ -109,6 +115,15 @@ for i in range(len(roles_list)):
         if overlap:
             errors.append(f"Write glob collision between parallel build roles {r1} and {r2}: {overlap}")
 
+# 4. Validate interactive atlas HTML template structure
+atlas_tpl = os.path.join("templates", "atlas-explainer.html")
+if not os.path.isfile(atlas_tpl):
+    errors.append(f"Missing required template: {atlas_tpl}")
+else:
+    tpl_text = open(atlas_tpl, encoding="utf-8").read()
+    if 'id="atlas-manifest"' not in tpl_text:
+        errors.append(f"{atlas_tpl}: missing embedded <script id=\"atlas-manifest\" type=\"application/json\"> block")
+
 if errors:
     print("LINT FAILED:")
     for e in errors:
@@ -117,3 +132,5 @@ if errors:
 
 print(f"LINT PASSED: {len(skill_dirs)} entry skills, {len(role_files)} role contracts, 0 write collisions, 0 unsafe scripts.")
 PY
+
+node --check "${REPO_DIR}/bin/kobean.js"

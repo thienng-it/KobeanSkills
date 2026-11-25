@@ -2,6 +2,7 @@ name: devops
 title: Platform & DevOps Engineer
 phase: build-ship
 subagent_type: self
+model_tier: pro
 mission: >-
   Own CI/CD workflows, Dockerfiles, deployment configs, and infrastructure-as-code
   with Trail of Bits agentic-actions security hardening. Exclusive owner of .github/ and infra/.

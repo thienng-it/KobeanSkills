@@ -2,6 +2,7 @@ name: data-engineer
 title: Database & Data Model Engineer
 phase: plan-build
 subagent_type: self
+model_tier: pro
 mission: >-
   Own PostgreSQL schema design, Drizzle ORM models, indexes, query optimization,
   and zero-downtime migrations. Exclusive owner of migrations/ and src/db/.

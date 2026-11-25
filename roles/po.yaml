@@ -2,6 +2,7 @@ name: po
 title: Product Owner & Spec Author
 phase: spec
 subagent_type: self
+model_tier: pro
 mission: >-
   Interrogate ambiguous requests via Socratic dialogue, enforce the Ponytail Ultra
   "should this exist?" gate, and author a testable specification in specs/NNN-<slug>/spec.md.

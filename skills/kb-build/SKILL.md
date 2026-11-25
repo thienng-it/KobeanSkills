@@ -3,8 +3,8 @@ name: kb-build
 description: >-
   Subagent-driven TDD implementation and Ponytail minimal-change execution. Use
   to execute ready tasks from .beads/ (or direct coding/refactoring requests)
-  across frontend, backend, data-engineer, mobile, ml-engineer, devops, and
-  refactorer roles.
+  across frontend, content-architect, backend, data-engineer, mobile,
+  ml-engineer, devops, and refactorer roles.
 ---
 
 # `kb-build` — TDD Execution & Ponytail Build Loop
@@ -14,7 +14,8 @@ Distilled from **Superpowers** (`subagent-driven-development`, `test-driven-deve
 ## Active Roles Loaded by This Skill
 - [`~/.kobean/roles/data-engineer.yaml`](../../roles/data-engineer.yaml) (`migrations/**`, `src/db/**`)
 - [`~/.kobean/roles/backend.yaml`](../../roles/backend.yaml) (`src/server/**`, `tests/server/**`)
-- [`~/.kobean/roles/frontend.yaml`](../../roles/frontend.yaml) (`src/web/**`, `app/**`, `tests/web/**`)
+- [`~/.kobean/roles/frontend.yaml`](../../roles/frontend.yaml) (`src/web/**`, `src/components/**`, `src/App.tsx`, `app/**`)
+- [`~/.kobean/roles/content-architect.yaml`](../../roles/content-architect.yaml) (`src/data/**`, `src/content/**`, `src/test/data.test.ts`)
 - [`~/.kobean/roles/mobile.yaml`](../../roles/mobile.yaml) (`src/mobile/**`, `apps/mobile/**`)
 - [`~/.kobean/roles/ml-engineer.yaml`](../../roles/ml-engineer.yaml) (`src/ml/**`, `evals/**`)
 - [`~/.kobean/roles/devops.yaml`](../../roles/devops.yaml) (`.github/**`, `Dockerfile*`, `infra/**`)
@@ -34,11 +35,12 @@ Distilled from **Superpowers** (`subagent-driven-development`, `test-driven-deve
    bd update <id> --claim
    ```
 
-### 2. Load Role Contract & Stack References
-1. Identify the role owning the task (`data-engineer`, `backend`, `frontend`, `mobile`, `ml-engineer`, `devops`, or `refactorer`).
-2. Read `.kobean/roles/<role>.yaml` (or `~/.kobean/roles/<role>.yaml`) and every file listed in its `references:` array under `.kobean/references/stacks/` (or `~/.kobean/references/stacks/`).
-3. **If multiple independent tasks with non-overlapping `writes` globs are ready simultaneously** (e.g., `backend` in `src/server/**` and `frontend` in `src/web/**` after `contracts/` is locked):
-   - Dispatch parallel subagents using `invoke_subagent(TypeName="self", Role="<Role Title>", Prompt="...")`, passing each subagent its claimed Bead ID, role contract path, and `spec.md`/`plan.md` paths.
+### 2. Load Role Contract, Stack References & Select Model/Orchestration
+1. Identify the role owning the task (`data-engineer`, `backend`, `frontend`, `content-architect`, `mobile`, `ml-engineer`, `devops`, or `refactorer`).
+2. Read `.kobean/roles/<role>.yaml` (or `~/.kobean/roles/<role>.yaml`) and every file listed in its `references:` array under `.kobean/references/stacks/`.
+3. **If multiple independent tasks with non-overlapping `writes` globs are ready simultaneously** (e.g., `frontend` in `src/components/**` and `content-architect` in `src/data/**`, or `backend` in `src/server/**` and `frontend` in `src/web/**`):
+   - For 2–3 tasks: dispatch parallel subagents using `invoke_subagent(TypeName="self", Role="<Role Title>", Model="pro", Prompt="...")`, passing each subagent its claimed Bead ID, role contract path, and `spec.md`/`plan.md` paths.
+   - For $N \ge 3$ homogeneous or staged slices (e.g., building multiple language packs across CEFR A1–C2): use `run_workflow` to fan out in parallel and aggregate test verification.
 
 ### 3. Enforce Red-Green-Refactor TDD (Mandatory)
 For every task:
@@ -62,4 +64,3 @@ For every task:
 End every build turn with **1–2 lines**:
 - **Skipped / Cut:** What optional complexity or unrequested flexibility was intentionally omitted.
 - **Residual Risk:** Any edge case or operational constraint the user should know.
-

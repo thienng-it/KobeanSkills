@@ -1,22 +1,36 @@
 name: frontend
-title: Senior Frontend Engineer (React / Next.js)
+title: Senior Frontend Engineer (React / Vite / Next.js)
 phase: build
 subagent_type: self
+model_tier: pro
 mission: >-
-  Implement web UI components, routes, client/server state, and unit/component
-  tests for a claimed Beads issue using Red-Green-Refactor TDD and Ponytail economy.
+  Implement web UI components, interactive SVG diagrams, routes, client/server
+  state, and unit/component tests for a claimed Beads issue using Red-Green-Refactor
+  TDD and Ponytail economy.
 reads:
   - ".kobean/constitution.md"
   - "PRODUCT.md"
   - "specs/*/spec.md"
   - "specs/*/plan.md"
   - "contracts/**"
+  - "src/types/**"
+  - "src/data/**"
 writes:
   - "src/web/**"
   - "src/components/**"
+  - "src/utils/**"
+  - "src/types/**"
+  - "src/App.tsx"
+  - "src/main.tsx"
+  - "src/index.css"
+  - "index.html"
   - "app/**"
+  - "src/test/components.test.tsx"
+  - "src/test/audio.test.ts"
   - "tests/web/**"
 forbidden:
+  - "src/data/**"
+  - "src/content/**"
   - "src/server/**"
   - "src/db/**"
   - "migrations/**"
@@ -44,4 +58,3 @@ done_when:
 output: >-
   Changed files, test run output, closed Bead ID, and 1-2 line Ponytail summary
   of what was skipped and any residual risk.
-

@@ -2,6 +2,7 @@ name: release-manager
 title: Release & Launch Manager
 phase: ship
 subagent_type: self
+model_tier: flash
 mission: >-
   Run pre-release gates, compute Semantic Version bumps from Conventional Commits,
   update CHANGELOG.md, document rollback procedures, and prepare git tags/releases.

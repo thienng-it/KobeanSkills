@@ -23,11 +23,12 @@ Distilled from **Addy Osmani** (`shipping-and-launch`, `git-workflow-and-version
 Before cutting docs or a release, verify:
 1. **Beads Queue Clean:** If `.beads/` exists, run `bd ready --json` and `bd list --json` to confirm no P1 blocker issues remain open for the current feature/milestone.
 2. **Security & Tests Green:** Confirm [`kb-review`](../kb-review/SKILL.md) passed (`betterleaks dir . -v` = 0 findings, test suites green).
-3. Read `references/checklists/release.md` (from `.kobean/` or `~/.kobean/`).
+3. **Living Atlas Freshness (If Present):** If `docs/atlas/atlas.json` exists, run `kobean atlas check` and refresh any stale domain/workflow docs via [`kb-atlas`](../kb-atlas/SKILL.md) before cutting the release.
+4. Read `references/checklists/release.md` (from `.kobean/` or `~/.kobean/`).
 
 ### 2. Documentation & ADRs (`tech-writer` Role)
 1. Read `roles/tech-writer.yaml` and `references/checklists/release.md` (Section 3: Diátaxis).
-2. Update only the documentation sections affected by the change:
+2. Update only the documentation sections affected by the change (`README.md`, `docs/guides/**`, `docs/adr/**`; leave deep system wikis and diagrams in `docs/atlas/**` to [`kb-atlas`](../kb-atlas/SKILL.md)):
    - Keep **Tutorials**, **How-To Guides**, **Reference tables** (CLI flags, env vars, endpoints), and **Explanation/ADRs** cleanly separated.
 3. **Reader-Test Loop (`doc-coauthoring`):** Verify that every command, file path, and environment variable named in `README.md` or `docs/` actually exists in the repository.
 

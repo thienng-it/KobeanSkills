@@ -1,0 +1,1813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <script>
+    try {
+      var stored = localStorage.getItem('kobean-atlas-scheme');
+      if (stored === 'light' || stored === 'dark') {
+        document.querySelector('meta[name="color-scheme"]').content = stored;
+      }
+    } catch (_) {}
+  </script>
+  <title>KobeanSkills — Interactive Architecture &amp; Workflow Workbench</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: light-dark(#F4F6F9, #070A0F);
+      --canvas-bg: light-dark(#F8FAFC, #090D14);
+      --surface: light-dark(#FFFFFF, #0F1520);
+      --surface-elevated: light-dark(#F1F5F9, #151D2C);
+      --surface-hover: light-dark(#E2E8F0, #1C2638);
+      --lane-bg: light-dark(rgba(241, 245, 249, 0.72), rgba(15, 21, 32, 0.66));
+      --lane-border: light-dark(rgba(148, 163, 184, 0.34), rgba(51, 65, 85, 0.52));
+      --border: light-dark(#CBD5E1, #232F44);
+      --border-subtle: light-dark(#E2E8F0, #192233);
+      --ink: light-dark(#0F172A, #F1F5F9);
+      --muted: light-dark(#475569, #94A3B8);
+      --dim: light-dark(#64748B, #64748B);
+      --focus: light-dark(#0284C7, #38BDF8);
+      --focus-glow: light-dark(rgba(2, 132, 199, 0.18), rgba(56, 189, 248, 0.24));
+
+      /* Semantic Architecture Layer Tokens (Dark / Light Parity) */
+      --frontend-stroke: light-dark(#0284C7, #38BDF8);
+      --frontend-fill: light-dark(#F0F9FF, #0C1F33);
+      --frontend-tint: light-dark(#E0F2FE, rgba(56, 189, 248, 0.16));
+
+      --api-stroke: light-dark(#0891B2, #06B6D4);
+      --api-fill: light-dark(#ECFEFF, #0B222B);
+      --api-tint: light-dark(#CFFAFE, rgba(6, 182, 212, 0.16));
+
+      --backend-stroke: light-dark(#059669, #10B981);
+      --backend-fill: light-dark(#ECFDF5, #0B231D);
+      --backend-tint: light-dark(#D1FAE5, rgba(16, 185, 129, 0.16));
+
+      --database-stroke: light-dark(#7C3AED, #A78BFA);
+      --database-fill: light-dark(#F5F3FF, #191530);
+      --database-tint: light-dark(#EDE9FE, rgba(167, 139, 250, 0.16));
+
+      --security-stroke: light-dark(#E11D48, #F43F5E);
+      --security-fill: light-dark(#FFF1F2, #29121B);
+      --security-tint: light-dark(#FFE4E6, rgba(244, 63, 94, 0.16));
+
+      --queue-stroke: light-dark(#D97706, #F59E0B);
+      --queue-fill: light-dark(#FFFBEB, #271D0E);
+      --queue-tint: light-dark(#FEF3C7, rgba(245, 158, 11, 0.16));
+
+      --external-stroke: light-dark(#475569, #94A3B8);
+      --external-fill: light-dark(#F8FAFC, #141B26);
+      --external-tint: light-dark(#E2E8F0, rgba(148, 163, 184, 0.16));
+
+      --grid-dot: light-dark(rgba(15, 23, 42, 0.08), rgba(148, 163, 184, 0.12));
+      --radius: 10px;
+      --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --sans: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+    }
+
+    :root:has(> head > meta[name="color-scheme"][content="dark"]) { color-scheme: dark; }
+    :root:has(> head > meta[name="color-scheme"][content="light"]) { color-scheme: light; }
+
+    :root[data-blueprint="true"] {
+      --bg: #071326;
+      --canvas-bg: #08172E;
+      --surface: #0C1E3B;
+      --surface-elevated: #12294D;
+      --surface-hover: #183461;
+      --lane-bg: rgba(12, 30, 59, 0.65);
+      --lane-border: rgba(100, 149, 214, 0.35);
+      --border: #25487A;
+      --border-subtle: #19345C;
+      --ink: #E8F2FF;
+      --muted: #9AC0EB;
+      --dim: #688FBF;
+      --frontend-fill: #0E2749;
+      --api-fill: #0D2A45;
+      --backend-fill: #0D2B38;
+      --database-fill: #18254C;
+      --security-fill: #2B1B38;
+      --queue-fill: #2B2625;
+      --external-fill: #132540;
+      --grid-dot: rgba(154, 192, 235, 0.2);
+      --radius: 4px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--ink);
+      height: 100dvh;
+      overflow: hidden;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    @media (max-width: 1024px) {
+      body {
+        height: auto;
+        min-height: 100dvh;
+        overflow: auto;
+      }
+    }
+
+    .visually-hidden:where(:not(:focus-within, :active)) {
+      position: absolute !important;
+      clip-path: inset(50%) !important;
+      overflow: hidden !important;
+      width: 1px !important;
+      height: 1px !important;
+      margin: -1px !important;
+      padding: 0 !important;
+      border: 0 !important;
+      white-space: nowrap !important;
+    }
+
+    .skip-link:focus {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      z-index: 200;
+      padding: 8px 14px;
+      background: var(--surface);
+      color: var(--ink);
+      border: 2px solid var(--focus);
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 12px 20px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      z-index: 20;
+    }
+
+    .brand-block { display: flex; align-items: center; gap: 12px; }
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: var(--queue-tint);
+      border: 1.5px solid var(--queue-stroke);
+      color: var(--queue-stroke);
+      font-family: var(--mono);
+      font-weight: 800;
+      font-size: 0.95rem;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+
+    .title-block { display: flex; flex-direction: column; gap: 2px; }
+    .title-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    h1 { font-family: var(--mono); font-size: 1rem; font-weight: 700; letter-spacing: -0.02em; }
+
+    .meta-pill {
+      font-family: var(--mono);
+      font-size: 0.69rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface-elevated);
+      color: var(--muted);
+    }
+    .meta-pill.verified {
+      border-color: var(--backend-stroke);
+      color: var(--backend-stroke);
+      background: var(--backend-tint);
+    }
+
+    .subtitle { font-size: 0.8rem; color: var(--muted); max-width: 78ch; }
+
+    /* Accessible Composite Toolbar (modern-web-guidance: toolbar) */
+    [role="toolbar"] {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    [role="toolbar"] [role="group"] {
+      display: inline-flex;
+      align-items: center;
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2px;
+      gap: 2px;
+    }
+
+    [role="separator"][aria-orientation="vertical"] {
+       inline-size: 0;
+      block-size: 20px;
+      border-inline-start: 1px solid var(--border);
+      margin-inline: 2px;
+    }
+
+    button {
+      font-family: var(--mono);
+      font-size: 0.73rem;
+      font-weight: 600;
+      min-inline-size: 32px;
+      min-block-size: 30px;
+      padding: 4px 10px;
+      border-radius: calc(var(--radius) - 3px);
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    @media (pointer: coarse) {
+      button { min-inline-size: 40px; min-block-size: 40px; }
+    }
+
+    @media (hover: hover) {
+      button:hover { color: var(--ink); background: var(--surface-hover); }
+    }
+
+    button:focus-visible, [tabindex="0"]:focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    button[aria-pressed="true"] {
+      background: var(--surface);
+      color: var(--ink);
+      border-color: var(--focus);
+      box-shadow: inset 0 0 0 1px var(--focus);
+    }
+
+    @media (forced-colors: active) {
+      button[aria-pressed="true"] {
+        border-color: Highlight;
+        color: ButtonText;
+      }
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 376px;
+      min-height: 0;
+    }
+    @media (max-width: 1024px) {
+      .workspace { grid-template-columns: 1fr; grid-template-rows: minmax(480px, 64vh) auto; }
+    }
+
+    main {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      background-color: var(--canvas-bg);
+      background-image: radial-gradient(var(--grid-dot) 1.1px, transparent 1.1px);
+      background-size: 22px 22px;
+      overflow: hidden;
+    }
+
+    /* Interactive Stepper & Search Strip */
+    .subbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 8px 16px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border-subtle);
+      z-index: 10;
+    }
+
+    .stepper-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      flex: 1;
+      min-width: 260px;
+    }
+
+    .step-pills {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .step-dot {
+      min-inline-size: 26px;
+      min-block-size: 26px;
+      padding: 0 7px;
+      border-radius: 999px;
+      font-size: 0.68rem;
+      border: 1px solid var(--border);
+      background: var(--surface-elevated);
+      color: var(--muted);
+    }
+    .step-dot[aria-pressed="true"] {
+      background: var(--frontend-tint);
+      border-color: var(--focus);
+      color: var(--ink);
+    }
+
+    .flow-banner {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .flow-banner strong { color: var(--ink); font-family: var(--mono); }
+
+    .search-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 3px 10px;
+    }
+    .search-box input {
+      border: none;
+      background: transparent;
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 0.74rem;
+      width: 176px;
+      outline: none;
+    }
+    .search-box input::placeholder { color: var(--dim); }
+    .search-box:focus-within { border-color: var(--focus); }
+
+    .stage-wrap {
+      flex: 1;
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+      padding: 14px 18px;
+      cursor: grab;
+      user-select: none;
+      position: relative;
+    }
+    .stage-wrap.dragging { cursor: grabbing; }
+
+    svg#atlas-svg {
+      width: 100%;
+      max-width: 1360px;
+      max-height: 100%;
+      height: auto;
+      display: block;
+      transform-origin: center center;
+    }
+
+    .legend {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px 16px;
+      padding: 9px 16px;
+      background: var(--surface);
+      border-top: 1px solid var(--border-subtle);
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      z-index: 10;
+    }
+    .legend-items { display: flex; flex-wrap: wrap; gap: 8px 14px; }
+    .legend-item { display: inline-flex; align-items: center; gap: 6px; }
+    .legend-swatch { width: 10px; height: 10px; border-radius: 3px; border: 1.8px solid currentColor; }
+    .legend-hint { color: var(--dim); font-size: 0.68rem; }
+
+    /* Right Semantic Passport Drawer */
+    aside.passport {
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      padding: 18px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    @media (max-width: 1024px) {
+      aside.passport { border-left: none; border-top: 1px solid var(--border); }
+    }
+
+    .passport-header {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .passport-kicker {
+      font-family: var(--mono);
+      font-size: 0.66rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+    .passport h2 { font-family: var(--mono); font-size: 1rem; font-weight: 700; }
+
+    .passport-badges { display: flex; flex-wrap: wrap; gap: 6px; }
+
+    .passport-card {
+      padding: 12px 14px;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius);
+      background: var(--surface-elevated);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .passport-copy { font-size: 0.82rem; color: var(--muted); line-height: 1.55; }
+
+    .role-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+    .role-chip {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      padding: 2px 7px;
+      border-radius: 5px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--ink);
+    }
+
+    .cite-list, .edge-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+    }
+
+    .cite-btn, .neighbor-btn {
+      width: 100%;
+      justify-content: space-between;
+      align-items: center;
+      text-align: left;
+      padding: 7px 9px;
+      gap: 8px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--ink);
+      font-weight: 500;
+      font-size: 0.71rem;
+      white-space: normal;
+    }
+    .cite-btn > span:first-child, .neighbor-btn > span:first-child {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+    .cite-hint { color: var(--dim); font-size: 0.65rem; flex-shrink: 0; }
+
+    .badge-tag {
+      display: inline-block;
+      flex-shrink: 0;
+      font-family: var(--mono);
+      font-size: 0.63rem;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      text-transform: uppercase;
+    }
+    .badge-extracted { color: var(--backend-stroke); border-color: var(--backend-stroke); background: var(--backend-tint); }
+    .badge-inferred { color: var(--queue-stroke); border-color: var(--queue-stroke); background: var(--queue-tint); }
+
+    /* SVG Diagram Choreography & Signal Flow */
+    .node-group { cursor: pointer; }
+    .node-group.dimmed { opacity: 0.22; }
+    .edge-group.dimmed { opacity: 0.12; }
+
+    .node-group.selected rect.node-card {
+      filter: drop-shadow(0 0 10px var(--focus-glow));
+    }
+
+    @keyframes signalDash {
+      to { stroke-dashoffset: -28; }
+    }
+
+    .signal-pulse {
+      stroke-dasharray: 6 22;
+      animation: signalDash 1.35s linear infinite;
+      pointer-events: none;
+    }
+
+    :root[data-motion="off"] .signal-pulse { display: none; }
+
+    @media (prefers-reduced-motion: no-preference) {
+      button, .node-group, .edge-group {
+        transition: opacity 180ms ease, border-color 140ms ease, background-color 140ms ease;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .signal-pulse { animation: none !important; display: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <a href="#atlas-stage" class="skip-link visually-hidden">Skip to interactive architecture canvas</a>
+  <p role="status" class="visually-hidden" id="live-announcer"></p>
+
+  <header>
+    <div class="brand-block">
+      <div class="brand-mark" aria-hidden="true">K</div>
+      <div class="title-block">
+        <div class="title-row">
+          <h1 id="atlas-title">KobeanSkills — Engineering Workflow Atlas</h1>
+          <span class="meta-pill verified">97 Citations Verified</span>
+          <span class="meta-pill" id="atlas-sha">HEAD: 939ac3d1 (dirty)</span>
+        </div>
+        <p class="subtitle" id="atlas-summary">Switch architecture lenses, step through animated workflow traces, drag/zoom the canvas, or inspect any component's Semantic Passport.</p>
+      </div>
+    </div>
+
+    <div role="toolbar" focusgroup="toolbar wrap" aria-label="Architecture workbench controls" aria-controls="atlas-stage">
+      <div role="group" aria-label="Architecture lens">
+        <button type="button" data-view="pipeline" aria-pressed="true">1. Lifecycle Pipeline</button>
+        <button type="button" data-view="distribution" aria-pressed="false">2. Multi-Agent &amp; MCP</button>
+        <button type="button" data-view="escalation" aria-pressed="false">3. Escalation &amp; Roles</button>
+      </div>
+
+      <span role="separator" aria-orientation="vertical"></span>
+
+      <div role="group" aria-label="Canvas zoom">
+        <button type="button" id="btn-zoom-out" aria-label="Zoom out" title="Zoom out">-</button>
+        <button type="button" id="btn-zoom-reset" title="Reset zoom and pan">100%</button>
+        <button type="button" id="btn-zoom-in" aria-label="Zoom in" title="Zoom in">+</button>
+      </div>
+
+      <span role="separator" aria-orientation="vertical"></span>
+
+      <div role="group" aria-label="Display options">
+        <button type="button" id="btn-motion" aria-pressed="true" title="Toggle animated signal pulses">Signal Flow</button>
+        <button type="button" id="btn-scheme" aria-pressed="false" title="Override system light/dark color scheme">Invert Theme</button>
+        <button type="button" id="btn-blueprint" aria-pressed="false" title="Toggle engineering blueprint surface">Blueprint</button>
+        <button type="button" id="btn-export" title="Download clean SVG snapshot">Export SVG</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="workspace">
+    <main id="atlas-stage" tabindex="-1">
+      <div class="subbar">
+        <div class="stepper-wrap">
+          <div role="toolbar" focusgroup="toolbar wrap" aria-label="Workflow trace playback">
+            <div role="group" aria-label="Playback">
+              <button type="button" id="btn-play" aria-pressed="false" title="Auto-play workflow steps">Play</button>
+              <button type="button" id="btn-flow-prev" title="Previous step">Prev</button>
+              <button type="button" id="btn-flow-next" title="Next step">Next</button>
+              <button type="button" id="btn-flow-reset" aria-pressed="true" title="Show full diagram">All</button>
+            </div>
+            <div role="group" aria-label="Step jump" class="step-pills" id="step-pills"></div>
+          </div>
+          <div class="flow-banner" id="flow-status" aria-live="polite">
+            <strong>All Stages:</strong> Full source-verified topology active.
+          </div>
+        </div>
+
+        <label class="search-box" aria-label="Filter components">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input type="search" id="node-search" placeholder="Filter skills / roles..." autocomplete="off">
+        </label>
+      </div>
+
+      <div class="stage-wrap" id="stage-wrap">
+        <svg id="atlas-svg" viewBox="0 0 1440 680" role="img" aria-labelledby="atlas-title atlas-summary"></svg>
+      </div>
+
+      <div class="legend" aria-label="Semantic layer legend">
+        <div class="legend-items">
+          <span class="legend-item" style="color: var(--frontend-stroke)"><span class="legend-swatch"></span>Ingress &amp; Routing</span>
+          <span class="legend-item" style="color: var(--api-stroke)"><span class="legend-swatch"></span>Spec, AST &amp; Contracts</span>
+          <span class="legend-item" style="color: var(--backend-stroke)"><span class="legend-swatch"></span>TDD Build, UI &amp; Atlas</span>
+          <span class="legend-item" style="color: var(--database-stroke)"><span class="legend-swatch"></span>State (.beads / MCP)</span>
+          <span class="legend-item" style="color: var(--security-stroke)"><span class="legend-swatch"></span>Hard Security Gates</span>
+          <span class="legend-item" style="color: var(--queue-stroke)"><span class="legend-swatch"></span>Git, Release &amp; Runtimes</span>
+        </div>
+        <span class="legend-hint">Drag canvas to pan · Ctrl/⌘ + Scroll to zoom · Click neighbor chips to hop</span>
+      </div>
+    </main>
+
+    <aside class="passport" aria-label="Semantic Passport Inspector">
+      <div class="passport-header">
+        <div class="passport-kicker">Semantic Passport</div>
+        <h2 id="passport-title">kb-router</h2>
+        <div class="passport-badges" id="passport-badges"></div>
+      </div>
+
+      <div class="passport-card">
+        <div class="passport-kicker">Architectural Responsibility</div>
+        <p class="passport-copy" id="passport-explanation"></p>
+      </div>
+
+      <div class="passport-card" id="passport-roles-card">
+        <div class="passport-kicker">Active Specialist Roles</div>
+        <div class="role-chips" id="passport-roles"></div>
+      </div>
+
+      <div class="passport-card">
+        <div class="passport-kicker">Pinned Source Citations (Click to Copy)</div>
+        <ul class="cite-list" id="passport-sources"></ul>
+      </div>
+
+      <div class="passport-card">
+        <div class="passport-kicker">Connected Handoffs (Click to Jump)</div>
+        <ul class="edge-list" id="passport-edges"></ul>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Deterministic Multi-View Manifest Verified by `kobean atlas check` -->
+  <script id="atlas-manifest" type="application/json">
+  {
+    "schemaVersion": "1.1",
+    "title": "KobeanSkills — Engineering Workflow Atlas",
+    "mode": "multi-view-workbench",
+    "repository": {
+      "url": "https://github.com/thienng-it/KobeanSkills.git",
+      "headSha": "939ac3d10dc143a4860a3f8e151a515fb9da816b",
+      "dirty": true
+    },
+    "views": {
+      "pipeline": {
+        "title": "KobeanSkills — End-to-End Engineering Pipeline",
+        "summary": "Complete 11-stage engineering flow: Global Rules -> kb-router -> Ponytail Fast-Path vs. Spec/Plan/Beads -> TDD/UI/Atlas/Debug -> Hard Review Gates (with BLOCK loop) -> Git & Ship.",
+        "viewBox": "0 0 1440 680",
+        "lanes": [
+          { "x": 18, "y": 20, "w": 292, "h": 640, "label": "01 · INGRESS & DISCOVERY" },
+          { "x": 366, "y": 20, "w": 292, "h": 640, "label": "02 · SPEC, PLAN & TASK GRAPH" },
+          { "x": 714, "y": 20, "w": 304, "h": 640, "label": "03 · EXECUTION, UI & ATLAS" },
+          { "x": 1094, "y": 20, "w": 328, "h": 640, "label": "04 · HARD GATES & DELIVERY" }
+        ],
+        "nodes": [
+          {
+            "id": "rules",
+            "label": "AGENTS Rules + CLI",
+            "sublabel": "init · install · MCP sync",
+            "badge": "ZERO-DEP",
+            "tier": "Node Stdlib",
+            "category": "frontend",
+            "x": 38, "y": 92, "w": 252, "h": 92,
+            "roles": ["devops", "release-manager"],
+            "explanation": "Unpacks .kobean/ into target repos or ~/.kobean/, wires Antigravity, Claude Code, and Codex discovery symlinks, and syncs .kobean/mcp.json across all 4 agent formats with zero credential leaks.",
+            "sources": [
+              { "path": "rules/AGENTS.md", "line": 1, "end_line": 19 },
+              { "path": "bin/kobean.js", "line": 781, "end_line": 864 },
+              { "path": "scripts/install.sh", "line": 133, "end_line": 179 }
+            ]
+          },
+          {
+            "id": "router",
+            "label": "kb-router",
+            "sublabel": "Intent Classifier · L1-L4",
+            "badge": "10 SKILLS",
+            "tier": "Orchestrator",
+            "category": "frontend",
+            "x": 38, "y": 292, "w": 252, "h": 96,
+            "roles": ["all 24 specialist roles"],
+            "explanation": "Entry-point orchestrator: loads doctrine.md, checks CONTEXT.md and .beads/, classifies intent (onboard, atlas, feature, ui, bugfix, review, git, ship), and routes trivial <20-line edits to the Ponytail Fast-Path.",
+            "sources": [
+              { "path": "skills/kb-router/SKILL.md", "line": 14, "end_line": 55 },
+              { "path": "doctrine.md", "line": 92, "end_line": 121 }
+            ]
+          },
+          {
+            "id": "explorer",
+            "label": "explorer + graphify",
+            "sublabel": "Tree-Sitter AST · CONTEXT.md",
+            "badge": "READ-ONLY",
+            "tier": "Tier 2 · flash",
+            "category": "api",
+            "x": 38, "y": 496, "w": 252, "h": 92,
+            "roles": ["explorer"],
+            "explanation": "Deterministic Tree-sitter AST scout (writes: []): maps repository entry points, module communities, shared utilities, and test commands before planning, debugging, or atlas synthesis.",
+            "sources": [
+              { "path": "roles/explorer.yaml", "line": 1, "end_line": 27 },
+              { "path": "doctrine.md", "line": 24, "end_line": 25 }
+            ]
+          },
+          {
+            "id": "spec",
+            "label": "kb-spec",
+            "sublabel": "Ponytail Ultra & STRIDE",
+            "badge": "3 ROLES",
+            "tier": "Tier 3 · pro",
+            "category": "api",
+            "x": 386, "y": 92, "w": 252, "h": 92,
+            "roles": ["po", "threat-modeler", "explorer"],
+            "explanation": "Questions whether the feature needs to exist (Ponytail Ultra), asks 1-4 Socratic clarifications, writes Given/When/Then spec.md, and authors STRIDE/DREAD threats.md when touching auth, payments, or PII.",
+            "sources": [
+              { "path": "skills/kb-spec/SKILL.md", "line": 21, "end_line": 55 },
+              { "path": "roles/po.yaml", "line": 1, "end_line": 39 },
+              { "path": "roles/threat-modeler.yaml", "line": 1, "end_line": 35 }
+            ]
+          },
+          {
+            "id": "plan",
+            "label": "kb-plan",
+            "sublabel": "Contracts · Schema · plan.md",
+            "badge": "3 ROLES",
+            "tier": "Tier 3 · pro",
+            "category": "api",
+            "x": 386, "y": 292, "w": 252, "h": 96,
+            "roles": ["architect", "api-designer", "data-engineer"],
+            "explanation": "Designs OpenAPI/Zod contracts and PostgreSQL migrations first, assigns strictly non-overlapping role write globs in plan.md, runs cross-artifact consistency checks, and seeds .beads/.",
+            "sources": [
+              { "path": "skills/kb-plan/SKILL.md", "line": 21, "end_line": 68 },
+              { "path": "roles/architect.yaml", "line": 1, "end_line": 47 },
+              { "path": "roles/api-designer.yaml", "line": 1, "end_line": 35 }
+            ]
+          },
+          {
+            "id": "beads",
+            "label": "Beads (.beads/)",
+            "sublabel": "Single Task Graph via bd",
+            "badge": "STATE SSOT",
+            "tier": "bd CLI",
+            "category": "database",
+            "x": 386, "y": 496, "w": 252, "h": 92,
+            "roles": ["architect", "all build roles"],
+            "explanation": "Version-controlled task graph replacing ad-hoc tasks.md/progress.md files. Enforces dependency blockers via bd dep add, atomic claiming via bd update --claim, and test-backed closure.",
+            "sources": [
+              { "path": "doctrine.md", "line": 23, "end_line": 24 },
+              { "path": "skills/kb-plan/SKILL.md", "line": 44, "end_line": 65 }
+            ]
+          },
+          {
+            "id": "ui_atlas",
+            "label": "kb-ui & kb-atlas",
+            "sublabel": "Impeccable UI · 10-Mode Atlas",
+            "badge": "VISUAL QA",
+            "tier": "Tier 3 · pro",
+            "category": "backend",
+            "x": 736, "y": 92, "w": 260, "h": 92,
+            "roles": ["ui-ux-designer", "frontend", "atlas-architect", "a11y-auditor"],
+            "explanation": "kb-ui builds anti-slop product UIs and bold landing pages verified in Chrome DevTools; kb-atlas generates AST-grounded business wikis, 10-mode diagrams, and HTML explainers verified via kobean atlas check.",
+            "sources": [
+              { "path": "skills/kb-ui/SKILL.md", "line": 21, "end_line": 50 },
+              { "path": "skills/kb-atlas/SKILL.md", "line": 1, "end_line": 77 },
+              { "path": "roles/atlas-architect.yaml", "line": 1, "end_line": 48 }
+            ]
+          },
+          {
+            "id": "build",
+            "label": "kb-build (8 Roles)",
+            "sublabel": "Red-Green-Refactor + Ponytail",
+            "badge": "ISOLATED",
+            "tier": "Tier 3 · pro",
+            "category": "backend",
+            "x": 736, "y": 292, "w": 260, "h": 96,
+            "roles": ["backend", "frontend", "content-architect", "data-engineer", "mobile", "ml-engineer", "devops", "refactorer"],
+            "explanation": "Executes ready Beads tasks with mandatory failing test first (Red), smallest complete implementation reusing existing code (Green), and lint-verified disjoint write globs across parallel subagents.",
+            "sources": [
+              { "path": "skills/kb-build/SKILL.md", "line": 14, "end_line": 66 },
+              { "path": "scripts/lint.sh", "line": 66, "end_line": 117 }
+            ]
+          },
+          {
+            "id": "debug",
+            "label": "kb-debug",
+            "sublabel": "Reproduce · Trace · Reg Test",
+            "badge": "IRON LAW",
+            "tier": "Tier 3 · pro",
+            "category": "backend",
+            "x": 736, "y": 496, "w": 260, "h": 92,
+            "roles": ["debugger"],
+            "explanation": "Forbids guessing patches: reproduces the failure first, traces all callers via graphify, writes a failing regression test, and applies the smallest root-cause fix.",
+            "sources": [
+              { "path": "skills/kb-debug/SKILL.md", "line": 1, "end_line": 52 },
+              { "path": "roles/debugger.yaml", "line": 1, "end_line": 39 }
+            ]
+          },
+          {
+            "id": "review",
+            "label": "kb-review (6 Gates)",
+            "sublabel": "betterleaks · AppSec · QA",
+            "badge": "HARD GATE",
+            "tier": "pro + flash",
+            "category": "security",
+            "x": 1122, "y": 182, "w": 272, "h": 100,
+            "roles": ["reviewer", "security", "supply-chain", "performance", "a11y-auditor", "qa"],
+            "explanation": "Blocks shipping on any secret hit (betterleaks), unmitigated CVE (osv-scanner), Trail of Bits AppSec CRITICAL/HIGH finding (fp-check), broken atlas citation, or failing test suite.",
+            "sources": [
+              { "path": "skills/kb-review/SKILL.md", "line": 14, "end_line": 81 },
+              { "path": "doctrine.md", "line": 80, "end_line": 84 },
+              { "path": "roles/security.yaml", "line": 1, "end_line": 32 }
+            ]
+          },
+          {
+            "id": "ship",
+            "label": "kb-git & kb-ship",
+            "sublabel": "Rebase · pr-check · SemVer",
+            "badge": "RELEASE",
+            "tier": "Tier 2 · flash",
+            "category": "queue",
+            "x": 1122, "y": 428, "w": 272, "h": 100,
+            "roles": ["release-manager", "tech-writer", "devops"],
+            "explanation": "Enforces Conventional Commits, linear rebase on main, materiality-gated PR delta diagrams (kobean atlas pr-check), Diataxis docs, SemVer CHANGELOG.md, and explicit rollback runbooks.",
+            "sources": [
+              { "path": "skills/kb-git/SKILL.md", "line": 20, "end_line": 103 },
+              { "path": "skills/kb-ship/SKILL.md", "line": 20, "end_line": 50 },
+              { "path": "bin/kobean.js", "line": 1867, "end_line": 1960 }
+            ]
+          }
+        ],
+        "edges": [
+          { "from": "rules", "to": "router", "label": "Auto-Route", "provenance": "EXTRACTED", "pts": [[164, 184], [164, 292]], "lp": [164, 238] },
+          { "from": "explorer", "to": "router", "label": "CONTEXT.md", "provenance": "EXTRACTED", "pts": [[164, 496], [164, 388]], "lp": [164, 442] },
+          { "from": "router", "to": "spec", "label": "Feature", "provenance": "EXTRACTED", "pts": [[290, 322], [344, 322], [344, 138], [386, 138]], "lp": [338, 210] },
+          { "from": "spec", "to": "plan", "label": "spec.md", "provenance": "EXTRACTED", "pts": [[512, 184], [512, 292]], "lp": [512, 238] },
+          { "from": "plan", "to": "beads", "label": "bd create", "provenance": "EXTRACTED", "pts": [[512, 388], [512, 496]], "lp": [512, 442] },
+          { "from": "beads", "to": "build", "label": "bd ready", "provenance": "EXTRACTED", "pts": [[638, 542], [687, 542], [687, 352], [736, 352]], "lp": [687, 442] },
+          { "from": "router", "to": "ui_atlas", "label": "UI / Atlas", "provenance": "EXTRACTED", "pts": [[290, 302], [326, 302], [326, 60], [866, 60], [866, 92]], "lp": [596, 60] },
+          { "from": "router", "to": "build", "label": "Fast-Path <20L", "provenance": "EXTRACTED", "pts": [[290, 354], [344, 354], [344, 618], [687, 618], [687, 324], [736, 324]], "lp": [512, 618] },
+          { "from": "router", "to": "debug", "label": "Bugfix", "provenance": "EXTRACTED", "pts": [[290, 376], [326, 376], [326, 646], [866, 646], [866, 588]], "lp": [780, 646] },
+          { "from": "ui_atlas", "to": "review", "label": "Visual QA", "provenance": "EXTRACTED", "pts": [[996, 138], [1059, 138], [1059, 206], [1122, 206]], "lp": [1059, 138] },
+          { "from": "build", "to": "review", "label": "TDD Diff", "provenance": "EXTRACTED", "pts": [[996, 324], [1059, 324], [1059, 234], [1122, 234]], "lp": [1059, 286] },
+          { "from": "debug", "to": "review", "label": "Reg Test", "provenance": "EXTRACTED", "pts": [[996, 542], [1059, 542], [1059, 260], [1122, 260]], "lp": [1059, 442] },
+          { "from": "review", "to": "build", "label": "BLOCK Fix", "provenance": "INFERRED", "alert": true, "pts": [[1122, 276], [1082, 276], [1082, 370], [996, 370]], "lp": [1059, 370] },
+          { "from": "review", "to": "ship", "label": "PASS (0 Leaks)", "provenance": "EXTRACTED", "pts": [[1258, 282], [1258, 428]], "lp": [1258, 355] }
+        ],
+        "flowSteps": [
+          { "title": "1. Bootstrap & AST Orientation", "detail": "AGENTS rules route the prompt into kb-router while explorer + graphify supply deterministic AST context.", "nodes": ["rules", "explorer", "router"], "edges": [0, 1] },
+          { "title": "2. Ponytail Fast-Path (<20 Lines)", "detail": "Unambiguous 1-file fixes bypass Spec/Plan ceremony and execute inline with TDD + Review.", "nodes": ["router", "build", "review"], "edges": [7, 10] },
+          { "title": "3. Spec & STRIDE Threat Modeling", "detail": "Multi-file features run Ponytail Ultra existence checks, Socratic Q&A, spec.md, and STRIDE threats.md.", "nodes": ["router", "spec"], "edges": [2] },
+          { "title": "4. Contract-First Plan & Beads Graph", "detail": "kb-plan locks OpenAPI/DB schemas, assigns disjoint write globs, and populates .beads/ via bd.", "nodes": ["spec", "plan", "beads"], "edges": [3, 4] },
+          { "title": "5. Parallel TDD Role Execution", "detail": "Isolated specialist roles claim unblocked Beads tasks and execute Red-Green-Refactor.", "nodes": ["beads", "build"], "edges": [5] },
+          { "title": "6. UI Craft, Atlas & Root-Cause Debug", "detail": "Dedicated pipelines handle Impeccable UI, 10-mode codebase diagrams (kb-atlas), and regression debugging.", "nodes": ["router", "ui_atlas", "debug", "review"], "edges": [6, 8, 9, 11] },
+          { "title": "7. Hard Security Gates & Release", "detail": "kb-review blocks on secrets/CVEs/test failures (looping back to fix) or passes to kb-git & kb-ship.", "nodes": ["build", "review", "ship"], "edges": [10, 12, 13] }
+        ]
+      },
+      "distribution": {
+        "title": "KobeanSkills — Cross-Agent Distribution & Zero-Drift MCP Sync",
+        "summary": "How one air-gapped .kobean/ engine and .kobean/mcp.json (41 presets) synchronize Antigravity, Gemini CLI, Claude Code, and Codex CLI without leaking secrets.",
+        "viewBox": "0 0 1440 680",
+        "lanes": [
+          { "x": 18, "y": 20, "w": 292, "h": 640, "label": "01 · AIR-GAPPED ENGINE" },
+          { "x": 384, "y": 20, "w": 292, "h": 640, "label": "02 · CLI & SINGLE SSOT" },
+          { "x": 750, "y": 20, "w": 304, "h": 640, "label": "03 · AUTO-WIRED AGENT RUNTIMES" },
+          { "x": 1128, "y": 20, "w": 294, "h": 640, "label": "04 · DIAGNOSTICS & SECURITY" }
+        ],
+        "nodes": [
+          {
+            "id": "core_bundle",
+            "label": "Declarative Core",
+            "sublabel": "10 Skills · 24 Roles · Doctrine",
+            "badge": "0 SCRIPTS",
+            "tier": "Air-Gapped",
+            "category": "frontend",
+            "x": 38, "y": 130, "w": 252, "h": 96,
+            "roles": ["architect", "security"],
+            "explanation": "Pure Markdown, YAML, and HTML templates distilled from 25 pinned upstream repos (SOURCES.md). Validated by lint.sh to guarantee zero executable scripts inside content folders.",
+            "sources": [
+              { "path": "SOURCES.md", "line": 1, "end_line": 56 },
+              { "path": "scripts/lint.sh", "line": 48, "end_line": 54 }
+            ]
+          },
+          {
+            "id": "mcp_catalog",
+            "label": "MCP Marketplace",
+            "sublabel": "41 Vetted Connectors · 7 Cats",
+            "badge": "STDIO + HTTP",
+            "tier": "Zero Config",
+            "category": "database",
+            "x": 38, "y": 410, "w": 252, "h": 96,
+            "roles": ["devops", "atlas-architect"],
+            "explanation": "Built-in catalog spanning Databases (10), DevTools (8), Web (4), Search (5), Cloud (4), Productivity (7), and Architecture & Diagrams (drawio, deepwiki, gitdiagram).",
+            "sources": [
+              { "path": "bin/kobean.js", "line": 18, "end_line": 561 }
+            ]
+          },
+          {
+            "id": "init_install",
+            "label": "kobean init",
+            "sublabel": "install · bunx · npx · curl",
+            "badge": "ZERO-CLONE",
+            "tier": "Node + Bash",
+            "category": "api",
+            "x": 404, "y": 130, "w": 252, "h": 96,
+            "roles": ["devops"],
+            "explanation": "Unpacks .kobean/ into any repo in ~50ms or links ~/.kobean/ machine-wide, creating cross-platform symlinks (with Windows junction/copy fallback) and PR templates.",
+            "sources": [
+              { "path": "bin/kobean.js", "line": 758, "end_line": 873 },
+              { "path": "setup.sh", "line": 44, "end_line": 69 }
+            ]
+          },
+          {
+            "id": "mcp_ssot",
+            "label": ".kobean/mcp.json",
+            "sublabel": "${ENV_VAR} Template SSOT",
+            "badge": "NO SECRETS",
+            "tier": "Declarative JSON",
+            "category": "database",
+            "x": 404, "y": 410, "w": 252, "h": 96,
+            "roles": ["security", "devops"],
+            "explanation": "Single source of truth storing ${GITHUB_TOKEN} / ${DATABASE_URL} placeholders instead of raw keys, exported deterministically by runMcpSync() into JSON and Codex TOML.",
+            "sources": [
+              { "path": "bin/kobean.js", "line": 944, "end_line": 1113 }
+            ]
+          },
+          {
+            "id": "agy_gemini",
+            "label": "Antigravity & Gemini",
+            "sublabel": ".agents/ · GEMINI.md · Plugin",
+            "badge": "NATIVE",
+            "tier": "Agent Runtime",
+            "category": "backend",
+            "x": 772, "y": 90, "w": 260, "h": 92,
+            "roles": ["all 24 roles"],
+            "explanation": "Receives .agents/skills/kb-*, .agents/rules/kobean.md, .agents/mcp.json, .gemini/mcp_config.json, and ~/.gemini/config/plugins/kobean-skills.",
+            "sources": [
+              { "path": "bin/kobean.js", "line": 803, "end_line": 815 },
+              { "path": "bin/kobean.js", "line": 1037, "end_line": 1051 }
+            ]
+          },
+          {
+            "id": "claude_cli",
+            "label": "Claude Code CLI",
+            "sublabel": ".claude/skills · .mcp.json",
+            "badge": "NATIVE",
+            "tier": "Agent Runtime",
+            "category": "backend",
+            "x": 772, "y": 292, "w": 260, "h": 92,
+            "roles": ["all 24 roles"],
+            "explanation": "Receives .claude/skills/kb-* symlinks, CLAUDE.md routing doctrine, and root .mcp.json synchronized on every kobean mcp add/remove/sync.",
+            "sources": [
+              { "path": "bin/kobean.js", "line": 808, "end_line": 830 },
+              { "path": "bin/kobean.js", "line": 1032, "end_line": 1036 }
+            ]
+          },
+          {
+            "id": "codex_cli",
+            "label": "OpenAI Codex CLI",
+            "sublabel": ".codex/skills · config.toml",
+            "badge": "TOML SYNC",
+            "tier": "Agent Runtime",
+            "category": "backend",
+            "x": 772, "y": 494, "w": 260, "h": 92,
+            "roles": ["all 24 roles"],
+            "explanation": "Receives .codex/skills/kb-*, AGENTS.md, and non-destructive [mcp_servers.*] TOML serialization preserving user settings in .codex/config.toml.",
+            "sources": [
+              { "path": "bin/kobean.js", "line": 944, "end_line": 999 },
+              { "path": "bin/kobean.js", "line": 1053, "end_line": 1063 }
+            ]
+          },
+          {
+            "id": "doctor_lint",
+            "label": "doctor + lint + atlas",
+            "sublabel": "Env Audit · Citations · Drift",
+            "badge": "VERIFIER",
+            "tier": "CI + Local",
+            "category": "security",
+            "x": 1148, "y": 286, "w": 254, "h": 104,
+            "roles": ["security", "qa", "atlas-architect"],
+            "explanation": "Audits missing .env variables without exposing secrets, validates 10 skills / 24 roles / 0 write collisions (lint.sh), and checks docs/atlas citations + git SHA drift.",
+            "sources": [
+              { "path": "bin/kobean.js", "line": 1344, "end_line": 1409 },
+              { "path": "bin/kobean.js", "line": 1687, "end_line": 1833 },
+              { "path": "scripts/lint.sh", "line": 1, "end_line": 136 }
+            ]
+          }
+        ],
+        "edges": [
+          { "from": "core_bundle", "to": "init_install", "label": "Unpack", "provenance": "EXTRACTED", "pts": [[290, 178], [404, 178]], "lp": [347, 178] },
+          { "from": "mcp_catalog", "to": "mcp_ssot", "label": "mcp add", "provenance": "EXTRACTED", "pts": [[290, 458], [404, 458]], "lp": [347, 458] },
+          { "from": "init_install", "to": "agy_gemini", "label": ".agents/", "provenance": "EXTRACTED", "pts": [[656, 152], [714, 152], [714, 122], [772, 122]], "lp": [714, 108] },
+          { "from": "init_install", "to": "claude_cli", "label": ".claude/", "provenance": "EXTRACTED", "pts": [[656, 178], [714, 178], [714, 322], [772, 322]], "lp": [714, 245] },
+          { "from": "init_install", "to": "codex_cli", "label": ".codex/", "provenance": "EXTRACTED", "pts": [[656, 204], [696, 204], [696, 524], [772, 524]], "lp": [714, 395] },
+          { "from": "mcp_ssot", "to": "agy_gemini", "label": "JSON Sync", "provenance": "EXTRACTED", "pts": [[656, 434], [732, 434], [732, 154], [772, 154]], "lp": [714, 195] },
+          { "from": "mcp_ssot", "to": "claude_cli", "label": ".mcp.json", "provenance": "EXTRACTED", "pts": [[656, 458], [732, 458], [732, 354], [772, 354]], "lp": [714, 458] },
+          { "from": "mcp_ssot", "to": "codex_cli", "label": "TOML Sync", "provenance": "EXTRACTED", "pts": [[656, 482], [714, 482], [714, 558], [772, 558]], "lp": [714, 575] },
+          { "from": "agy_gemini", "to": "doctor_lint", "label": "Link Check", "provenance": "EXTRACTED", "pts": [[1032, 136], [1090, 136], [1090, 314], [1148, 314]], "lp": [1090, 210] },
+          { "from": "claude_cli", "to": "doctor_lint", "label": "Sync Audit", "provenance": "EXTRACTED", "pts": [[1032, 338], [1148, 338]], "lp": [1090, 338] },
+          { "from": "codex_cli", "to": "doctor_lint", "label": "Env Check", "provenance": "EXTRACTED", "pts": [[1032, 540], [1090, 540], [1090, 364], [1148, 364]], "lp": [1090, 465] }
+        ],
+        "flowSteps": [
+          { "title": "1. Air-Gapped Engine Packaging", "detail": "10 skills, 24 role YAMLs, and doctrine are validated by lint.sh with zero executable scripts.", "nodes": ["core_bundle", "init_install"], "edges": [0] },
+          { "title": "2. Zero-Clone Cross-Agent Wiring", "detail": "kobean init / install.sh symlinks skills and rules into Antigravity, Claude Code, and Codex CLI.", "nodes": ["init_install", "agy_gemini", "claude_cli", "codex_cli"], "edges": [2, 3, 4] },
+          { "title": "3. Zero-Drift MCP Synchronization", "detail": ".kobean/mcp.json exports JSON and TOML configs simultaneously while keeping ${ENV_VAR} placeholders.", "nodes": ["mcp_catalog", "mcp_ssot", "agy_gemini", "claude_cli", "codex_cli"], "edges": [1, 5, 6, 7] },
+          { "title": "4. Health, Secret & Citation Audit", "detail": "kobean doctor, lint.sh, and atlas check verify symlinks, env vars, write isolation, and citations.", "nodes": ["agy_gemini", "claude_cli", "codex_cli", "doctor_lint"], "edges": [8, 9, 10] }
+        ]
+      },
+      "escalation": {
+        "title": "KobeanSkills — Multi-Agent Escalation Ladder & Smart Model Routing",
+        "summary": "How kb-router matches cognitive complexity to model tiers (flash_lite, flash, pro) and escalates cleanly from L1 Inline -> L2 Subagents -> L3 Workflows -> L4 Swarm.",
+        "viewBox": "0 0 1440 680",
+        "lanes": [
+          { "x": 18, "y": 20, "w": 364, "h": 640, "label": "01 · ESCALATION LADDER (L1 -> L4)" },
+          { "x": 506, "y": 20, "w": 364, "h": 640, "label": "02 · SMART MODEL TIERS (SECTION 6.1)" },
+          { "x": 994, "y": 20, "w": 428, "h": 640, "label": "03 · WRITE ISOLATION & MERGE GATES" }
+        ],
+        "nodes": [
+          {
+            "id": "l1",
+            "label": "Level 1 · Inline Role",
+            "sublabel": "<20 Lines · Single-Role Turn",
+            "badge": "0 OVERHEAD",
+            "tier": "Default Fast",
+            "category": "frontend",
+            "x": 42, "y": 82, "w": 316, "h": 82,
+            "roles": ["any single role"],
+            "explanation": "Adopts .kobean/roles/<role>.yaml directly in the active turn with zero subagent spawn latency for small, well-scoped edits.",
+            "sources": [
+              { "path": "doctrine.md", "line": 103, "end_line": 105 }
+            ]
+          },
+          {
+            "id": "l2",
+            "label": "Level 2 · invoke_subagent",
+            "sublabel": "Scout or 2-3 Parallel Roles",
+            "badge": "ISOLATED",
+            "tier": "research / self",
+            "category": "api",
+            "x": 42, "y": 222, "w": 316, "h": 82,
+            "roles": ["explorer", "frontend", "content-architect", "backend"],
+            "explanation": "Spawns read-only research subagents to keep noisy exploration out of main context, or 2-3 non-overlapping self subagents in parallel.",
+            "sources": [
+              { "path": "doctrine.md", "line": 74, "end_line": 79 },
+              { "path": "doctrine.md", "line": 106, "end_line": 107 }
+            ]
+          },
+          {
+            "id": "l3",
+            "label": "Level 3 · run_workflow",
+            "sublabel": "N >= 3 Fan-Out / Fan-In DAG",
+            "badge": "PYTHON DAG",
+            "tier": "parallel()",
+            "category": "backend",
+            "x": 42, "y": 362, "w": 316, "h": 82,
+            "roles": ["atlas-architect", "content-architect", "5 review roles"],
+            "explanation": "Programmatic Python orchestration fanning out across N>=3 independent modules (e.g., monorepo kb-atlas domains or multi-role audits) and aggregating results.",
+            "sources": [
+              { "path": "doctrine.md", "line": 108, "end_line": 109 },
+              { "path": "skills/kb-atlas/SKILL.md", "line": 44, "end_line": 49 }
+            ]
+          },
+          {
+            "id": "l4",
+            "label": "Level 4 · Native Swarm",
+            "sublabel": "workspace: share · Multi-Branch",
+            "badge": "SWARM",
+            "tier": "/swarm",
+            "category": "queue",
+            "x": 42, "y": 502, "w": 316, "h": 82,
+            "roles": ["backend", "frontend", "qa", "reviewer"],
+            "explanation": "Gives concurrent write-heavy workers isolated repository working copies (workspace: share) coordinated on a shared board with dedicated QA verification.",
+            "sources": [
+              { "path": "doctrine.md", "line": 110, "end_line": 111 }
+            ]
+          },
+          {
+            "id": "tier1",
+            "label": "Tier 1 · flash_lite",
+            "sublabel": "haiku · codex-mini",
+            "badge": "HIGH VOL",
+            "tier": "Lowest Latency",
+            "category": "external",
+            "x": 530, "y": 110, "w": 316, "h": 92,
+            "roles": ["tag/link scans", "JSON filtering"],
+            "explanation": "Assigned to trivial high-volume file scans, schema/link checks, and mechanical formatting.",
+            "sources": [
+              { "path": "doctrine.md", "line": 94, "end_line": 96 }
+            ]
+          },
+          {
+            "id": "tier2",
+            "label": "Tier 2 · flash",
+            "sublabel": "sonnet · gpt-5-codex",
+            "badge": "6 ROLES",
+            "tier": "Fast Synthesis",
+            "category": "api",
+            "x": 530, "y": 286, "w": 316, "h": 96,
+            "roles": ["explorer", "a11y-auditor", "performance", "supply-chain", "tech-writer", "release-manager"],
+            "explanation": "Fast analytical model tier powering graphify cartography, CWV/WCAG audits, CVE checks, Diataxis docs, and release changelogs.",
+            "sources": [
+              { "path": "doctrine.md", "line": 97, "end_line": 97 }
+            ]
+          },
+          {
+            "id": "tier3",
+            "label": "Tier 3 · pro (inherit)",
+            "sublabel": "opus · o3 / gpt-5-high",
+            "badge": "18 ROLES",
+            "tier": "Deep Reasoning",
+            "category": "database",
+            "x": 530, "y": 468, "w": 316, "h": 96,
+            "roles": ["po", "threat-modeler", "architect", "atlas-architect", "backend", "frontend", "security", "reviewer", "debugger"],
+            "explanation": "Deep reasoning tier reserved for architecture, STRIDE threat modeling, kb-atlas synthesis, TDD implementation, root-cause debugging, and AppSec fp-check.",
+            "sources": [
+              { "path": "doctrine.md", "line": 98, "end_line": 101 }
+            ]
+          },
+          {
+            "id": "isolation",
+            "label": "Disjoint Write Ownership",
+            "sublabel": "0 Pairwise Glob Collisions",
+            "badge": "LINT GATED",
+            "tier": "roles/*.yaml",
+            "category": "backend",
+            "x": 1030, "y": 170, "w": 360, "h": 110,
+            "roles": ["frontend", "content-architect", "backend", "data-engineer", "mobile", "ml-engineer", "devops"],
+            "explanation": "Every parallel build role declares explicit writes and forbidden globs validated pairwise by scripts/lint.sh so concurrent subagents never overwrite each other.",
+            "sources": [
+              { "path": "doctrine.md", "line": 70, "end_line": 74 },
+              { "path": "scripts/lint.sh", "line": 66, "end_line": 117 }
+            ]
+          },
+          {
+            "id": "reuse_loop",
+            "label": "Warm Subagent Reuse",
+            "sublabel": "send_message Review-Fix Loop",
+            "badge": "STAGE 6.3",
+            "tier": "Compiled Repos",
+            "category": "security",
+            "x": 1030, "y": 404, "w": 360, "h": 110,
+            "roles": ["backend", "frontend", "reviewer", "qa"],
+            "explanation": "Stages Core types before UI targets, runs parallel research auditors, and messages existing warm subagents via send_message for fixes instead of cold-spawning.",
+            "sources": [
+              { "path": "doctrine.md", "line": 112, "end_line": 121 }
+            ]
+          }
+        ],
+        "edges": [
+          { "from": "l1", "to": "tier3", "label": "Session Pin", "provenance": "EXTRACTED", "pts": [[358, 123], [444, 123], [444, 496], [530, 496]], "lp": [444, 195] },
+          { "from": "l2", "to": "tier2", "label": "Scout / Audit", "provenance": "EXTRACTED", "pts": [[358, 252], [468, 252], [468, 334], [530, 334]], "lp": [444, 252] },
+          { "from": "l2", "to": "tier3", "label": "Build Slice", "provenance": "EXTRACTED", "pts": [[358, 280], [420, 280], [420, 518], [530, 518]], "lp": [444, 330] },
+          { "from": "l3", "to": "tier1", "label": "Fast Scans", "provenance": "EXTRACTED", "pts": [[358, 390], [486, 390], [486, 156], [530, 156]], "lp": [444, 118] },
+          { "from": "l3", "to": "tier3", "label": "Leaf -> Parent", "provenance": "EXTRACTED", "pts": [[358, 418], [444, 418], [444, 540], [530, 540]], "lp": [444, 455] },
+          { "from": "l4", "to": "tier3", "label": "Swarm Share", "provenance": "EXTRACTED", "pts": [[358, 558], [530, 558]], "lp": [444, 558] },
+          { "from": "tier2", "to": "reuse_loop", "label": "QA Audit", "provenance": "EXTRACTED", "pts": [[846, 334], [938, 334], [938, 440], [1030, 440]], "lp": [938, 385] },
+          { "from": "tier3", "to": "isolation", "label": "Disjoint Globs", "provenance": "EXTRACTED", "pts": [[846, 498], [916, 498], [916, 225], [1030, 225]], "lp": [938, 225] },
+          { "from": "isolation", "to": "reuse_loop", "label": "send_message", "provenance": "EXTRACTED", "pts": [[1210, 280], [1210, 404]], "lp": [1210, 342] }
+        ],
+        "flowSteps": [
+          { "title": "1. Level 1 -> Level 2 Escalation", "detail": "Start inline for <20-line changes; spawn research scouts (flash) or 2-3 disjoint build subagents (pro) when needed.", "nodes": ["l1", "l2", "tier2", "tier3"], "edges": [0, 1, 2] },
+          { "title": "2. Level 3 Programmatic Fan-Out", "detail": "Use run_workflow for N>=3 slices (monorepo kb-atlas domains or 5-role verification).", "nodes": ["l3", "tier1", "tier3"], "edges": [3, 4] },
+          { "title": "3. Disjoint Write-Glob Isolation", "detail": "scripts/lint.sh verifies zero overlapping write paths across all parallel build roles.", "nodes": ["l4", "tier3", "isolation"], "edges": [5, 7] },
+          { "title": "4. Staged Handoff & Warm Reuse", "detail": "Audit Core + UI in parallel and send_message warm subagents for review fixes.", "nodes": ["tier2", "isolation", "reuse_loop"], "edges": [6, 8] }
+        ]
+      }
+    }
+  }
+  </script>
+
+  <script>
+    (function () {
+      const manifest = JSON.parse(document.getElementById('atlas-manifest').textContent);
+      const svgNS = 'http://www.w3.org/2000/svg';
+      const svg = document.getElementById('atlas-svg');
+      const stageWrap = document.getElementById('stage-wrap');
+      const announcer = document.getElementById('live-announcer');
+
+      let currentViewKey = 'pipeline';
+      let zoom = 1;
+      let panX = 0;
+      let panY = 0;
+      let selectedId = null;
+      let activeFlowIdx = -1;
+      let searchQuery = '';
+      let playTimer = null;
+
+      const sha = manifest.repository.headSha.slice(0, 8) + (manifest.repository.dirty ? ' (dirty)' : '');
+      document.getElementById('atlas-sha').textContent = 'HEAD: ' + sha;
+
+      function announce(msg) {
+        announcer.textContent = '';
+        setTimeout(() => { announcer.textContent = msg; }, 30);
+      }
+
+      function el(tag, attrs, text) {
+        const node = document.createElementNS(svgNS, tag);
+        for (const [k, v] of Object.entries(attrs || {})) node.setAttribute(k, String(v));
+        if (text !== undefined) node.textContent = text;
+        return node;
+      }
+
+      // Smooth rounded-corner orthogonal polyline builder
+      function buildRoundedPath(pts, radius = 12) {
+        if (!pts || pts.length < 2) return '';
+        if (pts.length === 2) return `M ${pts[0][0]} ${pts[0][1]} L ${pts[1][0]} ${pts[1][1]}`;
+        let d = `M ${pts[0][0]} ${pts[0][1]}`;
+        for (let i = 1; i < pts.length - 1; i++) {
+          const prev = pts[i - 1];
+          const curr = pts[i];
+          const next = pts[i + 1];
+          const v1x = curr[0] - prev[0];
+          const v1y = curr[1] - prev[1];
+          const v2x = next[0] - curr[0];
+          const v2y = next[1] - curr[1];
+          const len1 = Math.hypot(v1x, v1y);
+          const len2 = Math.hypot(v2x, v2y);
+          const r = Math.min(radius, len1 / 2, len2 / 2);
+          if (r < 1) {
+            d += ` L ${curr[0]} ${curr[1]}`;
+            continue;
+          }
+          const p1x = curr[0] - (v1x / len1) * r;
+          const p1y = curr[1] - (v1y / len1) * r;
+          const p2x = curr[0] + (v2x / len2) * r;
+          const p2y = curr[1] + (v2y / len2) * r;
+          d += ` L ${p1x.toFixed(1)} ${p1y.toFixed(1)} Q ${curr[0]} ${curr[1]} ${p2x.toFixed(1)} ${p2y.toFixed(1)}`;
+        }
+        const last = pts[pts.length - 1];
+        d += ` L ${last[0]} ${last[1]}`;
+        return d;
+      }
+
+      function currentView() {
+        return manifest.views[currentViewKey];
+      }
+
+      function applyTransform() {
+        svg.style.transform = `translate(${panX.toFixed(1)}px, ${panY.toFixed(1)}px) scale(${zoom.toFixed(2)})`;
+        document.getElementById('btn-zoom-reset').textContent = Math.round(zoom * 100) + '%';
+      }
+
+      function buildStepPills() {
+        const view = currentView();
+        const container = document.getElementById('step-pills');
+        container.innerHTML = '';
+        (view.flowSteps || []).forEach((step, idx) => {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'step-dot';
+          b.textContent = String(idx + 1);
+          b.title = step.title;
+          b.setAttribute('aria-label', step.title);
+          b.setAttribute('aria-pressed', String(activeFlowIdx === idx));
+          b.addEventListener('click', () => {
+            stopAutoPlay();
+            activeFlowIdx = idx;
+            syncPlaybackUI();
+          });
+          container.appendChild(b);
+        });
+      }
+
+      function syncPlaybackUI() {
+        const view = currentView();
+        const status = document.getElementById('flow-status');
+        const resetBtn = document.getElementById('btn-flow-reset');
+        resetBtn.setAttribute('aria-pressed', String(activeFlowIdx === -1));
+
+        document.querySelectorAll('#step-pills .step-dot').forEach((b, idx) => {
+          b.setAttribute('aria-pressed', String(activeFlowIdx === idx));
+        });
+
+        if (activeFlowIdx < 0 || activeFlowIdx >= view.flowSteps.length) {
+          status.innerHTML = '<strong>All Stages:</strong> Full source-verified topology active.';
+        } else {
+          const step = view.flowSteps[activeFlowIdx];
+          status.innerHTML = '';
+          const st = document.createElement('strong');
+          st.textContent = step.title + ': ';
+          status.appendChild(st);
+          status.appendChild(document.createTextNode(step.detail));
+          if (step.nodes && step.nodes.length > 0 && !step.nodes.includes(selectedId)) {
+            selectNode(step.nodes[0], false);
+          }
+        }
+        renderDiagram();
+      }
+
+      function renderDiagram() {
+        const view = currentView();
+        svg.setAttribute('viewBox', view.viewBox);
+        svg.innerHTML = '';
+
+        const defs = el('defs');
+        const mk = (id, colorVar) => {
+          const m = el('marker', { id, viewBox: '0 0 10 10', refX: '8.5', refY: '5', markerWidth: '6.5', markerHeight: '6.5', orient: 'auto-start-reverse' });
+          m.appendChild(el('path', { d: 'M 0 1.2 L 9.5 5 L 0 8.8 z', fill: colorVar }));
+          return m;
+        };
+        defs.appendChild(mk('arrow-muted', 'var(--muted)'));
+        defs.appendChild(mk('arrow-active', 'var(--focus)'));
+        defs.appendChild(mk('arrow-alert', 'var(--security-stroke)'));
+        svg.appendChild(defs);
+
+        // 1. Architectural Phase Swimlanes
+        const laneLayer = el('g', { 'aria-hidden': 'true' });
+        (view.lanes || []).forEach((lane) => {
+          laneLayer.appendChild(el('rect', {
+            x: lane.x, y: lane.y, width: lane.w, height: lane.h, rx: '14',
+            fill: 'var(--lane-bg)',
+            stroke: 'var(--lane-border)',
+            'stroke-width': '1',
+            'stroke-dasharray': '4 4'
+          }));
+          laneLayer.appendChild(el('text', {
+            x: lane.x + 16, y: lane.y + 24,
+            fill: 'var(--dim)',
+            'font-family': 'var(--mono)',
+            'font-size': '10.5',
+            'font-weight': '700',
+            'letter-spacing': '0.08em'
+          }, lane.label));
+        });
+        svg.appendChild(laneLayer);
+
+        const activeStep = activeFlowIdx >= 0 ? view.flowSteps[activeFlowIdx] : null;
+        const activeNodes = activeStep ? new Set(activeStep.nodes) : null;
+        const activeEdges = activeStep ? new Set(activeStep.edges) : null;
+        const q = searchQuery.trim().toLowerCase();
+
+        const matchesSearch = (n) => {
+          if (!q) return true;
+          const hay = [n.label, n.sublabel, n.category, n.badge, ...(n.roles || [])].join(' ').toLowerCase();
+          return hay.includes(q);
+        };
+
+        // 2. Connector Paths + Signal Pulses (Drawn First)
+        const edgeLayer = el('g');
+        const labelLayer = el('g');
+
+        view.edges.forEach((edge, idx) => {
+          const d = buildRoundedPath(edge.pts, 12);
+          const isStepDim = activeEdges && !activeEdges.has(idx);
+          const fromNode = view.nodes.find((n) => n.id === edge.from);
+          const toNode = view.nodes.find((n) => n.id === edge.to);
+          const isSearchDim = q && (!matchesSearch(fromNode) && !matchesSearch(toNode));
+          const isDim = isStepDim || isSearchDim;
+          const isHighlighted = (activeEdges && activeEdges.has(idx)) || (!activeEdges && (selectedId === edge.from || selectedId === edge.to));
+
+          const strokeColor = edge.alert
+            ? 'var(--security-stroke)'
+            : (isHighlighted ? 'var(--focus)' : 'var(--muted)');
+          const markerId = edge.alert
+            ? 'url(#arrow-alert)'
+            : (isHighlighted ? 'url(#arrow-active)' : 'url(#arrow-muted)');
+
+          const eg = el('g', { class: 'edge-group' + (isDim ? ' dimmed' : '') });
+          eg.appendChild(el('path', {
+            d,
+            fill: 'none',
+            stroke: strokeColor,
+            'stroke-width': isHighlighted ? '2.3' : '1.5',
+            'stroke-dasharray': edge.provenance === 'INFERRED' ? '6 4' : 'none',
+            'marker-end': markerId
+          }));
+
+          // Smooth animated signal pulse along active / connected paths
+          if (!isDim && (isHighlighted || activeFlowIdx === -1)) {
+            eg.appendChild(el('path', {
+              d,
+              fill: 'none',
+              stroke: edge.alert ? 'var(--security-stroke)' : 'var(--focus)',
+              'stroke-width': isHighlighted ? '2.6' : '1.8',
+              'stroke-linecap': 'round',
+              opacity: isHighlighted ? '0.9' : '0.42',
+              class: 'signal-pulse'
+            }));
+          }
+
+          // Port anchor dots
+          const pStart = edge.pts[0];
+          eg.appendChild(el('circle', {
+            cx: pStart[0], cy: pStart[1], r: '3',
+            fill: 'var(--surface)',
+            stroke: strokeColor,
+            'stroke-width': '1.5'
+          }));
+          edgeLayer.appendChild(eg);
+
+          // Crisp pill label in separate top layer so lines never cut across text
+          if (edge.label && edge.lp) {
+            const lg = el('g', { class: 'edge-label-group edge-group' + (isDim ? ' dimmed' : '') });
+            const pillW = Math.max(66, edge.label.length * 6.3 + 14);
+            lg.appendChild(el('rect', {
+              class: 'edge-pill',
+              x: edge.lp[0] - pillW / 2,
+              y: edge.lp[1] - 9.5,
+              width: pillW,
+              height: 19,
+              rx: '9.5',
+              fill: 'var(--surface)',
+              stroke: edge.alert ? 'var(--security-stroke)' : (isHighlighted ? 'var(--focus)' : 'var(--border)'),
+              'stroke-width': isHighlighted ? '1.3' : '1'
+            }));
+            lg.appendChild(el('text', {
+              x: edge.lp[0],
+              y: edge.lp[1] + 3.5,
+              'text-anchor': 'middle',
+              fill: edge.alert ? 'var(--security-stroke)' : (isHighlighted ? 'var(--ink)' : 'var(--muted)'),
+              'font-family': 'var(--mono)',
+              'font-size': '9.5',
+              'font-weight': '600'
+            }, edge.label));
+            labelLayer.appendChild(lg);
+          }
+        });
+        svg.appendChild(edgeLayer);
+
+        // 3. Semantic Node Cards
+        const nodeLayer = el('g');
+        view.nodes.forEach((n) => {
+          const cat = n.category || 'backend';
+          const isStepDim = activeNodes && !activeNodes.has(n.id);
+          const isSearchDim = q && !matchesSearch(n);
+          const isDim = isStepDim || isSearchDim;
+          const isSelected = selectedId === n.id;
+          const isStepActive = activeNodes && activeNodes.has(n.id);
+
+          const g = el('g', {
+            class: 'node-group' + (isDim ? ' dimmed' : '') + (isSelected ? ' selected' : ''),
+            role: 'button',
+            tabindex: '0',
+            'aria-label': `${n.label} (${n.sublabel})`
+          });
+
+          // Main card surface
+          g.appendChild(el('rect', {
+            class: 'node-card node-box',
+            x: n.x, y: n.y, width: n.w, height: n.h, rx: '10',
+            fill: `var(--${cat}-fill)`,
+            stroke: isSelected ? 'var(--focus)' : `var(--${cat}-stroke)`,
+            'stroke-width': (isSelected || isStepActive) ? '2.4' : '1.4'
+          }));
+
+          // Left semantic accent bar
+          g.appendChild(el('rect', {
+            x: n.x + 5, y: n.y + 10, width: '3.5', height: n.h - 20, rx: '2',
+            fill: `var(--${cat}-stroke)`
+          }));
+
+          // Top-right badge pill inside card
+          if (n.badge) {
+            const bw = n.badge.length * 5.7 + 12;
+            g.appendChild(el('rect', {
+              x: n.x + n.w - bw - 10, y: n.y + 10, width: bw, height: 17, rx: '4',
+              fill: `var(--${cat}-tint)`,
+              stroke: `var(--${cat}-stroke)`,
+              'stroke-width': '0.8'
+            }));
+            g.appendChild(el('text', {
+              x: n.x + n.w - bw / 2 - 10, y: n.y + 21.5,
+              'text-anchor': 'middle',
+              fill: `var(--${cat}-stroke)`,
+              'font-family': 'var(--mono)',
+              'font-size': '8.5',
+              'font-weight': '700'
+            }, n.badge));
+          }
+
+          // Node Title
+          g.appendChild(el('text', {
+            x: n.x + 17, y: n.y + 31,
+            fill: 'var(--ink)',
+            'font-family': 'var(--mono)',
+            'font-size': '13',
+            'font-weight': '700'
+          }, n.label));
+
+          // Subtitle
+          g.appendChild(el('text', {
+            x: n.x + 17, y: n.y + 52,
+            fill: 'var(--muted)',
+            'font-family': 'var(--mono)',
+            'font-size': '10.5'
+          }, n.sublabel));
+
+          // Bottom metadata line (Category + Model Tier)
+          g.appendChild(el('text', {
+            x: n.x + 17, y: n.y + n.h - 13,
+            fill: `var(--${cat}-stroke)`,
+            'font-family': 'var(--mono)',
+            'font-size': '9',
+            'font-weight': '700'
+          }, `${cat.toUpperCase()} · ${n.tier || ''}`));
+
+          g.addEventListener('click', () => selectNode(n.id, true));
+          g.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') selectNode(n.id, true);
+            if (e.key === ' ') e.preventDefault();
+          });
+          g.addEventListener('keyup', (e) => {
+            if (e.key === ' ') selectNode(n.id, true);
+          });
+
+          nodeLayer.appendChild(g);
+        });
+
+        svg.appendChild(nodeLayer);
+        svg.appendChild(labelLayer);
+      }
+
+      function selectNode(id, shouldRender = true) {
+        const view = currentView();
+        const n = view.nodes.find((item) => item.id === id);
+        if (!n) return;
+        selectedId = id;
+
+        document.getElementById('passport-title').textContent = n.label;
+        document.getElementById('passport-explanation').textContent = n.explanation;
+
+        const badgesEl = document.getElementById('passport-badges');
+        badgesEl.innerHTML = '';
+        [n.category.toUpperCase(), n.tier, n.badge].filter(Boolean).forEach((txt) => {
+          const s = document.createElement('span');
+          s.className = 'meta-pill';
+          s.textContent = txt;
+          badgesEl.appendChild(s);
+        });
+
+        const rolesEl = document.getElementById('passport-roles');
+        rolesEl.innerHTML = '';
+        (n.roles || []).forEach((r) => {
+          const chip = document.createElement('span');
+          chip.className = 'role-chip';
+          chip.textContent = r;
+          rolesEl.appendChild(chip);
+        });
+
+        const srcList = document.getElementById('passport-sources');
+        srcList.innerHTML = '';
+        (n.sources || []).forEach((s) => {
+          const li = document.createElement('li');
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'cite-btn';
+          const citeText = `${s.path}:${s.line}-${s.end_line}`;
+          const left = document.createElement('span');
+          left.textContent = citeText;
+          const hint = document.createElement('span');
+          hint.className = 'cite-hint';
+          hint.textContent = 'Copy';
+          btn.append(left, hint);
+          btn.addEventListener('click', async () => {
+            try {
+              await navigator.clipboard.writeText(citeText);
+              hint.textContent = 'Copied!';
+              announce(`Copied citation ${citeText}`);
+              setTimeout(() => { hint.textContent = 'Copy'; }, 1400);
+            } catch (_) {
+              hint.textContent = 'Failed';
+              announce('Copy failed');
+            }
+          });
+          li.appendChild(btn);
+          srcList.appendChild(li);
+        });
+
+        const edgeList = document.getElementById('passport-edges');
+        edgeList.innerHTML = '';
+        view.edges.filter((e) => e.from === id || e.to === id).forEach((e) => {
+          const targetId = e.from === id ? e.to : e.from;
+          const targetNode = view.nodes.find((item) => item.id === targetId);
+          const dir = e.from === id ? '->' : '<-';
+          const li = document.createElement('li');
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'neighbor-btn';
+          const left = document.createElement('span');
+          left.textContent = `${dir} ${targetNode ? targetNode.label : targetId} (${e.label})`;
+          const badge = document.createElement('span');
+          badge.className = 'badge-tag ' + (e.provenance === 'INFERRED' ? 'badge-inferred' : 'badge-extracted');
+          badge.textContent = e.provenance;
+          btn.append(left, badge);
+          btn.addEventListener('click', () => selectNode(targetId, true));
+          li.appendChild(btn);
+          edgeList.appendChild(li);
+        });
+
+        if (shouldRender) renderDiagram();
+      }
+
+      function switchView(viewKey) {
+        if (!manifest.views[viewKey]) return;
+        stopAutoPlay();
+        currentViewKey = viewKey;
+        activeFlowIdx = -1;
+        zoom = 1;
+        panX = 0;
+        panY = 0;
+        applyTransform();
+
+        const view = currentView();
+        document.getElementById('atlas-title').textContent = view.title;
+        document.getElementById('atlas-summary').textContent = view.summary;
+
+        document.querySelectorAll('[data-view]').forEach((btn) => {
+          btn.setAttribute('aria-pressed', String(btn.dataset.view === viewKey));
+        });
+
+        buildStepPills();
+        selectNode(view.nodes[1] ? view.nodes[1].id : view.nodes[0].id, false);
+        syncPlaybackUI();
+      }
+
+      // View switcher buttons
+      document.querySelectorAll('[data-view]').forEach((btn) => {
+        btn.addEventListener('click', () => switchView(btn.dataset.view));
+      });
+
+      // Playback & Auto-Play
+      const playBtn = document.getElementById('btn-play');
+      function stopAutoPlay() {
+        if (playTimer) {
+          clearInterval(playTimer);
+          playTimer = null;
+        }
+        playBtn.setAttribute('aria-pressed', 'false');
+      }
+
+      playBtn.addEventListener('click', () => {
+        if (playTimer) {
+          stopAutoPlay();
+          return;
+        }
+        playBtn.setAttribute('aria-pressed', 'true');
+        const steps = currentView().flowSteps || [];
+        if (!steps.length) return;
+        activeFlowIdx = (activeFlowIdx + 1) % steps.length;
+        syncPlaybackUI();
+        playTimer = setInterval(() => {
+          activeFlowIdx = (activeFlowIdx + 1) % steps.length;
+          syncPlaybackUI();
+        }, 2600);
+      });
+
+      document.getElementById('btn-flow-next').addEventListener('click', () => {
+        stopAutoPlay();
+        const len = currentView().flowSteps.length;
+        activeFlowIdx = (activeFlowIdx + 1) % len;
+        syncPlaybackUI();
+      });
+
+      document.getElementById('btn-flow-prev').addEventListener('click', () => {
+        stopAutoPlay();
+        const len = currentView().flowSteps.length;
+        activeFlowIdx = activeFlowIdx <= 0 ? len - 1 : activeFlowIdx - 1;
+        syncPlaybackUI();
+      });
+
+      document.getElementById('btn-flow-reset').addEventListener('click', () => {
+        stopAutoPlay();
+        activeFlowIdx = -1;
+        syncPlaybackUI();
+      });
+
+      // Search filter
+      document.getElementById('node-search').addEventListener('input', (e) => {
+        searchQuery = e.target.value || '';
+        renderDiagram();
+      });
+
+      // Canvas Drag Pan & Ctrl/Cmd Wheel Zoom
+      let isDragging = false;
+      let startX = 0;
+      let startY = 0;
+      stageWrap.addEventListener('pointerdown', (e) => {
+        if (e.target.closest('.node-group') || e.button !== 0) return;
+        isDragging = true;
+        startX = e.clientX - panX;
+        startY = e.clientY - panY;
+        stageWrap.classList.add('dragging');
+        stageWrap.setPointerCapture(e.pointerId);
+      });
+      stageWrap.addEventListener('pointermove', (e) => {
+        if (!isDragging) return;
+        panX = e.clientX - startX;
+        panY = e.clientY - startY;
+        applyTransform();
+      });
+      const endDrag = () => {
+        isDragging = false;
+        stageWrap.classList.remove('dragging');
+      };
+      stageWrap.addEventListener('pointerup', endDrag);
+      stageWrap.addEventListener('pointercancel', endDrag);
+
+      stageWrap.addEventListener('wheel', (e) => {
+        if (e.ctrlKey || e.metaKey) {
+          e.preventDefault();
+          const delta = e.deltaY < 0 ? 0.1 : -0.1;
+          zoom = Math.min(2.2, Math.max(0.55, zoom + delta));
+          applyTransform();
+        }
+      }, { passive: false });
+
+      document.getElementById('btn-zoom-in').addEventListener('click', () => { zoom = Math.min(2.2, zoom + 0.15); applyTransform(); });
+      document.getElementById('btn-zoom-out').addEventListener('click', () => { zoom = Math.max(0.55, zoom - 0.15); applyTransform(); });
+      document.getElementById('btn-zoom-reset').addEventListener('click', () => { zoom = 1; panX = 0; panY = 0; applyTransform(); });
+
+      // Signal Flow toggle
+      const motionBtn = document.getElementById('btn-motion');
+      motionBtn.addEventListener('click', () => {
+        const isOff = document.documentElement.getAttribute('data-motion') === 'off';
+        document.documentElement.setAttribute('data-motion', isOff ? 'on' : 'off');
+        motionBtn.setAttribute('aria-pressed', String(isOff));
+      });
+
+      // Two-state color-scheme toggle (modern-web-guidance: dark-mode-toggle + toolbar constant label)
+      const metaScheme = document.querySelector('meta[name="color-scheme"]');
+      const schemeBtn = document.getElementById('btn-scheme');
+      const systemScheme = () => window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      const renderedScheme = () => (metaScheme.content === 'light' || metaScheme.content === 'dark') ? metaScheme.content : systemScheme();
+      function syncSchemeState() {
+        schemeBtn.setAttribute('aria-pressed', String(metaScheme.content !== 'light dark'));
+      }
+      schemeBtn.addEventListener('click', () => {
+        const target = renderedScheme() === 'dark' ? 'light' : 'dark';
+        try {
+          if (target === systemScheme()) {
+            localStorage.removeItem('kobean-atlas-scheme');
+            metaScheme.content = 'light dark';
+          } else {
+            localStorage.setItem('kobean-atlas-scheme', target);
+            metaScheme.content = target;
+          }
+        } catch (_) {
+          metaScheme.content = target;
+        }
+        syncSchemeState();
+      });
+      window.addEventListener('storage', (e) => {
+        if (e.key === 'kobean-atlas-scheme') {
+          metaScheme.content = (e.newValue === 'light' || e.newValue === 'dark') ? e.newValue : 'light dark';
+          syncSchemeState();
+        }
+      });
+      syncSchemeState();
+
+      // Blueprint toggle
+      const bpBtn = document.getElementById('btn-blueprint');
+      bpBtn.addEventListener('click', () => {
+        const next = document.documentElement.getAttribute('data-blueprint') !== 'true';
+        document.documentElement.setAttribute('data-blueprint', String(next));
+        bpBtn.setAttribute('aria-pressed', String(next));
+      });
+
+      // Clean SVG Export
+      document.getElementById('btn-export').addEventListener('click', () => {
+        const clone = svg.cloneNode(true);
+        clone.removeAttribute('style');
+        clone.querySelectorAll('.signal-pulse').forEach((p) => p.remove());
+        const serialized = '<?xml version="1.0" encoding="UTF-8"?>\n' + new XMLSerializer().serializeToString(clone);
+        const blob = new Blob([serialized], { type: 'image/svg+xml;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `kobean-${currentViewKey}-diagram.svg`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        announce(`Exported kobean-${currentViewKey}-diagram.svg`);
+      });
+
+      // Toolbar roving-tabindex fallback when native focusgroup is unavailable (modern-web-guidance: toolbar)
+      if (!('focusGroup' in HTMLElement.prototype)) {
+        document.querySelectorAll('[role="toolbar"]').forEach((bar) => {
+          const getItems = () => Array.from(bar.querySelectorAll('button'));
+          const initItems = getItems();
+          initItems.forEach((b, i) => { b.tabIndex = i === 0 ? 0 : -1; });
+          bar.addEventListener('focusin', ({ target }) => {
+            const items = getItems();
+            if (items.includes(target)) items.forEach((b) => { b.tabIndex = b === target ? 0 : -1; });
+          });
+          bar.addEventListener('keydown', (e) => {
+            const items = getItems();
+            if (!items.length) return;
+            const idx = items.indexOf(document.activeElement);
+            if (idx === -1) return;
+            const rtl = getComputedStyle(bar).direction === 'rtl';
+            const stepMap = { ArrowRight: rtl ? -1 : 1, ArrowLeft: rtl ? 1 : -1 };
+            let nextIdx = null;
+            if (e.key in stepMap) nextIdx = (idx + stepMap[e.key] + items.length) % items.length;
+            else if (e.key === 'Home') nextIdx = 0;
+            else if (e.key === 'End') nextIdx = items.length - 1;
+            if (nextIdx !== null) {
+              e.preventDefault();
+              items[nextIdx].focus();
+            }
+          });
+        });
+      }
+
+      switchView('pipeline');
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "1.0",
+  "title": "KobeanSkills — Architecture & Engineering Workflow Atlas",
+  "headSha": "939ac3d10dc143a4860a3f8e151a515fb9da816b",
+  "repository": {
+    "url": "https://github.com/thienng-it/KobeanSkills.git",
+    "headSha": "939ac3d10dc143a4860a3f8e151a515fb9da816b",
+    "dirty": true,
+    "dirtyNote": "Includes uncommitted workspace updates (kb-atlas, atlas-architect, content-architect, model_tier contracts, and kobean atlas CLI)."
+  },
+  "pages": [
+    {
+      "path": "docs/atlas/INDEX.md",
+      "title": "Master Architecture & Workflow Atlas",
+      "modes": ["c4-architecture", "workflow", "sequence", "dataflow", "lifecycle"],
+      "sources": [
+        { "path": "doctrine.md", "line": 1, "end_line": 121 },
+        { "path": "rules/AGENTS.md", "line": 1, "end_line": 19 },
+        { "path": "bin/kobean.js", "line": 781, "end_line": 864 },
+        { "path": "bin/kobean.js", "line": 1004, "end_line": 1113 },
+        { "path": "bin/kobean.js", "line": 1687, "end_line": 1833 },
+        { "path": "skills/kb-router/SKILL.md", "line": 1, "end_line": 55 },
+        { "path": "skills/kb-spec/SKILL.md", "line": 1, "end_line": 55 },
+        { "path": "skills/kb-plan/SKILL.md", "line": 1, "end_line": 68 },
+        { "path": "skills/kb-build/SKILL.md", "line": 1, "end_line": 66 },
+        { "path": "skills/kb-atlas/SKILL.md", "line": 1, "end_line": 77 },
+        { "path": "skills/kb-review/SKILL.md", "line": 1, "end_line": 81 },
+        { "path": "skills/kb-git/SKILL.md", "line": 1, "end_line": 103 },
+        { "path": "skills/kb-ship/SKILL.md", "line": 1, "end_line": 50 },
+        { "path": "scripts/lint.sh", "line": 1, "end_line": 136 },
+        { "path": "scripts/install.sh", "line": 1, "end_line": 179 },
+        { "path": "init.sh", "line": 1, "end_line": 130 }
+      ]
+    },
+    {
+      "path": "docs/atlas/workflow-explainer.html",
+      "title": "Interactive KobeanSkills Workflow Explainer",
+      "modes": ["workflow", "c4-architecture"]
+    }
+  ]
+}

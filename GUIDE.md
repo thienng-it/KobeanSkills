@@ -218,10 +218,36 @@ Prompt:
 
 ---
 
+### Playbook 10: Codebase Atlas, Business Workflows & Interactive Diagrams (`kb-atlas`)
+
+When you want to turn any codebase into clean architecture diagrams, end-to-end business workflows, guided codemaps, or a source-grounded living wiki:
+
+```text
+Prompt (Full Business Wiki):
+"Use kb-atlas to document all business logic, core workflows, and C4 architecture of this codebase in docs/atlas/."
+
+Prompt (Interactive HTML Diagram / Flow Trace):
+"Use kb-atlas to trace the checkout and refund workflow end-to-end and render an interactive HTML explainer."
+
+Prompt (PR Architecture Delta):
+"Use kb-atlas in pr-delta mode to visualize what this branch changed across services and schemas."
+```
+
+**What the AI pipeline does step-by-step:**
+1. **Deterministic Grounding:** Pins `git rev-parse HEAD` and queries `graphify` (`graphify-out/graph.json`) plus SQL/OpenAPI/queue/CI artifacts so zero edges are guessed.
+2. **Business-First Synthesis:** Extracts 5–12 Core Business Capabilities ordered by topological prerequisites (never a raw folder mirror) and traces `Trigger -> Auth -> Business Invariants -> State Transitions -> Persistence`.
+3. **Instrument-Grade Visuals:** Routes across 10 canonical diagram modes (`c4-architecture`, `workflow`, `sequence`, `dataflow`, `lifecycle`, `erd`, `class`, `tree`, `timeline`, `waterfall`), enforces $\le 15$ nodes per canvas, and renders either clean Mermaid/D2, editable `.drawio` (`kobean mcp add drawio`), or offline interactive HTML (`templates/atlas-explainer.html`).
+4. **3-Gate Verification:** Runs `kobean atlas check` (verifies every `file:start-end` citation and detects git drift), performs a Reader-Answer arrow audit, and verifies HTML/SVG deliverables in `chrome-devtools-mcp` across Dark and Light themes.
+
+---
+
 ## 3. Power Controls & Steering
 
 | If you want to... | What to say |
 | :--- | :--- |
+| **Document business logic & draw clean diagrams** | `"Use kb-atlas to map business workflows and generate interactive diagrams"` |
+| **Verify docs citations & detect git drift** | Run `bunx kobean-skills atlas check` (or `--strict` in CI) |
+| **Check whether a PR needs an architecture diagram** | Run `bunx kobean-skills atlas pr-check --json` |
 | **Question whether a feature is necessary** | `"Run kb-spec with ponytail ultra"` |
 | **Keep implementations ultra-minimal** | `"Use ponytail mode: smallest possible diff"` |
 | **Manage branches, rebase & open PRs** | `"Use kb-git to rebase on main and create PR"` |
@@ -241,7 +267,8 @@ Prompt:
 
 | File / Folder | Purpose |
 | :--- | :--- |
-| `.kobean/` | Engine folder containing skills, 22 role contracts, stack guides, and doctrine. |
+| `.kobean/` | Engine folder containing 10 skills, 24 role contracts, stack & diagram guides, and doctrine. |
+| `docs/atlas/` | Living business-logic wiki, C4/workflow diagrams, `atlas.json` provenance manifest, and interactive HTML explainers (`kb-atlas`). |
 | `.kobean/mcp.json` | Single source of truth for Model Context Protocol (MCP) server connectors. |
 | `.mcp.json` | Claude Code MCP configuration (auto-synced from `.kobean/mcp.json`). |
 | `.agents/mcp.json` | Antigravity MCP configuration (auto-synced from `.kobean/mcp.json`). |

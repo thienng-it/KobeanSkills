@@ -4,8 +4,8 @@ A universal engineering skill distribution and multi-role agent orchestrator nat
 
 KobeanSkills unifies modern agent methodologies—including **GitHub Spec-Kit**, **Superpowers**, **Beads**, **Ponytail**, **Impeccable**, **Taste-Skill**, and **Trail of Bits**—into an air-gapped, context-efficient architecture:
 
-- **9 Entry Skills:** Progressive-disclosure interfaces that stay well within agent context limits.
-- **22 Specialist Role Contracts:** Explicit YAML definitions declaring file-path ownership, allowed tooling, and strict completion gates.
+- **10 Entry Skills:** Progressive-disclosure interfaces that stay well within agent context limits.
+- **24 Specialist Role Contracts:** Explicit YAML definitions declaring file-path ownership, allowed tooling, model tiers, and strict completion gates.
 - **Unified Doctrine:** Binding precedence rules that eliminate conflicts between process, task tracking, and design systems.
 - **Zero-Config Project Operation:** Installs once into `.kobean/` in seconds; requires zero manual configuration.
 
@@ -49,7 +49,7 @@ docker run --rm -v "$(pwd):/workspace" ghcr.io/thienng-it/kobean-skills:latest k
 ```
 
 ### What these single commands do:
-1. Unpacks all 9 entry skills, 22 role contracts, stack references, templates, and doctrine into **`.kobean/`** in your repository.
+1. Unpacks all 10 entry skills, 24 role contracts, stack & diagram references, templates, and doctrine into **`.kobean/`** in your repository.
 2. Automatically configures **Gemini CLI / Antigravity** (`.agents/` & `GEMINI.md`), **Claude CLI** (`.claude/` & `CLAUDE.md`), and **Codex CLI** (`.codex/` & `AGENTS.md`) discovery.
 3. Leaves zero extra files or git bloat. Simply commit `.kobean/` to Git to share with your team.
 
@@ -71,11 +71,13 @@ If you have already cloned KobeanSkills locally or want a machine-wide global in
 | :--- | :--- |
 | `npx kobean-skills init` | Zero-clone project setup into `.kobean/` with automated MCP & rule wiring. |
 | `npx kobean-skills help [cmd]` | Context-aware manual for any command (e.g. `init`, `mcp`, `skills`, `doctor`). |
-| `npx kobean-skills skills [name]` | Terminal inspector for all 9 entry skills; `kobean skill <name>` prints runbook. |
-| `npx kobean-skills roles [phase]` | Terminal inspector for 22 specialist roles; `kobean role <name>` prints YAML. |
-| `npx kobean-skills playbooks [q]` | Browse 9 engineering playbooks; `kobean playbook <name>` extracts playbook. |
+| `npx kobean-skills skills [name]` | Terminal inspector for all 10 entry skills; `kobean skill <name>` prints runbook. |
+| `npx kobean-skills roles [phase]` | Terminal inspector for 24 specialist roles; `kobean role <name>` prints YAML. |
+| `npx kobean-skills playbooks [q]` | Browse 10 engineering playbooks; `kobean playbook <name>` extracts playbook. |
+| `npx kobean-skills atlas check` | Deterministically verify `docs/atlas` file:line citations and detect git freshness drift. |
+| `npx kobean-skills atlas pr-check` | Evaluate 3-dot merge-base diff materiality for PR architecture delta diagrams. |
 | `npx kobean-skills mcp` | Inspect configured MCP connectors, agent sync status, and environment variables. |
-| `npx kobean-skills mcp marketplace` | Browse 38+ vetted MCP connectors across 6 categories in terminal. |
+| `npx kobean-skills mcp marketplace` | Browse 41+ vetted MCP connectors across 7 categories in terminal. |
 | `npx kobean-skills mcp search <query>` | Search marketplace connectors by keyword, technology, or provider. |
 | `npx kobean-skills mcp add <name>` | Add a vetted or custom MCP connector and auto-sync across all 4 agent files. |
 | `npx kobean-skills mcp sync` | Synchronize `.kobean/mcp.json` across Claude Code, Gemini CLI, Antigravity, and Codex. |
@@ -95,19 +97,20 @@ Different AI tools store Model Context Protocol (MCP) servers in incompatible lo
 - **Antigravity & Gemini CLI:** `.agents/mcp.json` & `~/.gemini/config/mcp_config.json`
 - **OpenAI Codex:** `.codex/config.toml` & `~/.codex/config.toml` (TOML `[mcp_servers.<name>]`)
 
-KobeanSkills eliminates config drift by establishing a single source of truth in **`.kobean/mcp.json`** and providing a built-in catalog of **38+ pre-vetted connectors**:
+KobeanSkills eliminates config drift by establishing a single source of truth in **`.kobean/mcp.json`** and providing a built-in catalog of **41+ pre-vetted connectors**:
 
 ```bash
-# 1. Browse 38+ connectors in the Marketplace directory:
+# 1. Browse 41+ connectors in the Marketplace directory:
 bunx kobean-skills mcp marketplace
 
-# 2. Search for any connector (e.g. database, supabase, linear, search):
+# 2. Search for any connector (e.g. database, drawio, supabase, linear):
 bunx kobean-skills mcp search database
 
 # 3. Add connectors in one command (auto-syncs to all agents):
 bunx kobean-skills mcp add postgres      # PostgreSQL database query engine
 bunx kobean-skills mcp add supabase      # Supabase tables, auth & storage
 bunx kobean-skills mcp add github        # PRs, issues, commits, branches
+bunx kobean-skills mcp add drawio        # Editable draw.io live architecture canvas
 bunx kobean-skills mcp add playwright    # Headless browser testing & UI automation
 bunx kobean-skills mcp add docker        # Container & compose lifecycle manager
 
@@ -122,6 +125,7 @@ bunx kobean-skills mcp sync
 4. **Search & Intelligence (5):** `brave-search`, `exa`, `tavily`, `memory`, `arxiv`
 5. **Cloud & Big Data (4):** `cloudflare`, `bigquery`, `aws-kb`, `snowflake`
 6. **Productivity & Comms (7):** `filesystem`, `slack`, `discord`, `notion`, `google-drive`, `google-maps`, `resend`
+7. **Architecture & Diagrams (3):** `drawio`, `deepwiki`, `gitdiagram`
 
 ### Zero-Leak Credential Safety
 KobeanSkills preserves `${ENV_VAR}` template references in all generated configs. Your API keys (`GITHUB_TOKEN`, `DATABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`) are read securely from your environment or `.env` at runtime and are **never committed to Git in plaintext**. Kobean's `doctor` and `mcp list` audit missing variables automatically.
@@ -130,13 +134,14 @@ KobeanSkills preserves `${ENV_VAR}` template references in all generated configs
 
 ## Documentation & Developer Playbooks
 
-KobeanSkills provides an **interactive documentation page** at [`docs/index.html`](docs/index.html) (viewable locally by running `npx kobean-skills docs` or hosted via GitHub Pages) with an interactive 22-role matrix filter, architecture diagrams, and pipeline tabs.
+KobeanSkills provides an **interactive documentation page** at [`docs/index.html`](docs/index.html) (viewable locally by running `npx kobean-skills docs` or hosted via GitHub Pages) with an interactive 24-role matrix filter, architecture diagrams, and pipeline tabs.
 
 For quick reference in the terminal, see [GUIDE.md](GUIDE.md) (or run `npx kobean-skills guide`).
 
 | Intent | Example Prompt | Pipeline Flow |
 | :--- | :--- | :--- |
 | **Repository Orientation** | `"Onboard this repo"` | `kb-router` &rarr; `explorer` (`graphify` &rarr; `CONTEXT.md`) |
+| **Diagrams, Workflows & Deep Wiki** | `"Document all business logic and draw interactive workflow diagrams"` | `kb-atlas` (`atlas-architect`, `graphify` AST, `docs/atlas/`, `kobean atlas check`, `chrome-devtools-mcp`) |
 | **Feature Development** | `"Build a webhook retry queue with backoff"` | `kb-spec` &rarr; `kb-plan` (`.beads/`) &rarr; `kb-build` (TDD + Ponytail) &rarr; `kb-review` |
 | **Interface Design & Polish** | `"Redesign the dashboard"` *(or `"Build bold landing page"`)* | `kb-ui` (Impeccable / Taste-Skill + `chrome-devtools-mcp`) |
 | **Root-Cause Debugging** | `"Fix the failing auth middleware test"` | `kb-debug` (Reproduce &rarr; Blast check &rarr; Regression test &rarr; Minimal fix) |
@@ -152,10 +157,11 @@ For quick reference in the terminal, see [GUIDE.md](GUIDE.md) (or run `npx kobea
 
 | Skill | Primary Focus | Active Roles Loaded on Demand |
 | :--- | :--- | :--- |
-| [`kb-router`](skills/kb-router/SKILL.md) | Request classification, pipeline selection, and subagent dispatching. | All 22 roles |
+| [`kb-router`](skills/kb-router/SKILL.md) | Request classification, pipeline selection, and subagent dispatching. | All 24 roles |
+| [`kb-atlas`](skills/kb-atlas/SKILL.md) | Business-logic wikis, 10-mode architecture/workflow/sequence/ERD diagrams, codemaps, PR deltas, and interactive HTML explainers. | `explorer`, `atlas-architect` |
 | [`kb-spec`](skills/kb-spec/SKILL.md) | Problem validation (Ponytail Ultra), Socratic clarification, `spec.md`, and STRIDE `threats.md`. | `explorer`, `po`, `threat-modeler` |
 | [`kb-plan`](skills/kb-plan/SKILL.md) | Architecture planning, contract definitions, data models, and Beads (`.beads/`) task graph generation. | `architect`, `api-designer`, `data-engineer` |
-| [`kb-build`](skills/kb-build/SKILL.md) | Red-Green-Refactor TDD execution against `.beads/` ready queue enforcing Ponytail minimal diffs. | `data-engineer`, `backend`, `frontend`, `mobile`, `ml-engineer`, `devops`, `refactorer` |
+| [`kb-build`](skills/kb-build/SKILL.md) | Red-Green-Refactor TDD execution against `.beads/` ready queue enforcing Ponytail minimal diffs. | `data-engineer`, `backend`, `frontend`, `content-architect`, `mobile`, `ml-engineer`, `devops`, `refactorer` |
 | [`kb-ui`](skills/kb-ui/SKILL.md) | Impeccable craft, optional Taste-Skill bold art direction, and live browser verification. | `ui-ux-designer`, `frontend`, `a11y-auditor` |
 | [`kb-review`](skills/kb-review/SKILL.md) | Differential review, automated secrets gate, supply-chain checks, CWV performance, and accessibility. | `reviewer`, `security`, `supply-chain`, `performance`, `a11y-auditor`, `qa` |
 | [`kb-debug`](skills/kb-debug/SKILL.md) | Systematic reproduction, caller blast-radius tracing, and regression test implementation. | `debugger` |
@@ -164,11 +170,11 @@ For quick reference in the terminal, see [GUIDE.md](GUIDE.md) (or run `npx kobea
 
 ### Specialist Roles (`roles/`)
 
-Each role is defined in a strict YAML contract declaring write permissions, forbidden paths, allowed tooling, and completion criteria:
+Each role is defined in a strict YAML contract declaring write permissions, forbidden paths, allowed tooling, model tiers, and completion criteria:
 
-- **Discovery & Specification:** `explorer`, `po`, `threat-modeler`
+- **Discovery, Atlas & Specification:** `explorer`, `atlas-architect`, `po`, `threat-modeler`
 - **Architecture & Schema:** `architect`, `api-designer`, `data-engineer`
-- **Engineering & Implementation:** `frontend`, `backend`, `mobile`, `ml-engineer`, `devops`, `refactorer`, `debugger`
+- **Engineering & Implementation:** `frontend`, `content-architect`, `backend`, `mobile`, `ml-engineer`, `devops`, `refactorer`, `debugger`
 - **Quality & Security Gates:** `reviewer`, `security`, `supply-chain`, `performance`, `a11y-auditor`, `qa`
 - **Documentation & Release:** `tech-writer`, `release-manager`
 
@@ -189,9 +195,9 @@ KobeanSkills/
 ├── docker-compose.yml       # Docker Compose service definition
 ├── rules/
 │   └── AGENTS.md            # Global engineering rules injected across all workspaces
-├── skills/                  # The 8 public entry skills
+├── skills/                  # The 10 public entry skills
 │   └── kb-*/SKILL.md
-├── roles/                   # 22 specialist role contracts (*.yaml)
+├── roles/                   # 24 specialist role contracts (*.yaml)
 ├── references/              # Curated technology & audit references
 │   ├── checklists/          # OWASP, WCAG 2.2 AA, performance budgets, release checklists
 │   ├── design/              # Impeccable and Taste-Skill art direction standards
